@@ -113,11 +113,11 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: boxRegular
+      name: regularBox
       rect:
         serializedVersion: 2
         x: 0
-        y: 500
+        y: 1500
         width: 500
         height: 500
       alignment: 0
@@ -126,20 +126,20 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: f0d092816264d4f60800000000000000
-      internalID: 8020143640844766479
+      spriteID: 9691e75ebd8af10449db8148fe91aed9
+      internalID: 813501525
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: boxSteel
+      name: steelBox
       rect:
         serializedVersion: 2
         x: 500
-        y: 500
+        y: 1500
         width: 500
         height: 500
       alignment: 0
@@ -150,18 +150,18 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 36b3b0adcc940774b823dfaed855b277
-      internalID: -881056903
+      spriteID: 6a045fb9dc372e44b9d9c68672a4594d
+      internalID: -2079447157
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: boxLava
+      name: lavaBox
       rect:
         serializedVersion: 2
         x: 1000
-        y: 500
+        y: 1500
         width: 500
         height: 500
       alignment: 0
@@ -172,18 +172,18 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 80364b6a4e0d3984e9d49d893cf7d3ed
-      internalID: -156562087
+      spriteID: e607a0e0c19bc164b953e4ed3ff6a8af
+      internalID: -593962314
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: boxMove
+      name: moveBox
       rect:
         serializedVersion: 2
         x: 1500
-        y: 500
+        y: 1500
         width: 500
         height: 500
       alignment: 0
@@ -194,18 +194,18 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 17c025e20c612ae4e85406446a7beb36
-      internalID: 939308749
+      spriteID: 3890b9c8bcfe2ff4b8d60d69d1f9117b
+      internalID: -728117610
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: boxDoorBlue
+      name: blueKeyDoor
       rect:
         serializedVersion: 2
         x: 0
-        y: 0
+        y: 1000
         width: 500
         height: 500
       alignment: 0
@@ -216,18 +216,18 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 874cd2f0aa8abfb49b3afbca483dd2e9
-      internalID: -1331252973
+      spriteID: 33184f63161b9f6448a8a94c9dda4b59
+      internalID: -712195093
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: boxDoorGreen
+      name: greenKeyDoor
       rect:
         serializedVersion: 2
         x: 500
-        y: 0
+        y: 1000
         width: 500
         height: 500
       alignment: 0
@@ -238,18 +238,18 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8ed5be55e03831648ac8a61c76a562ca
-      internalID: 961815817
+      spriteID: 449701f9218819b4aa701a1e748f5326
+      internalID: 1960526835
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: boxDoorRed
+      name: redKeyDoor
       rect:
         serializedVersion: 2
         x: 1000
-        y: 0
+        y: 1000
         width: 500
         height: 500
       alignment: 0
@@ -260,8 +260,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 7f737cfaed1faa444ae0c52c1c9d3777
-      internalID: -54341840
+      spriteID: 172a78731c19a26479257afe48472dbd
+      internalID: -410083941
       vertices: []
       indices: 
       edges: []
@@ -271,6 +271,116 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 1500
+        y: 1000
+        width: 500
+        height: 500
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4b6a381ec79b7e1488886e197d2d4b91
+      internalID: 1021533974
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: greenKey
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 500
+        width: 500
+        height: 500
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 47ac4f57b04f5a547ad7b97feb27b18b
+      internalID: -376581494
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blueKey
+      rect:
+        serializedVersion: 2
+        x: 500
+        y: 500
+        width: 500
+        height: 500
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fbb255720643830438cfa2fbcca3b899
+      internalID: 745944424
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: redKey
+      rect:
+        serializedVersion: 2
+        x: 1000
+        y: 500
+        width: 500
+        height: 500
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2e0b30af4d12bc74fba9e05d1ab3406e
+      internalID: -2035712140
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: goal
+      rect:
+        serializedVersion: 2
+        x: 1500
+        y: 500
+        width: 500
+        height: 500
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4609123be081b4d41a3151113ae3cf28
+      internalID: -1883157900
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: powerUp
+      rect:
+        serializedVersion: 2
+        x: 0
         y: 0
         width: 500
         height: 500
@@ -282,8 +392,52 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1f461d17a8d270b499e5af5ccbf05a37
-      internalID: 1021533974
+      spriteID: 7e9f5838a81f9f042b3caa92816b84f4
+      internalID: -496817637
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: player
+      rect:
+        serializedVersion: 2
+        x: 500
+        y: 0
+        width: 500
+        height: 500
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9646a7ccc8a70754f9f6512a1687b639
+      internalID: -2021778509
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: powerUpCover
+      rect:
+        serializedVersion: 2
+        x: 1000
+        y: 0
+        width: 500
+        height: 500
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6f7fb3b21ef84174ca7909473c8bfe93
+      internalID: 1319196528
       vertices: []
       indices: 
       edges: []
@@ -302,14 +456,21 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      boxDoorBlue: -1331252973
-      boxDoorGreen: 961815817
-      boxDoorRed: -54341840
-      boxLava: -156562087
-      boxMove: 939308749
-      boxRegular: 8020143640844766479
-      boxSteel: -881056903
+      blueKey: 745944424
+      blueKeyDoor: -712195093
+      goal: -1883157900
+      greenKey: -376581494
+      greenKeyDoor: 1960526835
       ice: 1021533974
+      lavaBox: -593962314
+      moveBox: -728117610
+      player: -2021778509
+      powerUp: -496817637
+      powerUpCover: 1319196528
+      redKey: -2035712140
+      redKeyDoor: -410083941
+      regularBox: 813501525
+      steelBox: -2079447157
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
