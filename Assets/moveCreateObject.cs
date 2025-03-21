@@ -1,3 +1,4 @@
+using NUnit.Framework.Internal;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Tilemaps;
@@ -18,26 +19,26 @@ public class moveCreateObject : MonoBehaviour
     public Tilemap lavaBoxTilemap;
     public TileBase lavaBoxTile;
     public Sprite lavaBoxImage;
-    public Tilemap powerUpTilemap;
-    public TileBase powerUpTile;
+    public GameObject powerUpGroup;
+    public GameObject powerUpObject;
     public Sprite powerUpImage;
-    public Tilemap greenKeyDoorTilemap;
-    public TileBase greenKeyDoorTile;
+    public GameObject greenKeyDoorGroup;
+    public GameObject greenKeyDoorObject;
     public Sprite greenKeyDoorImage;
-    public Tilemap blueKeyDoorTilemap;
-    public TileBase blueKeyDoorTile;
+    public GameObject blueKeyDoorGroup;
+    public GameObject blueKeyDoorObject;
     public Sprite blueKeyDoorImage;
-    public Tilemap redKeyDoorTilemap;
-    public TileBase redKeyDoorTile;
+    public GameObject redKeyDoorGroup;
+    public GameObject redKeyDoorObject;
     public Sprite redKeyDoorImage;
-    public Tilemap greenKeyTilemap;
-    public TileBase greenKeyTile;
+    public GameObject greenKeyGroup;
+    public GameObject greenKeyObject;
     public Sprite greenKeyImage;
-    public Tilemap blueKeyTilemap;
-    public TileBase blueKeyTile;
+    public GameObject blueKeyGroup;
+    public GameObject blueKeyObject;
     public Sprite blueKeyImage;
-    public Tilemap redKeyTilemap;
-    public TileBase redKeyTile;
+    public GameObject redKeyGroup;
+    public GameObject redKeyObject;
     public Sprite redKeyImage;
     private string objectName;
     private SpriteRenderer createSprite;
@@ -72,7 +73,7 @@ public class moveCreateObject : MonoBehaviour
         GetComponent<Transform>().position = new Vector2(mousePos.x, mousePos.y);
 
         // Place sprite
-        if (Input.GetMouseButton(0))
+        if (Input.GetMouseButtonUp(0))
         {
             // Get the box position on the tilemap grid
             int gridOffsetX = 4;
@@ -82,46 +83,105 @@ public class moveCreateObject : MonoBehaviour
                 (int)mousePos.y / gridScale + gridOffsetY
             );
 
+            // Check if the placed object can go though tiles
+            string[] objectThatCanGoInTiles = { "powerUp", "greenKey", "redKey", "blueKey" };
+            bool canPlacedObjectGoInTiles = false;
+            for (int counter = 0; counter < objectThatCanGoInTiles.Length; counter++)
+            {
+                if (objectName == objectThatCanGoInTiles[counter])
+                {
+                    canPlacedObjectGoInTiles = true;
+                    break;
+                }
+            }
+
             // Delete object if space is occupied
-            if (regularBoxTilemap.GetTile(objectPositon))
+            if (regularBoxTilemap.GetTile(objectPositon) && !canPlacedObjectGoInTiles)
             {
                 regularBoxTilemap.SetTile(objectPositon, null);
             }
-            else if (steelBoxTilemap.GetTile(objectPositon))
+            else if (steelBoxTilemap.GetTile(objectPositon) && !canPlacedObjectGoInTiles)
             {
                 steelBoxTilemap.SetTile(objectPositon, null);
             }
-            else if (lavaBoxTilemap.GetTile(objectPositon))
+            else if (lavaBoxTilemap.GetTile(objectPositon) && !canPlacedObjectGoInTiles)
             {
                 lavaBoxTilemap.SetTile(objectPositon, null);
             }
-            else if (powerUpTilemap.GetTile(objectPositon))
+            else
             {
-                powerUpTilemap.SetTile(objectPositon, null);
-            }
-            else if (greenKeyDoorTilemap.GetTile(objectPositon))
-            {
-                greenKeyDoorTilemap.SetTile(objectPositon, null);
-            }
-            else if (redKeyDoorTilemap.GetTile(objectPositon))
-            {
-                redKeyDoorTilemap.SetTile(objectPositon, null);
-            }
-            else if (blueKeyDoorTilemap.GetTile(objectPositon))
-            {
-                blueKeyDoorTilemap.SetTile(objectPositon, null);
-            }
-            else if (greenKeyTilemap.GetTile(objectPositon))
-            {
-                greenKeyTilemap.SetTile(objectPositon, null);
-            }
-            else if (redKeyTilemap.GetTile(objectPositon))
-            {
-                redKeyTilemap.SetTile(objectPositon, null);
-            }
-            else if (blueKeyTilemap.GetTile(objectPositon))
-            {
-                blueKeyTilemap.SetTile(objectPositon, null);
+                // Special check case for non-tile objects
+                Vector2 newObjectPos = new Vector2(mousePos.x, mousePos.y);
+                int amountOfPowerUps = powerUpGroup.transform.childCount;
+                for (int counter = 0; counter < amountOfPowerUps; counter++)
+                {
+                    GameObject powerUp = powerUpGroup.transform.GetChild(counter).gameObject;
+                    Vector2 powerUpVector = powerUp.transform.position;
+                    if (powerUpVector == newObjectPos)
+                    {
+                        Destroy(powerUp);
+                    }
+                }
+                int amountOfGreenKeyDoors = greenKeyDoorGroup.transform.childCount;
+                for (int counter = 0; counter < amountOfGreenKeyDoors; counter++)
+                {
+                    GameObject greenKeyDoor = greenKeyDoorGroup.transform.GetChild(counter).gameObject;
+                    Vector2 greenKeyDoorVector = greenKeyDoor.transform.position;
+                    if (greenKeyDoorVector == newObjectPos)
+                    {
+                        Destroy(greenKeyDoor);
+                    }
+                }
+                int amountOfRedKeyDoors = redKeyDoorGroup.transform.childCount;
+                for (int counter = 0; counter < amountOfRedKeyDoors; counter++)
+                {
+                    GameObject redKeyDoor = redKeyDoorGroup.transform.GetChild(counter).gameObject;
+                    Vector2 redKeyDoorVector = redKeyDoor.transform.position;
+                    if (redKeyDoorVector == newObjectPos)
+                    {
+                        Destroy(redKeyDoor);
+                    }
+                }
+                int amountOfBlueKeyDoors = blueKeyDoorGroup.transform.childCount;
+                for (int counter = 0; counter < amountOfBlueKeyDoors; counter++)
+                {
+                    GameObject blueKeyDoor = blueKeyDoorGroup.transform.GetChild(counter).gameObject;
+                    Vector2 blueKeyDoorVector = blueKeyDoor.transform.position;
+                    if (blueKeyDoorVector == newObjectPos)
+                    {
+                        Destroy(blueKeyDoor);
+                    }
+                }
+                int amountOfGreenKeys = greenKeyGroup.transform.childCount;
+                for (int counter = 0; counter < amountOfGreenKeys; counter++)
+                {
+                    GameObject greenKey = greenKeyGroup.transform.GetChild(counter).gameObject;
+                    Vector2 greenKeyVector = greenKey.transform.position;
+                    if (greenKeyVector == newObjectPos)
+                    {
+                        Destroy(greenKey);
+                    }
+                }
+                int amountOfRedKeys = redKeyGroup.transform.childCount;
+                for (int counter = 0; counter < amountOfRedKeys; counter++)
+                {
+                    GameObject redKey = redKeyGroup.transform.GetChild(counter).gameObject;
+                    Vector2 redKeyVector = redKey.transform.position;
+                    if (redKeyVector == newObjectPos)
+                    {
+                        Destroy(redKey);
+                    }
+                }
+                int amountOfBlueKeys = blueKeyGroup.transform.childCount;
+                for (int counter = 0; counter < amountOfBlueKeys; counter++)
+                {
+                    GameObject blueKey = blueKeyGroup.transform.GetChild(counter).gameObject;
+                    Vector2 blueKeyVector = blueKey.transform.position;
+                    if (blueKeyVector == newObjectPos)
+                    {
+                        Destroy(blueKey);
+                    }
+                }
             }
 
             // Create object
@@ -137,7 +197,8 @@ public class moveCreateObject : MonoBehaviour
                     lavaBoxTilemap.SetTile(objectPositon, lavaBoxTile);
                     break;
                 case "powerUp":
-                    powerUpTilemap.SetTile(objectPositon, lavaBoxTile);
+                    GameObject newClonePowerUp = Instantiate(powerUpObject, new Vector2(mousePos.x, mousePos.y), Quaternion.identity);
+                    newClonePowerUp.transform.SetParent(powerUpGroup.transform);
                     break;
                 case "player":
                     playerMarker.transform.position = new Vector2(mousePos.x, mousePos.y);
@@ -146,22 +207,28 @@ public class moveCreateObject : MonoBehaviour
                     goalMarker.transform.position = new Vector2(mousePos.x, mousePos.y);
                     break;
                 case "greenKeyDoor":
-                    greenKeyDoorTilemap.SetTile(objectPositon, greenKeyDoorTile);
+                    GameObject newCloneGreenKeyDoor = Instantiate(greenKeyDoorObject, new Vector2(mousePos.x, mousePos.y), Quaternion.identity);
+                    newCloneGreenKeyDoor.transform.SetParent(greenKeyDoorGroup.transform);
                     break;
                 case "redKeyDoor":
-                    redKeyDoorTilemap.SetTile(objectPositon, redKeyDoorTile);
+                    GameObject newCloneRedKeyDoor = Instantiate(redKeyDoorObject, new Vector2(mousePos.x, mousePos.y), Quaternion.identity);
+                    newCloneRedKeyDoor.transform.SetParent(redKeyDoorGroup.transform);
                     break;
                 case "blueKeyDoor":
-                    blueKeyDoorTilemap.SetTile(objectPositon, blueKeyDoorTile);
+                    GameObject newCloneBlueKeyDoor = Instantiate(blueKeyDoorObject, new Vector2(mousePos.x, mousePos.y), Quaternion.identity);
+                    newCloneBlueKeyDoor.transform.SetParent(blueKeyDoorGroup.transform);
                     break;
                 case "greenKey":
-                    greenKeyTilemap.SetTile(objectPositon, greenKeyTile);
+                    GameObject newCloneGreenKey = Instantiate(greenKeyObject, new Vector2(mousePos.x, mousePos.y), Quaternion.identity);
+                    newCloneGreenKey.transform.SetParent(greenKeyGroup.transform);
                     break;
                 case "redKey":
-                    redKeyTilemap.SetTile(objectPositon, redKeyTile);
+                    GameObject newCloneRedKey = Instantiate(redKeyObject, new Vector2(mousePos.x, mousePos.y), Quaternion.identity);
+                    newCloneRedKey.transform.SetParent(redKeyGroup.transform);
                     break;
                 case "blueKey":
-                    blueKeyTilemap.SetTile(objectPositon, blueKeyTile);
+                    GameObject newCloneBlueKey = Instantiate(blueKeyObject, new Vector2(mousePos.x, mousePos.y), Quaternion.identity);
+                    newCloneBlueKey.transform.SetParent(blueKeyGroup.transform);
                     break;
             }
         }

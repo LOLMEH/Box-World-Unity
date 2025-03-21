@@ -5,35 +5,6 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-[System.Serializable]
-public class GridPosition
-{
-    public int x;
-    public int y;
-}
-
-[System.Serializable]
-public class ObjectInformation
-{
-    public String type;
-    public GridPosition position;
-}
-
-[System.Serializable]
-public class Level
-{
-    public String levelName;
-    public String bounds;
-    public GridPosition playerStartPosition;
-    public ObjectInformation[] levelData;
-}
-
-[System.Serializable]
-public class LevelBounds
-{
-    public GridPosition[] boundData;
-}
-
 public class createLevel : MonoBehaviour
 {
     public TextAsset levelFile;
@@ -53,6 +24,60 @@ public class createLevel : MonoBehaviour
     public GameObject blueKey;
     public GameObject powerUp;
     public GameObject goal;
+
+    [System.Serializable]
+    public class GridPosition
+    {
+        public int x;
+        public int y;
+
+        public GridPosition(int x, int y)
+        {
+            this.x = x;
+            this.y = y;
+        }
+    }
+
+    [System.Serializable]
+    public class ObjectInformation
+    {
+        public String type;
+        public GridPosition position;
+
+        public ObjectInformation(string type, GridPosition position)
+        {
+            this.type = type;
+            this.position = position;
+        }
+    }
+
+    [System.Serializable]
+    public class Level
+    {
+        public String levelName;
+        public String bounds;
+        public GridPosition playerStartPosition;
+        public ObjectInformation[] levelData;
+
+        public Level(string levelName, string bounds, GridPosition playerStartPosition, ObjectInformation[] levelData)
+        {
+            this.levelName = levelName;
+            this.bounds = bounds;
+            this.playerStartPosition = playerStartPosition;
+            this.levelData = levelData;
+        }
+    }
+
+    [System.Serializable]
+    public class LevelBounds
+    {
+        public GridPosition[] boundData;
+
+        public LevelBounds(GridPosition[] boundData)
+        {
+            this.boundData = boundData;
+        }
+    }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
