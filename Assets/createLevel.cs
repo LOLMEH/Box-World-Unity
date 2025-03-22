@@ -1,13 +1,10 @@
 using System;
-using NUnit.Framework;
-using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
 public class createLevel : MonoBehaviour
 {
-    public TextAsset levelFile;
     public TextAsset oldBoundsFile;
     public GameObject player;
     public Tilemap regularBoxTilemap;
@@ -16,6 +13,8 @@ public class createLevel : MonoBehaviour
     public TileBase steelBoxTile;
     public Tilemap lavaBoxTilemap;
     public TileBase lavaBoxTile;
+    public Tilemap moveBoxTilemap;
+    public TileBase moveBoxTile;
     public GameObject greenKeyDoor;
     public GameObject redKeyDoor;
     public GameObject blueKeyDoor;
@@ -82,6 +81,11 @@ public class createLevel : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        // Get level json file from the loading level object
+        loadingLevelData loadingLevelData = GameObject.FindGameObjectWithTag("LoadLevelInfo").GetComponent<loadingLevelData>();
+        string levelFilePath = "Assets/levels/" + loadingLevelData.gamemode + "/" + loadingLevelData.levelID + ".json";
+        TextAsset levelFile = AssetDatabase.LoadAssetAtPath<TextAsset>(levelFilePath);
+        
         // Get level from json
         Level levelInfo = JsonUtility.FromJson<Level>(levelFile.text);
         ObjectInformation[] levelBoxes = levelInfo.levelData;
@@ -126,6 +130,10 @@ public class createLevel : MonoBehaviour
             else if (objectName == "lavaBox")
             {
                 lavaBoxTilemap.SetTile(objectPositonVector, lavaBoxTile);
+            }
+            else if (objectName == "moveBox")
+            {
+                moveBoxTilemap.SetTile(objectPositonVector, moveBoxTile);
             }
             else if (objectName == "powerUp")
             {

@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.Tilemaps;
 
 public class nextLevelScript : MonoBehaviour
 {
@@ -20,7 +19,9 @@ public class nextLevelScript : MonoBehaviour
 
         if (goalCollider.IsTouching(playerCollider))
         {
-            // Reset scene
+            // Reset scene with new level id and save level loading information
+            loadingLevelData loadingLevelData = GameObject.FindGameObjectWithTag("LoadLevelInfo").GetComponent<loadingLevelData>();
+            loadingLevelData.GetComponent<loadingLevelData>().levelID++;
             SceneManager.LoadScene("GameScene");
         }
     }

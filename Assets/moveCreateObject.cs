@@ -19,6 +19,9 @@ public class moveCreateObject : MonoBehaviour
     public Tilemap lavaBoxTilemap;
     public TileBase lavaBoxTile;
     public Sprite lavaBoxImage;
+    public Tilemap moveBoxTilemap;
+    public TileBase moveBoxTile;
+    public Sprite moveBoxImage;
     public GameObject powerUpGroup;
     public GameObject powerUpObject;
     public Sprite powerUpImage;
@@ -73,7 +76,7 @@ public class moveCreateObject : MonoBehaviour
         GetComponent<Transform>().position = new Vector2(mousePos.x, mousePos.y);
 
         // Place sprite
-        if (Input.GetMouseButtonUp(0))
+        if (Input.GetMouseButton(0))
         {
             // Get the box position on the tilemap grid
             int gridOffsetX = 4;
@@ -107,6 +110,10 @@ public class moveCreateObject : MonoBehaviour
             else if (lavaBoxTilemap.GetTile(objectPositon) && !canPlacedObjectGoInTiles)
             {
                 lavaBoxTilemap.SetTile(objectPositon, null);
+            }
+            else if (moveBoxTilemap.GetTile(objectPositon) && !canPlacedObjectGoInTiles)
+            {
+                moveBoxTilemap.SetTile(objectPositon, null);
             }
             else
             {
@@ -195,6 +202,9 @@ public class moveCreateObject : MonoBehaviour
                     break;
                 case "lavaBox":
                     lavaBoxTilemap.SetTile(objectPositon, lavaBoxTile);
+                    break;
+                case "moveBox":
+                    moveBoxTilemap.SetTile(objectPositon, moveBoxTile);
                     break;
                 case "powerUp":
                     GameObject newClonePowerUp = Instantiate(powerUpObject, new Vector2(mousePos.x, mousePos.y), Quaternion.identity);
@@ -298,6 +308,11 @@ public class moveCreateObject : MonoBehaviour
         {
             objectName = "blueKey";
             createSprite.sprite = blueKeyImage;
+        }
+        else if (Input.GetKeyDown(KeyCode.R))
+        {
+            objectName = "moveBox";
+            createSprite.sprite = moveBoxImage;
         }
     }
 }

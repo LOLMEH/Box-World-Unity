@@ -1,10 +1,7 @@
-using System;
-using System.IO;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using static createLevel;
-using static UnityEditor.PlayerSettings;
 
 public class saveCustomLevel : MonoBehaviour
 {
@@ -14,6 +11,7 @@ public class saveCustomLevel : MonoBehaviour
     public Tilemap regularBoxTilemap;
     public Tilemap steelBoxTilemap;
     public Tilemap lavaBoxTilemap;
+    public Tilemap moveBoxTilemap;
     public GameObject powerUpGroup;
     public GameObject greenKeyDoorGroup;
     public GameObject blueKeyDoorGroup;
@@ -47,11 +45,9 @@ public class saveCustomLevel : MonoBehaviour
             return amount;
         }
 
-        // https://discussions.unity.com/t/count-the-amount-Of-a-certain-tile-in-a-tilemap/228363/5
-        int createObjectAtPositionTilemap(Tilemap tilemap, string name)
+        void createObjectAtPositionTilemap(Tilemap tilemap, string name)
         {
             tilemap.CompressBounds(); // To only read the tiles that we have painted
-            int amount = 0;
             foreach (var pos in tilemap.cellBounds.allPositionsWithin)
             {
                 Tile tile = tilemap.GetTile<Tile>(pos);
@@ -62,11 +58,10 @@ public class saveCustomLevel : MonoBehaviour
                     levelDataIndex += 1;
                 }
             }
-            return amount;
         }
 
         // https://discussions.unity.com/t/count-the-amount-Of-a-certain-tile-in-a-tilemap/228363/5
-        int createObjectAtPositionObject(GameObject group, string name)
+        void createObjectAtPositionObject(GameObject group, string name)
         {
             int amount = group.transform.childCount;
             for (int counter = 0; counter < amount; counter++)
@@ -76,7 +71,6 @@ public class saveCustomLevel : MonoBehaviour
                 levelData[levelDataIndex] = new ObjectInformation(name, gridPos);
                 levelDataIndex += 1;
             }
-            return amount;
         }
 
         // Save level to json file
@@ -91,6 +85,7 @@ public class saveCustomLevel : MonoBehaviour
         int amountOfRegularBoxes = getAmountOfTiles(regularBoxTilemap);
         int amountOfSteelBoxes = getAmountOfTiles(steelBoxTilemap);
         int amountOfLavaBoxes = getAmountOfTiles(lavaBoxTilemap);
+        int amountOfMoveBoxes = getAmountOfTiles(moveBoxTilemap);
         int amountOfPowerUps = powerUpGroup.transform.childCount;
         int amountOfGreenKeyDoors = greenKeyDoorGroup.transform.childCount;
         int amountOfRedKeyDoors = redKeyDoorGroup.transform.childCount;
@@ -100,53 +95,26 @@ public class saveCustomLevel : MonoBehaviour
         int amountOfBlueKeys = blueKeyGroup.transform.childCount;
         int totalObjectCount = 1 + amountOfRegularBoxes + amountOfSteelBoxes
             + amountOfLavaBoxes + amountOfPowerUps + amountOfGreenKeyDoors + amountOfRedKeyDoors + amountOfBlueKeyDoors
-            + amountOfGreenKeys + amountOfRedKeys + amountOfBlueKeys;
+            + amountOfGreenKeys + amountOfRedKeys + amountOfBlueKeys + amountOfMoveBoxes;
 
         // Create objects
         levelData = new ObjectInformation[totalObjectCount];
         GridPosition goalGridPos = new GridPosition((int)goalMarker.transform.position.x, (int)goalMarker.transform.position.y);
         levelData[levelDataIndex] = new ObjectInformation("goal", goalGridPos);
         levelDataIndex += 1;
-        for (int counter = 0; counter < amountOfRegularBoxes; counter++)
-        {
-            createObjectAtPositionTilemap(regularBoxTilemap, "regularBox");
-        }
-        for (int counter = 0; counter < amountOfSteelBoxes; counter++)
-        {
-            createObjectAtPositionTilemap(steelBoxTilemap, "steelBox");
-        }
-        for (int counter = 0; counter < amountOfLavaBoxes; counter++)
-        {
-            createObjectAtPositionTilemap(lavaBoxTilemap, "lavaBox");
-        }
-        for (int counter = 0; counter < amountOfPowerUps; counter++)
-        {
-            createObjectAtPositionObject(powerUpGroup, "powerUp");
-        }
-        for (int counter = 0; counter < amountOfGreenKeyDoors; counter++)
-        {
-            createObjectAtPositionObject(greenKeyDoorGroup, "greenKeyDoor");
-        }
-        for (int counter = 0; counter < amountOfRedKeyDoors; counter++)
-        {
-            createObjectAtPositionObject(redKeyDoorGroup, "redKeyDoor");
-        }
-        for (int counter = 0; counter < amountOfBlueKeyDoors; counter++)
-        {
-            createObjectAtPositionObject(blueKeyDoorGroup, "blueKeyDoor");
-        }
-        for (int counter = 0; counter < amountOfGreenKeys; counter++)
-        {
-            createObjectAtPositionObject(greenKeyGroup, "greenKey");
-        }
-        for (int counter = 0; counter < amountOfRedKeys; counter++)
-        {
-            createObjectAtPositionObject(redKeyGroup, "redKey");
-        }
-        for (int counter = 0; counter < amountOfBlueKeys; counter++)
-        {
-            createObjectAtPositionObject(blueKeyGroup, "blueKey");
-        }
+        // Create objects (tilemaps)
+        createObjectAtPositionTilemap(regularBoxTilemap, "regularBox");
+        createObjectAtPositionTilemap(steelBoxTilemap, "steelBox");
+        createObjectAtPositionTilemap(lavaBoxTilemap, "lavaBox");
+        createObjectAtPositionTilemap(moveBoxTilemap, "moveBox");
+        // Create objects (non-tilemaps)
+        createObjectAtPositionObject(powerUpGroup, "powerUp");
+        createObjectAtPositionObject(greenKeyDoorGroup, "greenKeyDoor");
+        createObjectAtPositionObject(redKeyDoorGroup, "redKeyDoor");
+        createObjectAtPositionObject(blueKeyDoorGroup, "blueKeyDoor");
+        createObjectAtPositionObject(greenKeyGroup, "greenKey");
+        createObjectAtPositionObject(redKeyGroup, "redKey");
+        createObjectAtPositionObject(blueKeyGroup, "blueKey");
 
         // Save level to new json file
         Level level = new Level(levelName, "old", playerPosition, levelData);
