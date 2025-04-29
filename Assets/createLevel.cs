@@ -1,11 +1,15 @@
 using System;
+using Unity.VisualScripting;
 using UnityEditor;
+using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
 public class createLevel : MonoBehaviour
 {
+    public Camera gameCamera;
     public TextAsset oldBoundsFile;
+    public TextAsset x2BoundsFile;
     public GameObject player;
     public Tilemap regularBoxTilemap;
     public TileBase regularBoxTile;
@@ -13,8 +17,7 @@ public class createLevel : MonoBehaviour
     public TileBase steelBoxTile;
     public Tilemap lavaBoxTilemap;
     public TileBase lavaBoxTile;
-    public Tilemap moveBoxTilemap;
-    public TileBase moveBoxTile;
+    public GameObject moveBox;
     public GameObject greenKeyDoor;
     public GameObject redKeyDoor;
     public GameObject blueKeyDoor;
@@ -85,9 +88,21 @@ public class createLevel : MonoBehaviour
         loadingLevelData loadingLevelData = GameObject.FindGameObjectWithTag("LoadLevelInfo").GetComponent<loadingLevelData>();
         string levelFilePath = "Assets/levels/" + loadingLevelData.gamemode + "/" + loadingLevelData.levelID + ".json";
         TextAsset levelFile = AssetDatabase.LoadAssetAtPath<TextAsset>(levelFilePath);
-        
+
         // Get level from json
-        Level levelInfo = JsonUtility.FromJson<Level>(levelFile.text);
+        Level levelInfo;
+        try
+        {
+            // Get level's json file
+            levelInfo = JsonUtility.FromJson<Level>(levelFile.text);
+        }
+        catch (NullReferenceException)
+        {
+            // Get the default level's json file if the level does not exist
+            print("Error: Unknown level ID " + loadingLevelData.levelID + ". Loading default level...");
+            TextAsset defaultFile = AssetDatabase.LoadAssetAtPath<TextAsset>("Assets/levels/nick's/nico2.json");
+            levelInfo = JsonUtility.FromJson<Level>(defaultFile.text);
+        }
         ObjectInformation[] levelBoxes = levelInfo.levelData;
 
         // Move player
@@ -95,11 +110,9 @@ public class createLevel : MonoBehaviour
         Vector2 playerStartPositionVector = new Vector2(levelInfo.playerStartPosition.x, levelInfo.playerStartPosition.y);
         player.transform.position = playerStartPositionVector;
 
-        // Get and generate level boundaries
-        if (levelInfo.bounds == "old")
+        // Generate level boundaries
+        void createLevelBounds(LevelBounds levelBounds, GridPosition[] levelBoundData)
         {
-            LevelBounds levelBounds = JsonUtility.FromJson<LevelBounds>(oldBoundsFile.text);
-            GridPosition[] levelBoundData = levelBounds.boundData;
             for (int counter = 0; counter < levelBoundData.Length; counter++)
             {
                 GridPosition boundPositon = levelBoundData[counter];
@@ -107,9 +120,29 @@ public class createLevel : MonoBehaviour
                 steelBoxTilemap.SetTile(boundPositonVector, steelBoxTile);
             }
         }
-        else
+
+        // Get and call for the generation of level boundaries
+        LevelBounds levelBounds;
+        GridPosition[] levelBoundData;
+        switch (levelInfo.bounds)
         {
-            print("Error: bounds " + levelInfo.bounds + " not found");
+            case "old":
+                levelBounds = JsonUtility.FromJson<LevelBounds>(oldBoundsFile.text);
+                levelBoundData = levelBounds.boundData;
+                createLevelBounds(levelBounds, levelBoundData);
+                break;
+            case "x2":
+                levelBounds = JsonUtility.FromJson<LevelBounds>(x2BoundsFile.text);
+                levelBoundData = levelBounds.boundData;
+                createLevelBounds(levelBounds, levelBoundData);
+                // Change camera zoom and position
+                float cameraZ = gameCamera.transform.position.z;
+                gameCamera.orthographicSize = 10;
+                gameCamera.transform.position = new Vector3(1, -1, cameraZ);
+                break;
+            default:
+                print("Error: bounds " + levelInfo.bounds + " not found");
+                break;
         }
 
         // Generate level objects
@@ -133,7 +166,7 @@ public class createLevel : MonoBehaviour
             }
             else if (objectName == "moveBox")
             {
-                moveBoxTilemap.SetTile(objectPositonVector, moveBoxTile);
+                Instantiate(moveBox, objectPositonVector, Quaternion.identity);
             }
             else if (objectName == "powerUp")
             {
@@ -172,11 +205,5 @@ public class createLevel : MonoBehaviour
                 print("Error: object " + objectName + " not found");
             }
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

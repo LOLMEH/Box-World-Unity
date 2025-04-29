@@ -6,12 +6,13 @@ using static createLevel;
 public class saveCustomLevel : MonoBehaviour
 {
     public GameObject levelNameTextInput;
+    public changeGameBounds levelBoundsInput;
     public GameObject playerMarker;
     public GameObject goalMarker;
     public Tilemap regularBoxTilemap;
     public Tilemap steelBoxTilemap;
     public Tilemap lavaBoxTilemap;
-    public Tilemap moveBoxTilemap;
+    public GameObject moveBoxGroup;
     public GameObject powerUpGroup;
     public GameObject greenKeyDoorGroup;
     public GameObject blueKeyDoorGroup;
@@ -76,7 +77,10 @@ public class saveCustomLevel : MonoBehaviour
         // Save level to json file
         string levelName = levelNameTextInput.GetComponent<TMP_InputField>().text;
 
-        print("Attempting to save level " + levelName + "...");
+        // Get level bounds
+        string levelBounds = levelBoundsInput.boundString;
+
+        print("Attempting to save level '" + levelName + "' with '" + levelBounds + "' bounds...");
 
         // Get player position
         GridPosition playerPosition = new GridPosition((int)playerMarker.transform.position.x, (int)playerMarker.transform.position.y);
@@ -85,7 +89,7 @@ public class saveCustomLevel : MonoBehaviour
         int amountOfRegularBoxes = getAmountOfTiles(regularBoxTilemap);
         int amountOfSteelBoxes = getAmountOfTiles(steelBoxTilemap);
         int amountOfLavaBoxes = getAmountOfTiles(lavaBoxTilemap);
-        int amountOfMoveBoxes = getAmountOfTiles(moveBoxTilemap);
+        int amountOfMoveBoxes = moveBoxGroup.transform.childCount;
         int amountOfPowerUps = powerUpGroup.transform.childCount;
         int amountOfGreenKeyDoors = greenKeyDoorGroup.transform.childCount;
         int amountOfRedKeyDoors = redKeyDoorGroup.transform.childCount;
@@ -106,8 +110,8 @@ public class saveCustomLevel : MonoBehaviour
         createObjectAtPositionTilemap(regularBoxTilemap, "regularBox");
         createObjectAtPositionTilemap(steelBoxTilemap, "steelBox");
         createObjectAtPositionTilemap(lavaBoxTilemap, "lavaBox");
-        createObjectAtPositionTilemap(moveBoxTilemap, "moveBox");
         // Create objects (non-tilemaps)
+        createObjectAtPositionObject(moveBoxGroup, "moveBox");
         createObjectAtPositionObject(powerUpGroup, "powerUp");
         createObjectAtPositionObject(greenKeyDoorGroup, "greenKeyDoor");
         createObjectAtPositionObject(redKeyDoorGroup, "redKeyDoor");
@@ -117,7 +121,7 @@ public class saveCustomLevel : MonoBehaviour
         createObjectAtPositionObject(blueKeyGroup, "blueKey");
 
         // Save level to new json file
-        Level level = new Level(levelName, "old", playerPosition, levelData);
+        Level level = new Level(levelName, levelBounds, playerPosition, levelData);
         string levelJson = JsonUtility.ToJson(level);
         string filePath = Application.dataPath + "/customLevel.json";
         System.IO.File.WriteAllText(filePath, levelJson);

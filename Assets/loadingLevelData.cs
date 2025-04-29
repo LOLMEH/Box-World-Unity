@@ -4,6 +4,7 @@ public class loadingLevelData : MonoBehaviour
 {
     public int levelID;
     public string gamemode;
+    public string gameVersion;
 
     void Awake()
     {

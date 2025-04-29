@@ -19,8 +19,8 @@ public class moveCreateObject : MonoBehaviour
     public Tilemap lavaBoxTilemap;
     public TileBase lavaBoxTile;
     public Sprite lavaBoxImage;
-    public Tilemap moveBoxTilemap;
-    public TileBase moveBoxTile;
+    public GameObject moveBoxGroup;
+    public GameObject moveBoxObject;
     public Sprite moveBoxImage;
     public GameObject powerUpGroup;
     public GameObject powerUpObject;
@@ -111,14 +111,20 @@ public class moveCreateObject : MonoBehaviour
             {
                 lavaBoxTilemap.SetTile(objectPositon, null);
             }
-            else if (moveBoxTilemap.GetTile(objectPositon) && !canPlacedObjectGoInTiles)
-            {
-                moveBoxTilemap.SetTile(objectPositon, null);
-            }
             else
             {
                 // Special check case for non-tile objects
                 Vector2 newObjectPos = new Vector2(mousePos.x, mousePos.y);
+                int amountOfMoveBoxes = moveBoxGroup.transform.childCount;
+                for (int counter = 0; counter < amountOfMoveBoxes; counter++)
+                {
+                    GameObject moveBox = moveBoxGroup.transform.GetChild(counter).gameObject;
+                    Vector2 moveBoxVector = moveBox.transform.position;
+                    if (moveBoxVector == newObjectPos)
+                    {
+                        Destroy(moveBox);
+                    }
+                }
                 int amountOfPowerUps = powerUpGroup.transform.childCount;
                 for (int counter = 0; counter < amountOfPowerUps; counter++)
                 {
@@ -204,7 +210,8 @@ public class moveCreateObject : MonoBehaviour
                     lavaBoxTilemap.SetTile(objectPositon, lavaBoxTile);
                     break;
                 case "moveBox":
-                    moveBoxTilemap.SetTile(objectPositon, moveBoxTile);
+                    GameObject newCloneMoveBox = Instantiate(moveBoxObject, new Vector2(mousePos.x, mousePos.y), Quaternion.identity);
+                    newCloneMoveBox.transform.SetParent(moveBoxGroup.transform);
                     break;
                 case "powerUp":
                     GameObject newClonePowerUp = Instantiate(powerUpObject, new Vector2(mousePos.x, mousePos.y), Quaternion.identity);
