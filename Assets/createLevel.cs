@@ -11,6 +11,9 @@ public class createLevel : MonoBehaviour
     public TextAsset oldBoundsFile;
     public TextAsset x2BoundsFile;
     public GameObject player;
+    public GameObject playerTwo;
+    public GameObject playerThree;
+    public GameObject playerFour;
     public Tilemap regularBoxTilemap;
     public TileBase regularBoxTile;
     public Tilemap steelBoxTilemap;
@@ -58,14 +61,14 @@ public class createLevel : MonoBehaviour
     {
         public String levelName;
         public String bounds;
-        public GridPosition playerStartPosition;
+        public GridPosition[] playerStartPositions;
         public ObjectInformation[] levelData;
 
-        public Level(string levelName, string bounds, GridPosition playerStartPosition, ObjectInformation[] levelData)
+        public Level(string levelName, string bounds, GridPosition[] playerStartPositions, ObjectInformation[] levelData)
         {
             this.levelName = levelName;
             this.bounds = bounds;
-            this.playerStartPosition = playerStartPosition;
+            this.playerStartPositions = playerStartPositions;
             this.levelData = levelData;
         }
     }
@@ -100,15 +103,50 @@ public class createLevel : MonoBehaviour
         {
             // Get the default level's json file if the level does not exist
             print("Error: Unknown level ID " + loadingLevelData.levelID + ". Loading default level...");
-            TextAsset defaultFile = AssetDatabase.LoadAssetAtPath<TextAsset>("Assets/levels/nick's/nico2.json");
+            TextAsset defaultFile = AssetDatabase.LoadAssetAtPath<TextAsset>("Assets/levels/nick's/2.json");
             levelInfo = JsonUtility.FromJson<Level>(defaultFile.text);
         }
         ObjectInformation[] levelBoxes = levelInfo.levelData;
 
-        // Move player
-        GridPosition playerStartPosition = levelInfo.playerStartPosition;
-        Vector2 playerStartPositionVector = new Vector2(levelInfo.playerStartPosition.x, levelInfo.playerStartPosition.y);
+        // Get player positions
+        GridPosition[] playerStartPositions = levelInfo.playerStartPositions;
+        GridPosition playerPosition = playerStartPositions[0];
+        GridPosition playerTwoPosition = playerStartPositions[1];
+        GridPosition playerThreePosition = playerStartPositions[2];
+        GridPosition playerFourPosition = playerStartPositions[3];
+        GridPosition invalidPlayerPosition = new GridPosition(-99, -99);
+
+        // Move player to positions
+        GridPosition playerStartPosition = playerPosition;
+        Vector2 playerStartPositionVector = new Vector2(playerPosition.x, playerPosition.y);
         player.transform.position = playerStartPositionVector;
+
+        // Move the other players to positions if it is a multiplayer level
+        // A level is a multiplayer level if the player position is valid
+        if (playerTwoPosition != invalidPlayerPosition)
+        {
+            // Player two
+            playerTwo.SetActive(true);
+            GridPosition playerTwoStartPosition = playerTwoPosition;
+            Vector2 playerTwoStartPositionVector = new Vector2(playerTwoPosition.x, playerTwoPosition.y);
+            playerTwo.transform.position = playerTwoStartPositionVector;
+        }
+        if (playerThreePosition != invalidPlayerPosition)
+        {
+            // Player three
+            playerThree.SetActive(true);
+            GridPosition playerThreeStartPosition = playerThreePosition;
+            Vector2 playerThreeStartPositionVector = new Vector2(playerThreePosition.x, playerThreePosition.y);
+            playerThree.transform.position = playerThreeStartPositionVector;
+        }
+        if (playerFourPosition != invalidPlayerPosition)
+        {
+            // Player four
+            playerFour.SetActive(true);
+            GridPosition playerFourStartPosition = playerFourPosition;
+            Vector2 playerFourStartPositionVector = new Vector2(playerFourPosition.x, playerFourPosition.y);
+            playerFour.transform.position = playerFourStartPositionVector;
+        }
 
         // Generate level boundaries
         void createLevelBounds(LevelBounds levelBounds, GridPosition[] levelBoundData)

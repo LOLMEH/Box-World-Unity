@@ -2,26 +2,20 @@ using UnityEngine;
 
 public class removeBlueKeyDoor : MonoBehaviour
 {
-    public GameObject player;
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    void OnCollisionEnter2D(Collision2D collision)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        BoxCollider2D playerCollider = player.GetComponent<BoxCollider2D>();
-        BoxCollider2D keyDoorCollider = GetComponent<BoxCollider2D>();
-
-        int playerBlueKeys = player.GetComponent<movementScript>().blueKeys;
-
-        if (keyDoorCollider.IsTouching(playerCollider) && playerBlueKeys > 0)
+        // Check if a player is touching the object
+        if (collision.gameObject.CompareTag("Player"))
         {
-            player.GetComponent<movementScript>().blueKeys--;
-            Destroy(gameObject);
+            // Remove the key door if the player has more than one key
+            GameObject player = collision.gameObject;
+            int playerBlueKeys = player.GetComponent<movementScript>().blueKeys;
+
+            if (playerBlueKeys > 0)
+            {
+                player.GetComponent<movementScript>().blueKeys--;
+                Destroy(gameObject);
+            }
         }
     }
 }

@@ -2,22 +2,13 @@ using UnityEngine;
 
 public class getGreenKey : MonoBehaviour
 {
-    public GameObject player;
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    void OnCollisionEnter2D(Collision2D collision)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        BoxCollider2D playerCollider = player.GetComponent<BoxCollider2D>();
-        BoxCollider2D keyCollider = GetComponent<BoxCollider2D>();
-
-        if (keyCollider.IsTouching(playerCollider))
+        // Check if a player is touching the object
+        if (collision.gameObject.CompareTag("Player"))
         {
+            // Give the key to the player
+            GameObject player = collision.gameObject;
             player.GetComponent<movementScript>().greenKeys++;
             Destroy(gameObject);
         }

@@ -8,6 +8,12 @@ public class moveCreateObject : MonoBehaviour
     public int gridScale;
     public GameObject playerMarker;
     public Sprite playerImage;
+    public GameObject playerTwoMarker;
+    public Sprite playerTwoImage;
+    public GameObject playerThreeMarker;
+    public Sprite playerThreeImage;
+    public GameObject playerFourMarker;
+    public Sprite playerFourImage;
     public GameObject goalMarker;
     public Sprite goalImage;
     public Tilemap regularBoxTilemap;
@@ -247,6 +253,15 @@ public class moveCreateObject : MonoBehaviour
                     GameObject newCloneBlueKey = Instantiate(blueKeyObject, new Vector2(mousePos.x, mousePos.y), Quaternion.identity);
                     newCloneBlueKey.transform.SetParent(blueKeyGroup.transform);
                     break;
+                case "player2":
+                    playerTwoMarker.transform.position = new Vector2(mousePos.x, mousePos.y);
+                    break;
+                case "player3":
+                    playerThreeMarker.transform.position = new Vector2(mousePos.x, mousePos.y);
+                    break;
+                case "player4":
+                    playerFourMarker.transform.position = new Vector2(mousePos.x, mousePos.y);
+                    break;
             }
         }
 
@@ -320,6 +335,21 @@ public class moveCreateObject : MonoBehaviour
         {
             objectName = "moveBox";
             createSprite.sprite = moveBoxImage;
+        }
+        else if (Input.GetKeyDown(KeyCode.T))
+        {
+            objectName = "player2";
+            createSprite.sprite = playerTwoImage;
+        }
+        else if (Input.GetKeyDown(KeyCode.Y))
+        {
+            objectName = "player3";
+            createSprite.sprite = playerThreeImage;
+        }
+        else if (Input.GetKeyDown(KeyCode.U))
+        {
+            objectName = "player4";
+            createSprite.sprite = playerFourImage;
         }
     }
 }

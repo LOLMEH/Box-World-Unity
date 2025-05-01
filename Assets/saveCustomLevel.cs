@@ -1,3 +1,4 @@
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -6,20 +7,8 @@ using static createLevel;
 public class saveCustomLevel : MonoBehaviour
 {
     public GameObject levelNameTextInput;
-    public changeGameBounds levelBoundsInput;
-    public GameObject playerMarker;
-    public GameObject goalMarker;
-    public Tilemap regularBoxTilemap;
-    public Tilemap steelBoxTilemap;
-    public Tilemap lavaBoxTilemap;
-    public GameObject moveBoxGroup;
-    public GameObject powerUpGroup;
-    public GameObject greenKeyDoorGroup;
-    public GameObject blueKeyDoorGroup;
-    public GameObject redKeyDoorGroup;
-    public GameObject greenKeyGroup;
-    public GameObject blueKeyGroup;
-    public GameObject redKeyGroup;
+    public changeGameBounds levelSettings;
+    public moveCreateObject createObject;
     private ObjectInformation[] levelData;
     private int levelDataIndex;
 
@@ -77,13 +66,29 @@ public class saveCustomLevel : MonoBehaviour
         // Save level to json file
         string levelName = levelNameTextInput.GetComponent<TMP_InputField>().text;
 
-        // Get level bounds
-        string levelBounds = levelBoundsInput.boundString;
+        // Get level settings
+        string levelBounds = levelSettings.boundString;
+        int playerCount = levelSettings.playerCount;
 
-        print("Attempting to save level '" + levelName + "' with '" + levelBounds + "' bounds...");
+        print("Attempting to save " + playerCount + " player level " + levelName + " with " + levelBounds + " bounds...");
 
-        // Get player position
-        GridPosition playerPosition = new GridPosition((int)playerMarker.transform.position.x, (int)playerMarker.transform.position.y);
+        // Get markers for the objects
+        GameObject playerMarker = createObject.playerMarker;
+        GameObject goalMarker = createObject.goalMarker;
+        Tilemap regularBoxTilemap = createObject.regularBoxTilemap;
+        Tilemap steelBoxTilemap = createObject.steelBoxTilemap;
+        Tilemap lavaBoxTilemap = createObject.lavaBoxTilemap;
+        GameObject moveBoxGroup = createObject.moveBoxGroup;
+        GameObject powerUpGroup = createObject.powerUpGroup;
+        GameObject greenKeyDoorGroup = createObject.greenKeyDoorGroup;
+        GameObject blueKeyDoorGroup = createObject.blueKeyDoorGroup;
+        GameObject redKeyDoorGroup = createObject.redKeyDoorGroup;
+        GameObject greenKeyGroup = createObject.greenKeyGroup;
+        GameObject blueKeyGroup = createObject.blueKeyGroup;
+        GameObject redKeyGroup = createObject.redKeyGroup;
+        GameObject playerTwoMarker = createObject.playerTwoMarker;
+        GameObject playerThreeMarker = createObject.playerThreeMarker;
+        GameObject playerFourMarker = createObject.playerFourMarker;
 
         // Count amount Of objects placed
         int amountOfRegularBoxes = getAmountOfTiles(regularBoxTilemap);
@@ -120,8 +125,41 @@ public class saveCustomLevel : MonoBehaviour
         createObjectAtPositionObject(redKeyGroup, "redKey");
         createObjectAtPositionObject(blueKeyGroup, "blueKey");
 
+        // Get all of the player positions
+        GridPosition playerPosition = new GridPosition((int)playerMarker.transform.position.x, (int)playerMarker.transform.position.y);
+        GridPosition playerTwoPosition = new GridPosition((int)playerTwoMarker.transform.position.x, (int)playerTwoMarker.transform.position.y);
+        GridPosition playerThreePosition = new GridPosition((int)playerThreeMarker.transform.position.x, (int)playerThreeMarker.transform.position.y);
+        GridPosition playerFourPosition = new GridPosition((int)playerFourMarker.transform.position.x, (int)playerFourMarker.transform.position.y);
+
+
+        // Add player positions depending on how many players there are
+        GridPosition[] playerStartPositions = {
+            new GridPosition(-99, -99),
+            new GridPosition(-99, -99),
+            new GridPosition(-99, -99),
+            new GridPosition(-99, -99)
+        };
+
+        // Player 1 position
+        playerStartPositions[0] = playerPosition;
+        if (playerCount > 1)
+        {
+            // Player 2 position
+            playerStartPositions[1] = playerTwoPosition;
+        }
+        if (playerCount > 2)
+        {
+            // Player 3 position
+            playerStartPositions[2] = playerThreePosition;
+        }
+        if (playerCount > 3)
+        {
+            // Player 4 position
+            playerStartPositions[3] = playerFourPosition;
+        }
+
         // Save level to new json file
-        Level level = new Level(levelName, levelBounds, playerPosition, levelData);
+        Level level = new Level(levelName, levelBounds, playerStartPositions, levelData);
         string levelJson = JsonUtility.ToJson(level);
         string filePath = Application.dataPath + "/customLevel.json";
         System.IO.File.WriteAllText(filePath, levelJson);

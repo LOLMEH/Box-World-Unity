@@ -1,31 +1,29 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 
 public class getPowerUp : MonoBehaviour
 {
-    public movementScript player;
     public CompositeCollider2D regularBoxCollider;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    void OnCollisionEnter2D(Collision2D collision)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        BoxCollider2D playerCollider = player.GetComponent<BoxCollider2D>();
-        BoxCollider2D powerUpCollider = GetComponent<BoxCollider2D>();
-
-        if (powerUpCollider.IsTouching(playerCollider))
+        // Check if a player is touching the object
+        if (collision.gameObject.CompareTag("Player"))
         {
-            // Enable power up
-            player.hasPowerUp = true;
-            player.powerUpImage.enabled = true;
-            Physics2D.IgnoreCollision(playerCollider, regularBoxCollider, true);
-            // Destroy power up
-            Destroy(gameObject);
+            // Get the player that touched the powerup
+            movementScript player = collision.gameObject.GetComponent<movementScript>();
+            // Check if the player does not already have the powerup
+            if (player.hasPowerUp == false)
+            {
+                // Enable power up for the player
+                Collider2D playerCollider = collision.collider;
+                player.hasPowerUp = true;
+                player.powerUpImage.enabled = true;
+                Physics2D.IgnoreCollision(playerCollider, regularBoxCollider, true);
+                // Destroy power up
+                Destroy(gameObject);
+            }
         }
     }
 }

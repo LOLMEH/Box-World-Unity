@@ -1,0 +1,1 @@
+{"levelName":"test 2p","bounds":"old","playerStartPositions":[{"x":-8,"y":4},{"x":-8,"y":0},{"x":-99,"y":-99},{"x":-99,"y":-99}],"levelData":[{"type":"goal","position":{"x":8,"y":4}},{"type":"regularBox","position":{"x":2,"y":4}},{"type":"regularBox","position":{"x":3,"y":4}}]}
