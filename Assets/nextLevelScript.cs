@@ -1,28 +1,43 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class nextLevelScript : MonoBehaviour
 {
-    public GameObject player;
+    public createLevel levelInfo;
+    public int playersPassed;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        playersPassed = 0;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void goToNextLevel()
     {
-        BoxCollider2D playerCollider = player.GetComponent<BoxCollider2D>();
-        BoxCollider2D goalCollider = GetComponent<BoxCollider2D>();
+        // Reset scene with new level id and save level loading information
+        loadingLevelData loadingLevelData = GameObject.FindGameObjectWithTag("LoadLevelInfo").GetComponent<loadingLevelData>();
+        loadingLevelData.GetComponent<loadingLevelData>().levelID++;
+        SceneManager.LoadScene("GameScene");
+    }
 
-        if (goalCollider.IsTouching(playerCollider))
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        // Check if player is touching object
+        if (collision.gameObject.CompareTag("Player"))
         {
-            // Reset scene with new level id and save level loading information
-            loadingLevelData loadingLevelData = GameObject.FindGameObjectWithTag("LoadLevelInfo").GetComponent<loadingLevelData>();
-            loadingLevelData.GetComponent<loadingLevelData>().levelID++;
-            SceneManager.LoadScene("GameScene");
+            // Get and remove player
+            GameObject player = collision.gameObject;
+            playersPassed++;
+            Destroy(player);
+
+            // Check if the right amount of players have passed the level
+            int playerCount = levelInfo.playerCount;
+
+            if (playersPassed == playerCount)
+            {
+                goToNextLevel();
+            }
         }
     }
 }

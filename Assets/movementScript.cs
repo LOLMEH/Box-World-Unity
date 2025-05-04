@@ -58,6 +58,12 @@ public class movementScript : MonoBehaviour
                 break;
         }
     }
+    void OnCollisionExit2D(Collision2D collision)
+    {
+        // Stop moving the player when a collision stops
+        Rigidbody2D rb = GetComponent<Rigidbody2D>();
+        rb.linearVelocity = Vector2.zero;
+    }
 
     // Update is called once per frame
     void Update()
@@ -98,7 +104,7 @@ public class movementScript : MonoBehaviour
             rigidBody2D.AddForce(Vector2.right, ForceMode2D.Impulse);
         }
 
-        // Stop movement if a buttons is up
+        // Stop movement if a button is up
         if (isAnyButtonUp)
         {
             rigidBody2D.linearVelocity = Vector2.zero;

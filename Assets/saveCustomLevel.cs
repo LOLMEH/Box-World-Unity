@@ -89,11 +89,16 @@ public class saveCustomLevel : MonoBehaviour
         GameObject playerTwoMarker = createObject.playerTwoMarker;
         GameObject playerThreeMarker = createObject.playerThreeMarker;
         GameObject playerFourMarker = createObject.playerFourMarker;
+        GameObject throwBoxGroup = createObject.throwBoxGroup;
+        GameObject throwBoxButtonGroup = createObject.throwBoxButtonGroup;
+        Tilemap throwBoxTileTilemap = createObject.throwBoxTileTilemap;
 
-        // Count amount Of objects placed
+        // Count amount Of objects placed (tilemaps)
         int amountOfRegularBoxes = getAmountOfTiles(regularBoxTilemap);
         int amountOfSteelBoxes = getAmountOfTiles(steelBoxTilemap);
         int amountOfLavaBoxes = getAmountOfTiles(lavaBoxTilemap);
+        int amountOfThrowBoxTiles = getAmountOfTiles(throwBoxTileTilemap);
+        // Count amount Of objects placed (regular objects)
         int amountOfMoveBoxes = moveBoxGroup.transform.childCount;
         int amountOfPowerUps = powerUpGroup.transform.childCount;
         int amountOfGreenKeyDoors = greenKeyDoorGroup.transform.childCount;
@@ -102,11 +107,14 @@ public class saveCustomLevel : MonoBehaviour
         int amountOfGreenKeys = greenKeyGroup.transform.childCount;
         int amountOfRedKeys = redKeyGroup.transform.childCount;
         int amountOfBlueKeys = blueKeyGroup.transform.childCount;
+        int amountOfThrowBoxes = throwBoxGroup.transform.childCount;
+        int amountOfThrowBoxButtons = throwBoxButtonGroup.transform.childCount;
         int totalObjectCount = 1 + amountOfRegularBoxes + amountOfSteelBoxes
-            + amountOfLavaBoxes + amountOfPowerUps + amountOfGreenKeyDoors + amountOfRedKeyDoors + amountOfBlueKeyDoors
-            + amountOfGreenKeys + amountOfRedKeys + amountOfBlueKeys + amountOfMoveBoxes;
+            + amountOfLavaBoxes + amountOfPowerUps + amountOfGreenKeyDoors + amountOfRedKeyDoors
+            + amountOfBlueKeyDoors + amountOfGreenKeys + amountOfRedKeys + amountOfBlueKeys
+            + amountOfMoveBoxes + amountOfThrowBoxes + amountOfThrowBoxButtons + amountOfThrowBoxTiles;
 
-        // Create objects
+        // Create objects in the level data
         levelData = new ObjectInformation[totalObjectCount];
         GridPosition goalGridPos = new GridPosition((int)goalMarker.transform.position.x, (int)goalMarker.transform.position.y);
         levelData[levelDataIndex] = new ObjectInformation("goal", goalGridPos);
@@ -115,6 +123,7 @@ public class saveCustomLevel : MonoBehaviour
         createObjectAtPositionTilemap(regularBoxTilemap, "regularBox");
         createObjectAtPositionTilemap(steelBoxTilemap, "steelBox");
         createObjectAtPositionTilemap(lavaBoxTilemap, "lavaBox");
+        createObjectAtPositionTilemap(throwBoxTileTilemap, "throwBoxTile");
         // Create objects (non-tilemaps)
         createObjectAtPositionObject(moveBoxGroup, "moveBox");
         createObjectAtPositionObject(powerUpGroup, "powerUp");
@@ -124,6 +133,8 @@ public class saveCustomLevel : MonoBehaviour
         createObjectAtPositionObject(greenKeyGroup, "greenKey");
         createObjectAtPositionObject(redKeyGroup, "redKey");
         createObjectAtPositionObject(blueKeyGroup, "blueKey");
+        createObjectAtPositionObject(throwBoxGroup, "throwBox");
+        createObjectAtPositionObject(throwBoxButtonGroup, "throwBoxButton");
 
         // Get all of the player positions
         GridPosition playerPosition = new GridPosition((int)playerMarker.transform.position.x, (int)playerMarker.transform.position.y);

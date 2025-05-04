@@ -20,6 +20,8 @@ public class createLevel : MonoBehaviour
     public TileBase steelBoxTile;
     public Tilemap lavaBoxTilemap;
     public TileBase lavaBoxTile;
+    public Tilemap throwBoxTileTilemap;
+    public TileBase throwBoxTileTile;
     public GameObject moveBox;
     public GameObject greenKeyDoor;
     public GameObject redKeyDoor;
@@ -29,6 +31,9 @@ public class createLevel : MonoBehaviour
     public GameObject blueKey;
     public GameObject powerUp;
     public GameObject goal;
+    public GameObject throwBox;
+    public GameObject throwBoxButton;
+    public int playerCount;
 
     [System.Serializable]
     public class GridPosition
@@ -123,29 +128,33 @@ public class createLevel : MonoBehaviour
 
         // Move the other players to positions if it is a multiplayer level
         // A level is a multiplayer level if the player position is valid
-        if (playerTwoPosition != invalidPlayerPosition)
+        playerCount = 1;
+        if (playerTwoPosition.x != invalidPlayerPosition.x && playerTwoPosition.y != invalidPlayerPosition.y)
         {
             // Player two
             playerTwo.SetActive(true);
             GridPosition playerTwoStartPosition = playerTwoPosition;
             Vector2 playerTwoStartPositionVector = new Vector2(playerTwoPosition.x, playerTwoPosition.y);
             playerTwo.transform.position = playerTwoStartPositionVector;
+            playerCount = 2;
         }
-        if (playerThreePosition != invalidPlayerPosition)
+        if (playerThreePosition.x != invalidPlayerPosition.x && playerThreePosition.y != invalidPlayerPosition.y)
         {
             // Player three
             playerThree.SetActive(true);
             GridPosition playerThreeStartPosition = playerThreePosition;
             Vector2 playerThreeStartPositionVector = new Vector2(playerThreePosition.x, playerThreePosition.y);
             playerThree.transform.position = playerThreeStartPositionVector;
+            playerCount = 3;
         }
-        if (playerFourPosition != invalidPlayerPosition)
+        if (playerFourPosition.x != invalidPlayerPosition.x && playerFourPosition.y != invalidPlayerPosition.y)
         {
             // Player four
             playerFour.SetActive(true);
             GridPosition playerFourStartPosition = playerFourPosition;
             Vector2 playerFourStartPositionVector = new Vector2(playerFourPosition.x, playerFourPosition.y);
             playerFour.transform.position = playerFourStartPositionVector;
+            playerCount = 4;
         }
 
         // Generate level boundaries
@@ -237,6 +246,18 @@ public class createLevel : MonoBehaviour
             else if (objectName == "blueKey")
             {
                 Instantiate(blueKey, objectPositonVector, Quaternion.identity);
+            }
+            else if (objectName == "throwBox")
+            {
+                Instantiate(throwBox, objectPositonVector, Quaternion.identity);
+            }
+            else if (objectName == "throwBoxButton")
+            {
+                Instantiate(throwBoxButton, objectPositonVector, Quaternion.identity);
+            }
+            else if (objectName == "throwBoxTile")
+            {
+                throwBoxTileTilemap.SetTile(objectPositonVector, throwBoxTileTile);
             }
             else
             {

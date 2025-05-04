@@ -49,6 +49,15 @@ public class moveCreateObject : MonoBehaviour
     public GameObject redKeyGroup;
     public GameObject redKeyObject;
     public Sprite redKeyImage;
+    public GameObject throwBoxGroup;
+    public GameObject throwBoxObject;
+    public Sprite throwBoxImage;
+    public GameObject throwBoxButtonGroup;
+    public GameObject throwBoxButtonObject;
+    public Sprite throwBoxButtonImage;
+    public Tilemap throwBoxTileTilemap;
+    public TileBase throwBoxTileTile;
+    public Sprite throwBoxTileImage;
     private string objectName;
     private SpriteRenderer createSprite;
 
@@ -116,6 +125,10 @@ public class moveCreateObject : MonoBehaviour
             else if (lavaBoxTilemap.GetTile(objectPositon) && !canPlacedObjectGoInTiles)
             {
                 lavaBoxTilemap.SetTile(objectPositon, null);
+            }
+            else if (throwBoxTileTilemap.GetTile(objectPositon) && !canPlacedObjectGoInTiles)
+            {
+                throwBoxTileTilemap.SetTile(objectPositon, null);
             }
             else
             {
@@ -201,12 +214,33 @@ public class moveCreateObject : MonoBehaviour
                         Destroy(blueKey);
                     }
                 }
+                int amountOfThrowBoxes = throwBoxGroup.transform.childCount;
+                for (int counter = 0; counter < amountOfThrowBoxes; counter++)
+                {
+                    GameObject throwBox = throwBoxGroup.transform.GetChild(counter).gameObject;
+                    Vector2 throwBoxVector = throwBox.transform.position;
+                    if (throwBoxVector == newObjectPos)
+                    {
+                        Destroy(throwBox);
+                    }
+                }
+                int amountOfThrowBoxButtons = throwBoxButtonGroup.transform.childCount;
+                for (int counter = 0; counter < amountOfThrowBoxButtons; counter++)
+                {
+                    GameObject throwBoxButton = throwBoxButtonGroup.transform.GetChild(counter).gameObject;
+                    Vector2 throwBoxButtonVector = throwBoxButton.transform.position;
+                    if (throwBoxButtonVector == newObjectPos)
+                    {
+                        Destroy(throwBoxButton);
+                    }
+                }
             }
 
             // Create object
             switch (objectName)
             {
                 case "regularBox":
+                    // Create tile object
                     regularBoxTilemap.SetTile(objectPositon, regularBoxTile);
                     break;
                 case "steelBox":
@@ -216,6 +250,7 @@ public class moveCreateObject : MonoBehaviour
                     lavaBoxTilemap.SetTile(objectPositon, lavaBoxTile);
                     break;
                 case "moveBox":
+                    // Create regular object
                     GameObject newCloneMoveBox = Instantiate(moveBoxObject, new Vector2(mousePos.x, mousePos.y), Quaternion.identity);
                     newCloneMoveBox.transform.SetParent(moveBoxGroup.transform);
                     break;
@@ -224,6 +259,7 @@ public class moveCreateObject : MonoBehaviour
                     newClonePowerUp.transform.SetParent(powerUpGroup.transform);
                     break;
                 case "player":
+                    // Move the only critical object
                     playerMarker.transform.position = new Vector2(mousePos.x, mousePos.y);
                     break;
                 case "goal":
@@ -261,6 +297,17 @@ public class moveCreateObject : MonoBehaviour
                     break;
                 case "player4":
                     playerFourMarker.transform.position = new Vector2(mousePos.x, mousePos.y);
+                    break;
+                case "throwBox":
+                    GameObject newCloneThrowBox = Instantiate(throwBoxObject, new Vector2(mousePos.x, mousePos.y), Quaternion.identity);
+                    newCloneThrowBox.transform.SetParent(throwBoxGroup.transform);
+                    break;
+                case "throwBoxButton":
+                    GameObject newCloneThrowBoxButton = Instantiate(throwBoxButtonObject, new Vector2(mousePos.x, mousePos.y), Quaternion.identity);
+                    newCloneThrowBoxButton.transform.SetParent(throwBoxButtonGroup.transform);
+                    break;
+                case "throwBoxTile":
+                    throwBoxTileTilemap.SetTile(objectPositon, throwBoxTileTile);
                     break;
             }
         }
@@ -350,6 +397,21 @@ public class moveCreateObject : MonoBehaviour
         {
             objectName = "player4";
             createSprite.sprite = playerFourImage;
+        }
+        else if (Input.GetKeyDown(KeyCode.I))
+        {
+            objectName = "throwBox";
+            createSprite.sprite = throwBoxImage;
+        }
+        else if (Input.GetKeyDown(KeyCode.O))
+        {
+            objectName = "throwBoxButton";
+            createSprite.sprite = throwBoxButtonImage;
+        }
+        else if (Input.GetKeyDown(KeyCode.P))
+        {
+            objectName = "throwBoxTile";
+            createSprite.sprite = throwBoxTileImage;
         }
     }
 }
