@@ -94,7 +94,7 @@ public class createLevel : MonoBehaviour
     {
         // Get level json file from the loading level object
         loadingLevelData loadingLevelData = GameObject.FindGameObjectWithTag("LoadLevelInfo").GetComponent<loadingLevelData>();
-        string levelFilePath = "Assets/levels/" + loadingLevelData.gamemode + "/" + loadingLevelData.levelID + ".json";
+        string levelFilePath = "Assets/gameAssets/levels/" + loadingLevelData.gamemode + "/" + loadingLevelData.levelID + ".json";
         TextAsset levelFile = AssetDatabase.LoadAssetAtPath<TextAsset>(levelFilePath);
 
         // Get level from json
@@ -108,7 +108,7 @@ public class createLevel : MonoBehaviour
         {
             // Get the default level's json file if the level does not exist
             print("Error: Unknown level ID " + loadingLevelData.levelID + ". Loading default level...");
-            TextAsset defaultFile = AssetDatabase.LoadAssetAtPath<TextAsset>("Assets/levels/nick's/2.json");
+            TextAsset defaultFile = AssetDatabase.LoadAssetAtPath<TextAsset>("Assets/gameAssets/levels/nick's/2.json");
             levelInfo = JsonUtility.FromJson<Level>(defaultFile.text);
         }
         ObjectInformation[] levelBoxes = levelInfo.levelData;
@@ -213,47 +213,81 @@ public class createLevel : MonoBehaviour
             }
             else if (objectName == "moveBox")
             {
-                Instantiate(moveBox, objectPositonVector, Quaternion.identity);
+                // Make sure the object keeps its z value
+                Vector3Int moveBoxPositonVector = new Vector3Int(
+                    objectPosition.x, objectPosition.y, (int)moveBox.transform.position.z
+                );
+                Instantiate(moveBox, moveBoxPositonVector, Quaternion.identity);
             }
             else if (objectName == "powerUp")
             {
-                Instantiate(powerUp, objectPositonVector, Quaternion.identity);
+                Vector3Int powerUpPositonVector = new Vector3Int(
+                    objectPosition.x, objectPosition.y, (int)powerUp.transform.position.z
+                );
+                Instantiate(powerUp, powerUpPositonVector, Quaternion.identity);
             }
             else if (objectName == "goal")
             {
-                Instantiate(goal, objectPositonVector, Quaternion.identity);
+                Vector3Int goalPositonVector = new Vector3Int(
+                    objectPosition.x, objectPosition.y, (int)goal.transform.position.z
+                );
+                Instantiate(goal, goalPositonVector, Quaternion.identity);
             }
             else if (objectName == "greenKeyDoor")
             {
-                Instantiate(greenKeyDoor, objectPositonVector, Quaternion.identity);
+                Vector3Int greenKeyDoorPositonVector = new Vector3Int(
+                    objectPosition.x, objectPosition.y, (int)greenKeyDoor.transform.position.z
+                );
+                Instantiate(greenKeyDoor, greenKeyDoorPositonVector, Quaternion.identity);
             }
             else if (objectName == "greenKey")
             {
-                Instantiate(greenKey, objectPositonVector, Quaternion.identity);
+                Vector3Int greenKeyPositonVector = new Vector3Int(
+                    objectPosition.x, objectPosition.y, (int)greenKey.transform.position.z
+                );
+                Instantiate(greenKey, greenKeyPositonVector, Quaternion.identity);
             }
             else if (objectName == "redKeyDoor")
             {
-                Instantiate(redKeyDoor, objectPositonVector, Quaternion.identity);
+                Vector3Int redKeyDoorPositonVector = new Vector3Int(
+                    objectPosition.x, objectPosition.y, (int)redKeyDoor.transform.position.z
+                );
+                Instantiate(redKeyDoor, redKeyDoorPositonVector, Quaternion.identity);
             }
             else if (objectName == "redKey")
             {
-                Instantiate(redKey, objectPositonVector, Quaternion.identity);
+                Vector3Int redKeyPositonVector = new Vector3Int(
+                    objectPosition.x, objectPosition.y, (int)redKey.transform.position.z
+                );
+                Instantiate(redKey, redKeyPositonVector, Quaternion.identity);
             }
             else if (objectName == "blueKeyDoor")
             {
-                Instantiate(blueKeyDoor, objectPositonVector, Quaternion.identity);
+                Vector3Int blueKeyDoorPositonVector = new Vector3Int(
+                    objectPosition.x, objectPosition.y, (int)blueKeyDoor.transform.position.z
+                );
+                Instantiate(blueKeyDoor, blueKeyDoorPositonVector, Quaternion.identity);
             }
             else if (objectName == "blueKey")
             {
-                Instantiate(blueKey, objectPositonVector, Quaternion.identity);
+                Vector3Int blueKeyPositonVector = new Vector3Int(
+                    objectPosition.x, objectPosition.y, (int)blueKey.transform.position.z
+                );
+                Instantiate(blueKey, blueKeyPositonVector, Quaternion.identity);
             }
             else if (objectName == "throwBox")
             {
-                Instantiate(throwBox, objectPositonVector, Quaternion.identity);
+                Vector3Int throwBoxPositonVector = new Vector3Int(
+                    objectPosition.x, objectPosition.y, (int)throwBox.transform.position.z
+                );
+                Instantiate(throwBox, throwBoxPositonVector, Quaternion.identity);
             }
             else if (objectName == "throwBoxButton")
             {
-                Instantiate(throwBoxButton, objectPositonVector, Quaternion.identity);
+                Vector3Int throwBoxButtonPositonVector = new Vector3Int(
+                    objectPosition.x, objectPosition.y, (int)throwBoxButton.transform.position.z
+                );
+                Instantiate(throwBoxButton, throwBoxButtonPositonVector, Quaternion.identity);
             }
             else if (objectName == "throwBoxTile")
             {
