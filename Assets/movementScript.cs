@@ -15,7 +15,6 @@ public class movementScript : MonoBehaviour
     private KeyCode downKey;
     private KeyCode leftKey;
     private KeyCode rightKey;
-    private KeyCode resetKey;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -32,7 +31,6 @@ public class movementScript : MonoBehaviour
         }
 
         // Get the player's controls depending on their player number
-        resetKey = KeyCode.R;
         switch (playerNumber)
         {
             case 1:
@@ -77,19 +75,11 @@ public class movementScript : MonoBehaviour
         bool isLeftButtonDown = Input.GetKey(leftKey);
         bool isDownButtonDown = Input.GetKey(downKey);
         bool isRightButtonDown = Input.GetKey(rightKey);
-        bool isResetButtonDown = Input.GetKey(resetKey);
         bool isUpButtonUp = Input.GetKeyUp(upKey);
         bool isLeftButtonUp = Input.GetKeyUp(leftKey);
         bool isDownButtonUp = Input.GetKeyUp(downKey);
         bool isRightButtonUp = Input.GetKeyUp(rightKey);
-        bool isResetButtonUp = Input.GetKeyUp(resetKey);
         bool isAnyButtonUp = isUpButtonUp || isLeftButtonUp || isDownButtonUp || isRightButtonUp;
-
-        // Reset current level
-        if (isResetButtonDown && !isResetButtonUp)
-        {
-            SceneManager.LoadScene("GameScene");
-        }
 
         // Move up
         if (isUpButtonDown && !isUpButtonUp)
