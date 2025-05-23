@@ -1,7 +1,4 @@
 using System;
-using Unity.VisualScripting;
-using UnityEditor;
-using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -94,8 +91,9 @@ public class createLevel : MonoBehaviour
     {
         // Get level json file from the loading level object
         loadingLevelData loadingLevelData = GameObject.FindGameObjectWithTag("LoadLevelInfo").GetComponent<loadingLevelData>();
-        string levelFilePath = "Assets/gameAssets/levels/" + loadingLevelData.gamemode + "/" + loadingLevelData.levelID + ".json";
-        TextAsset levelFile = AssetDatabase.LoadAssetAtPath<TextAsset>(levelFilePath);
+        string resourcePath = "levels/";
+        string levelFilePath = resourcePath + loadingLevelData.gamemode + "/" + loadingLevelData.levelID;
+        TextAsset levelFile = Resources.Load<TextAsset>(levelFilePath);
 
         // Get level from json
         Level levelInfo;
@@ -108,7 +106,7 @@ public class createLevel : MonoBehaviour
         {
             // Get the default level's json file if the level does not exist
             print("Error: Unknown level ID " + loadingLevelData.levelID + ". Loading default level...");
-            TextAsset defaultFile = AssetDatabase.LoadAssetAtPath<TextAsset>("Assets/gameAssets/levels/nick's/2.json");
+            TextAsset defaultFile = Resources.Load<TextAsset>(resourcePath + "nick's/2");
             levelInfo = JsonUtility.FromJson<Level>(defaultFile.text);
         }
         ObjectInformation[] levelBoxes = levelInfo.levelData;

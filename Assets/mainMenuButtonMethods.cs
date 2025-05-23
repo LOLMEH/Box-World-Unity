@@ -5,12 +5,21 @@ public class mainMenuButtonMethods : MonoBehaviour
 {
     public GameObject mainMenuScreen;
     public GameObject chooseGameScreen;
+    public GameObject levelSelectScreen;
     private loadingLevelData loadingLevelData;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        // Get the loading level data
         loadingLevelData = GameObject.FindGameObjectWithTag("LoadLevelInfo").GetComponent<loadingLevelData>();
+        loadingLevelData.levelID = 1;
+
+        // If the scene loads with info to go to the level select menu load it first
+        if (loadingLevelData.gamemode.Equals("levelSelect"))
+        {
+            GoToLevelSelectMenu();
+        }
     }
 
     public void goToGame()
@@ -33,16 +42,24 @@ public class mainMenuButtonMethods : MonoBehaviour
         chooseGameScreen.SetActive(true);
     }
 
+    public void GoToLevelSelectMenu()
+    {
+        // Go to the level select menu from the main menu
+        mainMenuScreen.SetActive(false);
+        levelSelectScreen.SetActive(true);
+    }
+
     public void GoBackToMainMenu()
     {
-        // Return to the main menu
+        // Return to the main menu from any submenu
         chooseGameScreen.SetActive(false);
+        levelSelectScreen.SetActive(false);
         mainMenuScreen.SetActive(true);
     }
 
     public void GoToTwoPlayerGame()
     {
-        // Start game scene (singleplayer)
+        // Start game scene (two player)
         loadingLevelData.gamemode = "twoplayer";
         SceneManager.LoadScene("GameScene");
     }
