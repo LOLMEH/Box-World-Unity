@@ -1,3 +1,5 @@
+using System;
+using System.IO;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -5,6 +7,7 @@ using static createLevel;
 
 public class saveCustomLevel : MonoBehaviour
 {
+    public int customLevelLimit;
     public GameObject levelNameTextInput;
     public changeGameBounds levelSettings;
     public moveCreateObject createObject;
@@ -168,10 +171,31 @@ public class saveCustomLevel : MonoBehaviour
             playerStartPositions[3] = playerFourPosition;
         }
 
-        // Save level to new json file
+        // Create the level's json file
         Level level = new Level(levelName, levelBounds, playerStartPositions, levelData);
         string levelJson = JsonUtility.ToJson(level);
-        string filePath = Application.dataPath + "/customLevel.json";
+
+        // Find the file path from the next unused level id
+        string customLevelFolderPath = "/Resources/customLevels/";
+        string customLevelExtension = ".json";
+        int fileID = 1;
+        while (fileID < customLevelLimit)
+        {
+            // Get the next level file
+            string checkFilePath = Application.dataPath + customLevelFolderPath + fileID + customLevelExtension;
+
+            // Check if the next level file does not exist
+            bool doesFileExist = File.Exists(checkFilePath);
+            if (!doesFileExist)
+            {
+                break;
+            }
+
+            fileID++;
+        }
+        string filePath = Application.dataPath + customLevelFolderPath + fileID + customLevelExtension;
+
+        // Save level to a new json file
         System.IO.File.WriteAllText(filePath, levelJson);
         print("File saved to " + filePath);
 

@@ -8,6 +8,8 @@ using static createLevel;
 public class CreateLevelSelectText : MonoBehaviour
 {
     public int maxTextButtonsOnLine;
+    public float textButtonsSpaceDividend;
+    public float textButtonsNextLineMultiple;
     public string textCloneTagName;
     public TMP_Text textButton;
     private loadingLevelData loadingLevelData;
@@ -24,7 +26,15 @@ public class CreateLevelSelectText : MonoBehaviour
         {
             Destroy(oldTextButtons[counter]);
         }
-        
+
+        // Get the level folder path
+        string levelFolderPath = "levels/";
+        if (gamemode == "customLevels")
+        {
+            // Special folder for custom levels
+            levelFolderPath = "";
+        }
+
         // Create a text button for each level
         int levelID = 1;
         while (levelID < 30)
@@ -33,7 +43,7 @@ public class CreateLevelSelectText : MonoBehaviour
             int newLevelID = levelID;
 
             // Get the next level file
-            string levelFilePath = "levels/" + gamemode + "/" + newLevelID;
+            string levelFilePath = levelFolderPath + gamemode + "/" + newLevelID;
             TextAsset levelFile = Resources.Load<TextAsset>(levelFilePath);
 
             // Get level from json
@@ -63,13 +73,13 @@ public class CreateLevelSelectText : MonoBehaviour
             if (newLevelID > maxTextButtonsOnLine)
             {
                 // Move to a new line if there the first line is full
-                newXPos = textTransform.position.x - (textTransform.position.x * 1.75f);
-                newYPos = textTransform.position.y - (textTransform.position.y / 3 * (newLevelID - maxTextButtonsOnLine - 1));
+                newXPos = textTransform.position.x - (textTransform.position.x * textButtonsNextLineMultiple);
+                newYPos = textTransform.position.y - (textTransform.position.y / textButtonsSpaceDividend * (newLevelID - maxTextButtonsOnLine - 1));
             }
             else
             {
                 newXPos = textTransform.position.x;
-                newYPos = textTransform.position.y - (textTransform.position.y / 3 * (newLevelID - 1));
+                newYPos = textTransform.position.y - (textTransform.position.y / textButtonsSpaceDividend * (newLevelID - 1));
             }
             textTransform.position = new Vector3(newXPos, newYPos, textTransform.position.z);
 

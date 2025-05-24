@@ -92,6 +92,11 @@ public class createLevel : MonoBehaviour
         // Get level json file from the loading level object
         loadingLevelData loadingLevelData = GameObject.FindGameObjectWithTag("LoadLevelInfo").GetComponent<loadingLevelData>();
         string resourcePath = "levels/";
+        if (loadingLevelData.gamemode == "customLevels")
+        {
+            // Go to another folder for custom levels
+            resourcePath = "";
+        }
         string levelFilePath = resourcePath + loadingLevelData.gamemode + "/" + loadingLevelData.levelID;
         TextAsset levelFile = Resources.Load<TextAsset>(levelFilePath);
 
