@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using TMPro;
 using UnityEngine;
@@ -11,11 +10,13 @@ public class saveCustomLevel : MonoBehaviour
     public GameObject levelNameTextInput;
     public changeGameBounds levelSettings;
     public moveCreateObject createObject;
+    private loadingLevelData loadingLevelData;
     private ObjectInformation[] levelData;
     private int levelDataIndex;
 
     void Start()
     {
+        loadingLevelData = GameObject.FindGameObjectWithTag("LoadLevelInfo").GetComponent<loadingLevelData>();
         levelDataIndex = 0;
     }
 
@@ -67,6 +68,9 @@ public class saveCustomLevel : MonoBehaviour
 
         // Save level to json file
         string levelName = levelNameTextInput.GetComponent<TMP_InputField>().text;
+
+        // Get the version the level was created in
+        string versionCreated = loadingLevelData.gameVersion;
 
         // Get level settings
         string levelBounds = levelSettings.boundString;
@@ -172,17 +176,22 @@ public class saveCustomLevel : MonoBehaviour
         }
 
         // Create the level's json file
-        Level level = new Level(levelName, levelBounds, playerStartPositions, levelData);
+        Level level = new (levelName, levelBounds, playerStartPositions, versionCreated, levelData);
         string levelJson = JsonUtility.ToJson(level);
 
         // Find the file path from the next unused level id
-        string customLevelFolderPath = "/Resources/customLevels/";
+        string customLevelFolderPath = Application.persistentDataPath + "/customLevels/";
+        if (!Directory.Exists(customLevelFolderPath))
+        {
+            // If the custom level directory does not exist, create it
+            Directory.CreateDirectory(customLevelFolderPath);
+        }
         string customLevelExtension = ".json";
         int fileID = 1;
         while (fileID < customLevelLimit)
         {
             // Get the next level file
-            string checkFilePath = Application.dataPath + customLevelFolderPath + fileID + customLevelExtension;
+            string checkFilePath = customLevelFolderPath + fileID + customLevelExtension;
 
             // Check if the next level file does not exist
             bool doesFileExist = File.Exists(checkFilePath);
@@ -193,10 +202,10 @@ public class saveCustomLevel : MonoBehaviour
 
             fileID++;
         }
-        string filePath = Application.dataPath + customLevelFolderPath + fileID + customLevelExtension;
+        string filePath = customLevelFolderPath + fileID + customLevelExtension;
 
         // Save level to a new json file
-        System.IO.File.WriteAllText(filePath, levelJson);
+        File.WriteAllText(filePath, levelJson);
         print("File saved to " + filePath);
 
         // Reset level values

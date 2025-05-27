@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class movementScript : MonoBehaviour
 {
@@ -69,8 +68,15 @@ public class movementScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Moves the player depending on the x and y values
+        void movePlayer(Rigidbody2D rigidBody2D, float x, float y)
+        {
+            rigidBody2D.linearVelocity = new Vector2(x, y);
+        }
+        
         Rigidbody2D rigidBody2D = GetComponent<Rigidbody2D>();
 
+        // Press button variables
         bool isUpButtonDown = Input.GetKey(upKey);
         bool isLeftButtonDown = Input.GetKey(leftKey);
         bool isDownButtonDown = Input.GetKey(downKey);
@@ -79,36 +85,67 @@ public class movementScript : MonoBehaviour
         bool isLeftButtonUp = Input.GetKeyUp(leftKey);
         bool isDownButtonUp = Input.GetKeyUp(downKey);
         bool isRightButtonUp = Input.GetKeyUp(rightKey);
-        bool isAnyButtonUp = isUpButtonUp || isLeftButtonUp || isDownButtonUp || isRightButtonUp;
 
-        // Move up
-        if (isUpButtonDown && !isUpButtonUp)
+        // Hold button variables
+        bool upButtonHold = isUpButtonDown && !isUpButtonUp;
+        bool downButtonHold = isDownButtonDown && !isDownButtonUp;
+        bool leftButtonHold = isLeftButtonDown && !isLeftButtonUp;
+        bool rightButtonHold = isRightButtonDown && !isRightButtonUp;
+
+        // Exclusive hold button variables
+        bool upButtonHoldOnly = upButtonHold && !downButtonHold && !leftButtonHold && !rightButtonHold;
+        bool downButtonHoldOnly = !upButtonHold && downButtonHold && !leftButtonHold && !rightButtonHold;
+        bool leftButtonHoldOnly = !upButtonHold && !downButtonHold && leftButtonHold && !rightButtonHold;
+        bool rightButtonHoldOnly = !upButtonHold && !downButtonHold && !leftButtonHold && rightButtonHold;
+        bool upLeftButtonHoldOnly = upButtonHold && !downButtonHold && leftButtonHold && !rightButtonHold;
+        bool downLeftButtonHoldOnly = !upButtonHold && downButtonHold && leftButtonHold && !rightButtonHold;
+        bool upRightButtonHoldOnly = upButtonHold && !downButtonHold && !leftButtonHold && rightButtonHold;
+        bool downRightButtonHoldOnly = !upButtonHold && downButtonHold && !leftButtonHold && rightButtonHold;
+
+        if (upLeftButtonHoldOnly)
         {
-            rigidBody2D.AddForce(Vector2.up, ForceMode2D.Impulse);
+            // Move up left
+            movePlayer(rigidBody2D, -maxSpeed, maxSpeed);
         }
-
-        // Move left
-        if (isLeftButtonDown && !isLeftButtonUp)
+        else if (downLeftButtonHoldOnly)
         {
-            rigidBody2D.AddForce(-Vector2.right, ForceMode2D.Impulse);
+            // Move down left
+            movePlayer(rigidBody2D, -maxSpeed, -maxSpeed);
         }
-
-        // Move down
-        if (isDownButtonDown && !isDownButtonUp)
+        else if (upRightButtonHoldOnly)
         {
-            rigidBody2D.AddForce(-Vector2.up, ForceMode2D.Impulse);
+            // Move up right
+            movePlayer(rigidBody2D, maxSpeed, maxSpeed);
         }
-
-        // Move right
-        if (isRightButtonDown && !isRightButtonUp)
+        else if (downRightButtonHoldOnly)
         {
-            rigidBody2D.AddForce(Vector2.right, ForceMode2D.Impulse);
+            // Move down right
+            movePlayer(rigidBody2D, maxSpeed, -maxSpeed);
         }
-
-        // Stop movement if a button is up
-        if (isAnyButtonUp)
+        else if (upButtonHoldOnly)
         {
-            rigidBody2D.linearVelocity = Vector2.zero;
+            // Move up
+            movePlayer(rigidBody2D, 0, maxSpeed);
+        }
+        else if (leftButtonHoldOnly)
+        {
+            // Move left
+            movePlayer(rigidBody2D, -maxSpeed, 0);
+        }
+        else if (downButtonHoldOnly)
+        {
+            // Move down
+            movePlayer(rigidBody2D, 0, -maxSpeed);
+        }
+        else if (rightButtonHoldOnly)
+        {
+            // Move right
+            movePlayer(rigidBody2D, maxSpeed, 0);
+        }
+        else
+        {
+            // Stop movement if no buttons are down (or if no valid movements are made)
+            movePlayer(rigidBody2D, 0, 0);
         }
 
         // Cap at max speed (+X)

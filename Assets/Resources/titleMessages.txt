@@ -6,14 +6,14 @@ qwertyuiopasdfghjklzxcvbnm
 Click the logo!
 These messages are random.
 Press escape to pause!
-Made in Unity!
+Made in Unity 6!
 Not made in Phaser 3!
-I do not know if this piece of text will appear on screen correctly but I hope it does so that my programming skills are proven to be good. It took a while to figure out how to make the scrolling text actually work, but I've just proven that it works with even long pieces of text! Haha!
+I do not know if this piece of text will appear on screen correctly but I hope it does so that my programming skills are proven to be good. It took a while to figure out how to make the scrolling text actually work, but I've just proven that it works with even incredibly long pieces of text! Hahahaha! I'm actually the best at making text scroll across the screen without it being cut off randomly!
 undefined
 I hope this works!
 Pro Tip: You cannot jump.
 With kept circlular eyes!
-Currently in pre-alpha!
+Currently in alpha!
 Pretty square!
 I got a box here...
 ☺
@@ -29,8 +29,8 @@ Check out Box World Plus on GitHub!
 This is every epic
 Wow!
 This text is not on line 33.
-This text is actually on line 33.
-Just kidding! This text is really on line 33.
+This text may actually not be on line 33.
+This text is really on line 33.
 Do not ingest!
 I'm writing this at 8:33 pm on May 5th 2025
 ?
@@ -41,15 +41,35 @@ Does not (hopefully) explode on you!
 Was that the box of '25?
 The world is not ready for March 23rd 2036...
 Cool!
-AAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAHHHHHHHHHHHHHH
 Probably not illegal!
 Fun(?) with friends!
 I'd like to order a burger.
 No zombies included.
 Probably legal!
-:) :( :O :D
+:) :( :O :D B) :P
 In the beginning there were boxes. Maybe.
-Pressing enter at the end might've done something in the past...
-Press ALT-F4 for free ??????
+Enter = uh oh
+Press ALT-F4 for free #%@!&*?
 Hopefully no more procrastinating.
 Not seen on TV!
+This is plain text.
+There is nothing special about this line.
+Why did the chicken cross the road?                  To get to the other side!
+Mo.
+Not called crispy.
+Programmed in C#!
+Use WASD to move around.
+Click your mouse to select an option.
+UUDDLRLRBAS
+Might be new!
+in the house
+lol
+Might work on your device!
+funny
+Stay clean!
+Shoutouts to CrisyCod on Scratch
+Kick! Punch! Block! Jump! Turn! Pose!
+Talk about low buget flights, no food or movies... I'm outta here!
+01000010 01101111 01111000
+Do you remember?

@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -64,13 +65,15 @@ public class createLevel : MonoBehaviour
         public String levelName;
         public String bounds;
         public GridPosition[] playerStartPositions;
+        public String versionCreated;
         public ObjectInformation[] levelData;
 
-        public Level(string levelName, string bounds, GridPosition[] playerStartPositions, ObjectInformation[] levelData)
+        public Level(string levelName, string bounds, GridPosition[] playerStartPositions, string versionCreated, ObjectInformation[] levelData)
         {
             this.levelName = levelName;
             this.bounds = bounds;
             this.playerStartPositions = playerStartPositions;
+            this.versionCreated = versionCreated;
             this.levelData = levelData;
         }
     }
@@ -89,31 +92,46 @@ public class createLevel : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        // Get level json file from the loading level object
+        // Load the level json file from the loading level object
         loadingLevelData loadingLevelData = GameObject.FindGameObjectWithTag("LoadLevelInfo").GetComponent<loadingLevelData>();
-        string resourcePath = "levels/";
+        string levelFilePath = "levels/" + loadingLevelData.gamemode + "/" + loadingLevelData.levelID;
+        string levelFile;
+        // Get the raw level json data
         if (loadingLevelData.gamemode == "customLevels")
         {
-            // Go to another folder for custom levels
-            resourcePath = "";
+            // Go to another folder to load custom levels
+            string customLevelFilePath =
+                Application.persistentDataPath + "/" + loadingLevelData.gamemode + "/" + loadingLevelData.levelID + ".json";
+            try
+            {
+                levelFile = File.ReadAllText(customLevelFilePath);
+            }
+            catch (FileNotFoundException)
+            {
+                // Load the default level's json file if the custom level does not exist
+                print("Error: Unknown level ID " + loadingLevelData.levelID + ". Loading default level...");
+                levelFile = Resources.Load<TextAsset>("levels/nick's/1").ToString();
+            }
         }
-        string levelFilePath = resourcePath + loadingLevelData.gamemode + "/" + loadingLevelData.levelID;
-        TextAsset levelFile = Resources.Load<TextAsset>(levelFilePath);
+        else
+        {
+            try
+            {
+                levelFile = Resources.Load<TextAsset>(levelFilePath).ToString();
+            }
+            catch (NullReferenceException)
+            {
+                // Load the default level's json file if the level does not exist
+                print("Error: Unknown level ID " + loadingLevelData.levelID + ". Loading default level...");
+                levelFile = Resources.Load<TextAsset>("levels/nick's/2").ToString();
+            }
+        }
 
-        // Get level from json
+        // Convert to a level from json
         Level levelInfo;
-        try
-        {
-            // Get level's json file
-            levelInfo = JsonUtility.FromJson<Level>(levelFile.text);
-        }
-        catch (NullReferenceException)
-        {
-            // Get the default level's json file if the level does not exist
-            print("Error: Unknown level ID " + loadingLevelData.levelID + ". Loading default level...");
-            TextAsset defaultFile = Resources.Load<TextAsset>(resourcePath + "nick's/2");
-            levelInfo = JsonUtility.FromJson<Level>(defaultFile.text);
-        }
+        levelInfo = JsonUtility.FromJson<Level>(levelFile);
+
+        // Get the level's object information
         ObjectInformation[] levelBoxes = levelInfo.levelData;
 
         // Get player positions
@@ -130,7 +148,7 @@ public class createLevel : MonoBehaviour
         player.transform.position = playerStartPositionVector;
 
         // Move the other players to positions if it is a multiplayer level
-        // A level is a multiplayer level if the player position is valid
+        // A level is a multiplayer level if the player position is valid (not equal to -99, -99)
         playerCount = 1;
         if (playerTwoPosition.x != invalidPlayerPosition.x && playerTwoPosition.y != invalidPlayerPosition.y)
         {

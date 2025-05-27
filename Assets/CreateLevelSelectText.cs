@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -7,11 +8,9 @@ using static createLevel;
 
 public class CreateLevelSelectText : MonoBehaviour
 {
-    public int maxTextButtonsOnLine;
-    public float textButtonsSpaceDividend;
-    public float textButtonsNextLineMultiple;
-    public string textCloneTagName;
-    public TMP_Text textButton;
+    public string baseTextCloneTagName;
+    public TMP_Text baseTextButton;
+    public GameObject scrollContent;
     private loadingLevelData loadingLevelData;
 
     /// <summary>
@@ -21,7 +20,7 @@ public class CreateLevelSelectText : MonoBehaviour
     public void GenerateLevelSelect(string gamemode)
     {
         // Find and remove all previous text buttons
-        GameObject[] oldTextButtons = GameObject.FindGameObjectsWithTag(textCloneTagName);
+        GameObject[] oldTextButtons = GameObject.FindGameObjectsWithTag(baseTextCloneTagName);
         for (int counter = 0; counter < oldTextButtons.Length; counter++)
         {
             Destroy(oldTextButtons[counter]);
@@ -29,61 +28,65 @@ public class CreateLevelSelectText : MonoBehaviour
 
         // Get the level folder path
         string levelFolderPath = "levels/";
+        bool customLevelSelected = false;
         if (gamemode == "customLevels")
         {
-            // Special folder for custom levels
-            levelFolderPath = "";
+            // Special switch for custom levels
+            levelFolderPath = "/";
+            customLevelSelected = true;
         }
 
         // Create a text button for each level
         int levelID = 1;
-        while (levelID < 30)
+        while (true)
         {
             // Save the level id so it does not get overridden by the next level ids
             int newLevelID = levelID;
-
-            // Get the next level file
-            string levelFilePath = levelFolderPath + gamemode + "/" + newLevelID;
-            TextAsset levelFile = Resources.Load<TextAsset>(levelFilePath);
 
             // Get level from json
             Level levelInfo;
             try
             {
+                // Get the next level file
+                string levelFilePath = levelFolderPath + gamemode + "/" + newLevelID;
+                string levelFile;
+                if (customLevelSelected == false)
+                {
+                    // Regular levels
+                    levelFile = Resources.Load<TextAsset>(levelFilePath).ToString();
+                }
+                else
+                {
+                    // Custom levels
+                    levelFilePath = Application.persistentDataPath + levelFilePath + ".json";
+                    levelFile = File.ReadAllText(levelFilePath);
+                }
+
                 // Get level's json file
-                levelInfo = JsonUtility.FromJson<Level>(levelFile.text);
+                levelInfo = JsonUtility.FromJson<Level>(levelFile);
             }
             catch (NullReferenceException)
             {
                 // Break the loop if there are no more files in the directory
                 break;
             }
+            catch (FileNotFoundException)
+            {
+                // Break the loop if there are no more files in the custom directory
+                break;
+            }
 
             // Create the text button
-            TMP_Text newTextButton = Instantiate(textButton);
+            TMP_Text newTextButton = Instantiate(baseTextButton);
             newTextButton.text = levelInfo.levelName;
-            newTextButton.gameObject.tag = textCloneTagName;
+            newTextButton.gameObject.tag = baseTextCloneTagName;
             // Enable the text button
             newTextButton.gameObject.SetActive(true);
-            // Move the text button into the GUI
+            // Move the text button into the scroll viewport GUI
             Transform textTransform = newTextButton.transform;
-            textTransform.SetParent(transform, false);
-            float newXPos;
-            float newYPos;
-            if (newLevelID > maxTextButtonsOnLine)
-            {
-                // Move to a new line if there the first line is full
-                newXPos = textTransform.position.x - (textTransform.position.x * textButtonsNextLineMultiple);
-                newYPos = textTransform.position.y - (textTransform.position.y / textButtonsSpaceDividend * (newLevelID - maxTextButtonsOnLine - 1));
-            }
-            else
-            {
-                newXPos = textTransform.position.x;
-                newYPos = textTransform.position.y - (textTransform.position.y / textButtonsSpaceDividend * (newLevelID - 1));
-            }
-            textTransform.position = new Vector3(newXPos, newYPos, textTransform.position.z);
+            textTransform.SetParent(scrollContent.transform, false);
 
-            // Create the click event that pushes the player to the specific level
+            // Create the click event that loads the player into a specific level
             EventTrigger trigger = newTextButton.GetComponent<EventTrigger>();
             EventTrigger.Entry entry = new()
             {
