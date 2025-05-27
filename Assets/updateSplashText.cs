@@ -1,14 +1,25 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class updateSplashText : MonoBehaviour
 {
     public float scrollSpeed;
+    public RawImage backgroundImage;
     public TextAsset splashFile;
     private RectTransform rectTransform;
     private float originalXPos;
-    private float resetXPos;
+    private float originalBackgroundWidth;
     private float textMeshProTextSize;
+    private float resetXPos;
+
+    /// <summary>
+    /// Calculates the x position to reset the text
+    /// </summary>
+    private void ChangeSplashResetX()
+    {
+        resetXPos = -(originalXPos + textMeshProTextSize + backgroundImage.rectTransform.rect.width);
+    }
 
     /// <summary>
     /// Gets a random splash text from the splash file and loads it into the text object
@@ -28,16 +39,17 @@ public class updateSplashText : MonoBehaviour
         // Set the text of the GUI element to the random splash text
         GetComponent<TMP_Text>().text = splashText;
 
-        // Calculate the x pos to reset the text
-        resetXPos = -(originalXPos + textMeshProTextSize);
+        // Change the splash reset x
+        ChangeSplashResetX();
     }
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        // Save the original x position
+        // Save the original x position and background width
         rectTransform = GetComponent<RectTransform>();
         originalXPos = rectTransform.anchoredPosition.x;
+        originalBackgroundWidth = backgroundImage.rectTransform.rect.width;
 
         // Set a random splash text
         UpdateSplashRandom();
@@ -51,6 +63,13 @@ public class updateSplashText : MonoBehaviour
 
         // Move the text to the left
         rectTransform.Translate(-scrollSpeed * Time.deltaTime, 0, 0);
+
+        // When the background width changes, change the reset x position
+        if (originalBackgroundWidth != backgroundImage.rectTransform.rect.width)
+        {
+            originalBackgroundWidth = backgroundImage.rectTransform.rect.width;
+            ChangeSplashResetX();
+        }
 
         // If the text is finished scolling, set it back to the original position and change the splash text
         if (position.x <= resetXPos)

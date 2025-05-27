@@ -1,27 +1,23 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class moveMenuBackground : MonoBehaviour
 {
     public float scrollSpeed;
-    private float originalXPos;
+    private RawImage rawImage;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        // Save the original x position
-        originalXPos = transform.position.x;
+        // Get the raw image
+        rawImage = GetComponent<RawImage>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        // Move the image to the left
-        transform.Translate(-scrollSpeed * Time.deltaTime, 0, 0);
-
-        // If the image is finished scolling, set it back to the original position
-        if (transform.position.x <= -originalXPos)
-        {
-            transform.position = new Vector3(originalXPos, 0);
-        }
+        // Scroll the background
+        rawImage.uvRect =
+            new Rect(scrollSpeed * Time.time, rawImage.uvRect.y, rawImage.uvRect.width, rawImage.uvRect.height);
     }
 }
