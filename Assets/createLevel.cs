@@ -144,7 +144,7 @@ public class createLevel : MonoBehaviour
 
         // Move player to positions
         GridPosition playerStartPosition = playerPosition;
-        Vector2 playerStartPositionVector = new Vector2(playerPosition.x, playerPosition.y);
+        Vector2 playerStartPositionVector = new Vector2(playerPosition.x * 2, playerPosition.y * 2);
         player.transform.position = playerStartPositionVector;
 
         // Move the other players to positions if it is a multiplayer level
@@ -155,7 +155,7 @@ public class createLevel : MonoBehaviour
             // Player two
             playerTwo.SetActive(true);
             GridPosition playerTwoStartPosition = playerTwoPosition;
-            Vector2 playerTwoStartPositionVector = new Vector2(playerTwoPosition.x, playerTwoPosition.y);
+            Vector2 playerTwoStartPositionVector = new Vector2(playerTwoPosition.x * 2, playerTwoPosition.y * 2);
             playerTwo.transform.position = playerTwoStartPositionVector;
             playerCount = 2;
         }
@@ -164,7 +164,7 @@ public class createLevel : MonoBehaviour
             // Player three
             playerThree.SetActive(true);
             GridPosition playerThreeStartPosition = playerThreePosition;
-            Vector2 playerThreeStartPositionVector = new Vector2(playerThreePosition.x, playerThreePosition.y);
+            Vector2 playerThreeStartPositionVector = new Vector2(playerThreePosition.x * 2, playerThreePosition.y * 2);
             playerThree.transform.position = playerThreeStartPositionVector;
             playerCount = 3;
         }
@@ -173,7 +173,7 @@ public class createLevel : MonoBehaviour
             // Player four
             playerFour.SetActive(true);
             GridPosition playerFourStartPosition = playerFourPosition;
-            Vector2 playerFourStartPositionVector = new Vector2(playerFourPosition.x, playerFourPosition.y);
+            Vector2 playerFourStartPositionVector = new Vector2(playerFourPosition.x * 2, playerFourPosition.y * 2);
             playerFour.transform.position = playerFourStartPositionVector;
             playerCount = 4;
         }
@@ -234,79 +234,80 @@ public class createLevel : MonoBehaviour
             }
             else if (objectName == "moveBox")
             {
-                // Make sure the object keeps its z value
+                // Makes sure the object keeps its z value
+                // Objects that are not tilemaps need to have their position multiplied by 2
                 Vector3Int moveBoxPositonVector = new Vector3Int(
-                    objectPosition.x, objectPosition.y, (int)moveBox.transform.position.z
+                    objectPosition.x * 2, objectPosition.y * 2, (int)moveBox.transform.position.z
                 );
                 Instantiate(moveBox, moveBoxPositonVector, Quaternion.identity);
             }
             else if (objectName == "powerUp")
             {
                 Vector3Int powerUpPositonVector = new Vector3Int(
-                    objectPosition.x, objectPosition.y, (int)powerUp.transform.position.z
+                    objectPosition.x * 2, objectPosition.y * 2, (int)powerUp.transform.position.z
                 );
                 Instantiate(powerUp, powerUpPositonVector, Quaternion.identity);
             }
             else if (objectName == "goal")
             {
                 Vector3Int goalPositonVector = new Vector3Int(
-                    objectPosition.x, objectPosition.y, (int)goal.transform.position.z
+                    objectPosition.x * 2, objectPosition.y * 2, (int)goal.transform.position.z
                 );
                 Instantiate(goal, goalPositonVector, Quaternion.identity);
             }
             else if (objectName == "greenKeyDoor")
             {
                 Vector3Int greenKeyDoorPositonVector = new Vector3Int(
-                    objectPosition.x, objectPosition.y, (int)greenKeyDoor.transform.position.z
+                    objectPosition.x * 2, objectPosition.y * 2, (int)greenKeyDoor.transform.position.z
                 );
                 Instantiate(greenKeyDoor, greenKeyDoorPositonVector, Quaternion.identity);
             }
             else if (objectName == "greenKey")
             {
                 Vector3Int greenKeyPositonVector = new Vector3Int(
-                    objectPosition.x, objectPosition.y, (int)greenKey.transform.position.z
+                    objectPosition.x * 2, objectPosition.y * 2, (int)greenKey.transform.position.z
                 );
                 Instantiate(greenKey, greenKeyPositonVector, Quaternion.identity);
             }
             else if (objectName == "redKeyDoor")
             {
                 Vector3Int redKeyDoorPositonVector = new Vector3Int(
-                    objectPosition.x, objectPosition.y, (int)redKeyDoor.transform.position.z
+                    objectPosition.x * 2, objectPosition.y * 2, (int)redKeyDoor.transform.position.z
                 );
                 Instantiate(redKeyDoor, redKeyDoorPositonVector, Quaternion.identity);
             }
             else if (objectName == "redKey")
             {
                 Vector3Int redKeyPositonVector = new Vector3Int(
-                    objectPosition.x, objectPosition.y, (int)redKey.transform.position.z
+                    objectPosition.x * 2, objectPosition.y * 2, (int)redKey.transform.position.z
                 );
                 Instantiate(redKey, redKeyPositonVector, Quaternion.identity);
             }
             else if (objectName == "blueKeyDoor")
             {
                 Vector3Int blueKeyDoorPositonVector = new Vector3Int(
-                    objectPosition.x, objectPosition.y, (int)blueKeyDoor.transform.position.z
+                    objectPosition.x * 2, objectPosition.y * 2, (int)blueKeyDoor.transform.position.z
                 );
                 Instantiate(blueKeyDoor, blueKeyDoorPositonVector, Quaternion.identity);
             }
             else if (objectName == "blueKey")
             {
                 Vector3Int blueKeyPositonVector = new Vector3Int(
-                    objectPosition.x, objectPosition.y, (int)blueKey.transform.position.z
+                    objectPosition.x * 2, objectPosition.y * 2, (int)blueKey.transform.position.z
                 );
                 Instantiate(blueKey, blueKeyPositonVector, Quaternion.identity);
             }
             else if (objectName == "throwBox")
             {
                 Vector3Int throwBoxPositonVector = new Vector3Int(
-                    objectPosition.x, objectPosition.y, (int)throwBox.transform.position.z
+                    objectPosition.x * 2, objectPosition.y * 2, (int)throwBox.transform.position.z
                 );
                 Instantiate(throwBox, throwBoxPositonVector, Quaternion.identity);
             }
             else if (objectName == "throwBoxButton")
             {
                 Vector3Int throwBoxButtonPositonVector = new Vector3Int(
-                    objectPosition.x, objectPosition.y, (int)throwBoxButton.transform.position.z
+                    objectPosition.x * 2, objectPosition.y * 2, (int)throwBoxButton.transform.position.z
                 );
                 Instantiate(throwBoxButton, throwBoxButtonPositonVector, Quaternion.identity);
             }

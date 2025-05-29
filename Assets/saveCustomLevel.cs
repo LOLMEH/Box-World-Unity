@@ -59,8 +59,11 @@ public class saveCustomLevel : MonoBehaviour
             int amount = group.transform.childCount;
             for (int counter = 0; counter < amount; counter++)
             {
+                // Since object positions are double what they should be, convert them to the tile position
                 Vector2 objectPos = group.transform.GetChild(counter).position;
-                GridPosition gridPos = new GridPosition((int)objectPos.x, (int)objectPos.y);
+                int objectPosX = (int)objectPos.x / 2;
+                int objectPosY = (int)objectPos.y / 2;
+                GridPosition gridPos = new GridPosition(objectPosX, objectPosY);
                 levelData[levelDataIndex] = new ObjectInformation(name, gridPos);
                 levelDataIndex += 1;
             }
@@ -122,7 +125,7 @@ public class saveCustomLevel : MonoBehaviour
 
         // Create objects in the level data
         levelData = new ObjectInformation[totalObjectCount];
-        GridPosition goalGridPos = new GridPosition((int)goalMarker.transform.position.x, (int)goalMarker.transform.position.y);
+        GridPosition goalGridPos = new GridPosition((int)goalMarker.transform.position.x / 2, (int)goalMarker.transform.position.y / 2);
         levelData[levelDataIndex] = new ObjectInformation("goal", goalGridPos);
         levelDataIndex += 1;
         // Create objects (tilemaps)
@@ -143,35 +146,35 @@ public class saveCustomLevel : MonoBehaviour
         createObjectAtPositionObject(throwBoxButtonGroup, "throwBoxButton");
 
         // Get all of the player positions
-        GridPosition playerPosition = new GridPosition((int)playerMarker.transform.position.x, (int)playerMarker.transform.position.y);
-        GridPosition playerTwoPosition = new GridPosition((int)playerTwoMarker.transform.position.x, (int)playerTwoMarker.transform.position.y);
-        GridPosition playerThreePosition = new GridPosition((int)playerThreeMarker.transform.position.x, (int)playerThreeMarker.transform.position.y);
-        GridPosition playerFourPosition = new GridPosition((int)playerFourMarker.transform.position.x, (int)playerFourMarker.transform.position.y);
+        GridPosition playerPosition = new GridPosition((int)playerMarker.transform.position.x / 2, (int)playerMarker.transform.position.y / 2);
+        GridPosition playerTwoPosition = new GridPosition((int)playerTwoMarker.transform.position.x / 2, (int)playerTwoMarker.transform.position.y / 2);
+        GridPosition playerThreePosition = new GridPosition((int)playerThreeMarker.transform.position.x / 2, (int)playerThreeMarker.transform.position.y / 2);
+        GridPosition playerFourPosition = new GridPosition((int)playerFourMarker.transform.position.x / 2, (int)playerFourMarker.transform.position.y / 2);
 
 
-        // Add player positions depending on how many players there are
+        // Save player positions depending on how many players there are
         GridPosition[] playerStartPositions = {
-            new GridPosition(-99, -99),
+            new GridPosition(-99, -99), // Invalid player position
             new GridPosition(-99, -99),
             new GridPosition(-99, -99),
             new GridPosition(-99, -99)
         };
 
-        // Player 1 position
+        // Save player 1 position
         playerStartPositions[0] = playerPosition;
         if (playerCount > 1)
         {
-            // Player 2 position
+            // Save player 2 position
             playerStartPositions[1] = playerTwoPosition;
         }
         if (playerCount > 2)
         {
-            // Player 3 position
+            // Save player 3 position
             playerStartPositions[2] = playerThreePosition;
         }
         if (playerCount > 3)
         {
-            // Player 4 position
+            // Save player 4 position
             playerStartPositions[3] = playerFourPosition;
         }
 
@@ -197,6 +200,7 @@ public class saveCustomLevel : MonoBehaviour
             bool doesFileExist = File.Exists(checkFilePath);
             if (!doesFileExist)
             {
+                // If the level file does not exist, use the current level ID to save this custom level file
                 break;
             }
 

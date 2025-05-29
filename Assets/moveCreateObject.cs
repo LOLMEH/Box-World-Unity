@@ -94,11 +94,9 @@ public class moveCreateObject : MonoBehaviour
         if (Input.GetMouseButton(0))
         {
             // Get the box position on the tilemap grid
-            int gridOffsetX = 4;
-            int gridOffsetY = 2;
             Vector3Int objectPositon = new Vector3Int(
-                (int)mousePos.x / gridScale + gridOffsetX,
-                (int)mousePos.y / gridScale + gridOffsetY
+                (int)mousePos.x / gridScale,
+                (int)mousePos.y / gridScale
             );
 
             // Check if the placed object can go though tiles
