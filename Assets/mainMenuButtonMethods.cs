@@ -6,6 +6,7 @@ public class mainMenuButtonMethods : MonoBehaviour
     public GameObject mainMenuScreen;
     public GameObject chooseGameScreen;
     public GameObject levelSelectScreen;
+    public GameObject levelInfoScreen;
     private loadingLevelData loadingLevelData;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -44,8 +45,9 @@ public class mainMenuButtonMethods : MonoBehaviour
 
     public void GoToLevelSelectMenu()
     {
-        // Go to the level select menu from the main menu
+        // Go to the level select menu from the main menu or level info scren
         mainMenuScreen.SetActive(false);
+        levelInfoScreen.SetActive(false);
         levelSelectScreen.SetActive(true);
     }
 
