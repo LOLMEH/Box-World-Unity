@@ -3,14 +3,22 @@ using System.IO;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using static createLevel;
 
 public class CreateLevelSelectText : MonoBehaviour
 {
     public string baseTextCloneTagName;
-    public TMP_Text baseTextButton;
+    public int levelTextIndex;
+    public GameObject baseLevelPreviewContent;
     public GameObject scrollContent;
+    public Sprite unknownThumbnail;
+    public Sprite onePlayerThumbnail;
+    public Sprite twoPlayerThumbnail;
+    public Sprite threePlayerThumbnail;
+    public Sprite fourPlayerThumbnail;
     private loadingLevelData loadingLevelData;
 
     /// <summary>
@@ -76,18 +84,71 @@ public class CreateLevelSelectText : MonoBehaviour
                 break;
             }
 
-            // Create the text button
-            TMP_Text newTextButton = Instantiate(baseTextButton);
-            newTextButton.text = levelInfo.levelName;
-            newTextButton.gameObject.tag = baseTextCloneTagName;
-            // Enable the text button
-            newTextButton.gameObject.SetActive(true);
-            // Move the text button into the scroll viewport GUI
-            Transform textTransform = newTextButton.transform;
-            textTransform.SetParent(scrollContent.transform, false);
+            // Create the level button
+            GameObject newLevelButton = Instantiate(baseLevelPreviewContent);
+            newLevelButton.tag = baseTextCloneTagName;
+
+            // Move the level button into the scroll viewport GUI
+            Transform levelTransform = newLevelButton.transform;
+            levelTransform.SetParent(scrollContent.transform, false);
+
+            // Change the text on the button
+            levelTransform.GetChild(levelTextIndex).GetComponent<TMP_Text>().text = levelInfo.levelName;
+
+            // Change the thumbnail on the button
+            Sprite thumbnail;
+            if (customLevelSelected == true)
+            {
+                // Custom level thumbnails (loads a custom image)
+                string levelFilePath = levelFolderPath + gamemode + "/" + newLevelID;
+                string thumbnailPath = Application.persistentDataPath + levelFilePath + ".png";
+
+                if (File.Exists(thumbnailPath))
+                {
+                    // Load the custom level thumbnail texture from the file path
+                    byte[] thumbnilTextureData = File.ReadAllBytes(thumbnailPath);
+                    Texture2D thumbnilTexture = new Texture2D(350, 150);
+                    thumbnilTexture.LoadImage(thumbnilTextureData);
+
+                    // Turn the texture into a sprite
+                    Rect rect = new Rect(0, 0, thumbnilTexture.width, thumbnilTexture.height);
+                    thumbnail = Sprite.Create(thumbnilTexture, rect, new Vector2(0.5f, 0.5f), 100f);
+                }
+                else
+                {
+                    thumbnail = unknownThumbnail;
+                }
+            }
+            else
+            {
+                // Regular level thumbnails (based off of player count)
+                int playerCount = CheckPlayerCountOfLevel(levelInfo.playerStartPositions);
+                switch (playerCount)
+                {
+                    case 1:
+                        thumbnail = onePlayerThumbnail;
+                        break;
+                    case 2:
+                        thumbnail = twoPlayerThumbnail;
+                        break;
+                    case 3:
+                        thumbnail = threePlayerThumbnail;
+                        break;
+                    case 4:
+                        thumbnail = fourPlayerThumbnail;
+                        break;
+                    default:
+                        thumbnail = unknownThumbnail;
+                        break;
+                }
+            }
+            levelTransform.GetChild(levelTextIndex - 1).GetComponent<Image>().sprite = thumbnail;
+
+            // Enable the level button
+            newLevelButton.SetActive(true);
 
             // Create the click event that loads the player into a specific level
-            EventTrigger trigger = newTextButton.GetComponent<EventTrigger>();
+            EventTrigger trigger = newLevelButton.GetComponent<EventTrigger>();
             EventTrigger.Entry entry = new()
             {
                 eventID = EventTriggerType.PointerClick

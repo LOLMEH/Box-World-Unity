@@ -89,6 +89,40 @@ public class createLevel : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Checks the player count of a level
+    /// </summary>
+    /// <param name="levelInfo">The level data</param>
+    /// <returns></returns>
+    public static int CheckPlayerCountOfLevel(GridPosition[] playerStartPositions)
+    {
+        // Get player positions
+        GridPosition playerTwoPosition = playerStartPositions[1];
+        GridPosition playerThreePosition = playerStartPositions[2];
+        GridPosition playerFourPosition = playerStartPositions[3];
+        GridPosition invalidPlayerPosition = new GridPosition(-99, -99);
+
+        // A level is a multiplayer level if the player position is valid (not equal to -99, -99)
+        int foundPlayerCount = 1;
+        if (playerTwoPosition.x != invalidPlayerPosition.x && playerTwoPosition.y != invalidPlayerPosition.y)
+        {
+            // Two players
+            foundPlayerCount = 2;
+        }
+        if (playerThreePosition.x != invalidPlayerPosition.x && playerThreePosition.y != invalidPlayerPosition.y)
+        {
+            // Three players
+            foundPlayerCount = 3;
+        }
+        if (playerFourPosition.x != invalidPlayerPosition.x && playerFourPosition.y != invalidPlayerPosition.y)
+        {
+            // Four players
+            foundPlayerCount = 4;
+        }
+
+        return foundPlayerCount;
+    }
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -142,40 +176,57 @@ public class createLevel : MonoBehaviour
         GridPosition playerFourPosition = playerStartPositions[3];
         GridPosition invalidPlayerPosition = new GridPosition(-99, -99);
 
-        // Move player to positions
+        // Move player one to positions
         GridPosition playerStartPosition = playerPosition;
         Vector2 playerStartPositionVector = new Vector2(playerPosition.x * 2, playerPosition.y * 2);
         player.transform.position = playerStartPositionVector;
 
-        // Move the other players to positions if it is a multiplayer level
-        // A level is a multiplayer level if the player position is valid (not equal to -99, -99)
-        playerCount = 1;
-        if (playerTwoPosition.x != invalidPlayerPosition.x && playerTwoPosition.y != invalidPlayerPosition.y)
+        // Move player two to position
+        void movePlayerTwo(GridPosition position)
         {
-            // Player two
             playerTwo.SetActive(true);
-            GridPosition playerTwoStartPosition = playerTwoPosition;
+            GridPosition playerTwoStartPosition = position;
             Vector2 playerTwoStartPositionVector = new Vector2(playerTwoPosition.x * 2, playerTwoPosition.y * 2);
             playerTwo.transform.position = playerTwoStartPositionVector;
-            playerCount = 2;
         }
-        if (playerThreePosition.x != invalidPlayerPosition.x && playerThreePosition.y != invalidPlayerPosition.y)
+
+        // Move player three to position
+        void movePlayerThree(GridPosition position)
         {
-            // Player three
             playerThree.SetActive(true);
-            GridPosition playerThreeStartPosition = playerThreePosition;
+            GridPosition playerThreeStartPosition = position;
             Vector2 playerThreeStartPositionVector = new Vector2(playerThreePosition.x * 2, playerThreePosition.y * 2);
             playerThree.transform.position = playerThreeStartPositionVector;
-            playerCount = 3;
         }
-        if (playerFourPosition.x != invalidPlayerPosition.x && playerFourPosition.y != invalidPlayerPosition.y)
+
+        // Move player four to position
+        void movePlayerFour(GridPosition position)
         {
-            // Player four
             playerFour.SetActive(true);
-            GridPosition playerFourStartPosition = playerFourPosition;
+            GridPosition playerFourStartPosition = position;
             Vector2 playerFourStartPositionVector = new Vector2(playerFourPosition.x * 2, playerFourPosition.y * 2);
             playerFour.transform.position = playerFourStartPositionVector;
-            playerCount = 4;
+        }
+
+        // Move the other players to positions if it is a multiplayer level
+        playerCount = CheckPlayerCountOfLevel(playerStartPositions);
+        if (playerCount == 2)
+        {
+            // Two players
+            movePlayerTwo(playerTwoPosition);
+        }
+        if (playerCount == 3)
+        {
+            // Three players
+            movePlayerTwo(playerTwoPosition);
+            movePlayerThree(playerThreePosition);
+        }
+        if (playerCount == 4)
+        {
+            // Four players
+            movePlayerTwo(playerTwoPosition);
+            movePlayerThree(playerThreePosition);
+            movePlayerFour(playerThreePosition);
         }
 
         // Generate level boundaries

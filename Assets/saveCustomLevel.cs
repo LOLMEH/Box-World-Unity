@@ -7,6 +7,7 @@ using static createLevel;
 public class saveCustomLevel : MonoBehaviour
 {
     public int customLevelLimit;
+    public GameObject pauseGUI;
     public GameObject levelNameTextInput;
     public changeGameBounds levelSettings;
     public moveCreateObject createObject;
@@ -208,7 +209,12 @@ public class saveCustomLevel : MonoBehaviour
         }
         string filePath = customLevelFolderPath + fileID + customLevelExtension;
 
+        // Save level thumbnail
+        string thumbnailPath = customLevelFolderPath + fileID + ".png";
+        ScreenCapture.CaptureScreenshot(thumbnailPath);
+
         // Save level to a new json file
+        pauseGUI.SetActive(false);
         File.WriteAllText(filePath, levelJson);
         print("File saved to " + filePath);
 

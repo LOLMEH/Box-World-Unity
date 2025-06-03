@@ -5398,6 +5398,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   customLevelLimit: 50
+  pauseGUI: {fileID: 753103745}
   levelNameTextInput: {fileID: 1967408773}
   levelSettings: {fileID: 1512877155}
   createObject: {fileID: 1560469862}
