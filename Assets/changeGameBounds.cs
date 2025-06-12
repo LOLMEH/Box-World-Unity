@@ -29,7 +29,7 @@ public class changeGameBounds : MonoBehaviour
             case 0:
                 // Old bounds
                 createCamera.orthographicSize = 5;
-                createCamera.transform.position = new Vector3(0, 0, cameraZ);
+                createCamera.transform.position = new Vector3(8, -4, cameraZ);
                 boundString = "old";
                 break;
             case 1:

@@ -10,6 +10,7 @@ using static createLevel;
 public class CreateLevelSelectText : MonoBehaviour
 {
     public string baseTextCloneTagName;
+    public TMP_Text levelCategoryText;
     public GameObject levelSelectScreen;
     public GameObject baseLevelPreviewContent;
     public GameObject scrollContent;
@@ -26,6 +27,28 @@ public class CreateLevelSelectText : MonoBehaviour
     /// <param name="gamemode">The name of level list to use</param>
     public void GenerateLevelSelect(string gamemode)
     {
+        // Change the level category text depending on the gamemode
+        bool customLevelSelected = false; // Also check if custom levels are being requested
+        switch (gamemode)
+        {
+            case "singleplayer":
+                levelCategoryText.text = "Singleplayer Levels";
+                break;
+            case "twoplayer":
+                levelCategoryText.text = "Two Player Levels";
+                break;
+            case "threeplayer":
+                levelCategoryText.text = "Three Player Levels";
+                break;
+            case "fourplayer":
+                levelCategoryText.text = "Four Player Levels";
+                break;
+            case "customLevels":
+                levelCategoryText.text = "Saved Levels";
+                customLevelSelected = true;
+                break;
+        }
+
         // Find and remove all previous text buttons
         GameObject[] oldTextButtons = GameObject.FindGameObjectsWithTag(baseTextCloneTagName);
         for (int counter = 0; counter < oldTextButtons.Length; counter++)
@@ -35,12 +58,10 @@ public class CreateLevelSelectText : MonoBehaviour
 
         // Get the level folder path
         string levelFolderPath = "levels/";
-        bool customLevelSelected = false;
-        if (gamemode == "customLevels")
+        if (customLevelSelected == true)
         {
             // Special switch for custom levels
             levelFolderPath = "/";
-            customLevelSelected = true;
         }
 
         // Create a text button for each level

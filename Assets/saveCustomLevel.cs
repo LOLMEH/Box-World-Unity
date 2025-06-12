@@ -7,7 +7,7 @@ using static createLevel;
 public class saveCustomLevel : MonoBehaviour
 {
     public int customLevelLimit;
-    public GameObject pauseGUI;
+    public togglePauseGUI guis;
     public GameObject levelNameTextInput;
     public changeGameBounds levelSettings;
     public moveCreateObject createObject;
@@ -21,7 +21,11 @@ public class saveCustomLevel : MonoBehaviour
         levelDataIndex = 0;
     }
 
-    public void OnClick()
+    /// <summary>
+    /// Saves the custom level into a json file
+    /// </summary>
+    /// <param name="overrideLevelID">The level ID of the custom level to override</param>
+    public void OnClick(int overrideLevelID = -1)
     {
         // https://discussions.unity.com/t/count-the-amount-Of-a-certain-tile-in-a-tilemap/228363/5
         int getAmountOfTiles(Tilemap tilemap)
@@ -183,7 +187,7 @@ public class saveCustomLevel : MonoBehaviour
         Level level = new (levelName, levelBounds, playerStartPositions, versionCreated, levelData);
         string levelJson = JsonUtility.ToJson(level);
 
-        // Find the file path from the next unused level id
+        // Find the file path from the level id
         string customLevelFolderPath = Application.persistentDataPath + "/customLevels/";
         if (!Directory.Exists(customLevelFolderPath))
         {
@@ -191,30 +195,40 @@ public class saveCustomLevel : MonoBehaviour
             Directory.CreateDirectory(customLevelFolderPath);
         }
         string customLevelExtension = ".json";
+        // Find the level ID
         int fileID = 1;
-        while (fileID < customLevelLimit)
+        if (overrideLevelID == -1)
         {
-            // Get the next level file
-            string checkFilePath = customLevelFolderPath + fileID + customLevelExtension;
-
-            // Check if the next level file does not exist
-            bool doesFileExist = File.Exists(checkFilePath);
-            if (!doesFileExist)
+            // If the level file ID is invalid save the custom level to the next unused ID
+            while (fileID < customLevelLimit)
             {
-                // If the level file does not exist, use the current level ID to save this custom level file
-                break;
-            }
+                // Get the next level file
+                string checkFilePath = customLevelFolderPath + fileID + customLevelExtension;
 
-            fileID++;
+                // Check if the next level file does not exist
+                bool doesFileExist = File.Exists(checkFilePath);
+                if (!doesFileExist)
+                {
+                    // If the level file does not exist, use the current level ID to save this custom level file
+                    break;
+                }
+
+                fileID++;
+            }
+        } else
+        {
+            fileID = overrideLevelID;
         }
-        string filePath = customLevelFolderPath + fileID + customLevelExtension;
+            string filePath = customLevelFolderPath + fileID + customLevelExtension;
 
         // Save level thumbnail
+        guis.pauseGui.SetActive(false);
+        guis.saveLevelGui.SetActive(false);
+        guis.copyLevelGui.SetActive(false);
         string thumbnailPath = customLevelFolderPath + fileID + ".png";
         ScreenCapture.CaptureScreenshot(thumbnailPath);
 
         // Save level to a new json file
-        pauseGUI.SetActive(false);
         File.WriteAllText(filePath, levelJson);
         print("File saved to " + filePath);
 
