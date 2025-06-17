@@ -125,11 +125,13 @@ public class GetCustomLevelsToCopy : MonoBehaviour
                     for (int counter = 0; counter < levelBoxes.Length; counter++)
                     {
                         // Get object information
-                        String objectName = levelBoxes[counter].type;
-                        GridPosition objectPosition = levelBoxes[counter].position;
+                        ObjectInformation objectInformation = levelBoxes[counter];
+                        string objectName = objectInformation.type;
+                        GridPosition objectPosition = objectInformation.position;
+                        int variantID = objectInformation.variantID;
 
                         // Place object
-                        createObject.PlaceObject(objectPosition.x, objectPosition.y, true, objectName);
+                        createObject.PlaceObject(objectPosition.x, objectPosition.y, true, objectName, variantID);
                     }
 
                     // Go back to the pause menu

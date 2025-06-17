@@ -28,6 +28,8 @@ public class createLevel : MonoBehaviour
     public GameObject throwBox;
     public GameObject throwBoxButton;
     public GameObject unknownObject;
+    public GameObject diagonalBox;
+    public GameObject halfBox;
     public int playerCount;
 
     [System.Serializable]
@@ -341,6 +343,48 @@ public class createLevel : MonoBehaviour
             else if (objectName == "throwBoxTile")
             {
                 throwBoxTileTilemap.SetTile(objectPositonVector, throwBoxTileTile);
+            }
+            else if (objectName == "diagBox")
+            {
+                Vector3Int diagBoxPositonVector = new Vector3Int(
+                    objectPosition.x * 2, objectPosition.y * 2, (int)diagonalBox.transform.position.z
+                );
+                Quaternion quaternion = Quaternion.identity;
+                switch (objectVariantID)
+                {
+                    // Change rotation depending on variant ID
+                    case 2:
+                        quaternion = Quaternion.Euler(0, 0, 90);
+                        break;
+                    case 3:
+                        quaternion = Quaternion.Euler(0, 0, 180);
+                        break;
+                    case 4:
+                        quaternion = Quaternion.Euler(0, 0, 270);
+                        break;
+                }
+                Instantiate(diagonalBox, diagBoxPositonVector, quaternion);
+            }
+            else if (objectName == "halfBox")
+            {
+                Vector3Int halfBoxPositonVector = new Vector3Int(
+                    objectPosition.x * 2, objectPosition.y * 2, (int)halfBox.transform.position.z
+                );
+                Quaternion quaternion = Quaternion.identity;
+                switch (objectVariantID)
+                {
+                    // Change rotation depending on variant ID
+                    case 2:
+                        quaternion = Quaternion.Euler(0, 0, 90);
+                        break;
+                    case 3:
+                        quaternion = Quaternion.Euler(0, 0, 180);
+                        break;
+                    case 4:
+                        quaternion = Quaternion.Euler(0, 0, 270);
+                        break;
+                }
+                Instantiate(halfBox, halfBoxPositonVector, quaternion);
             }
             else
             {

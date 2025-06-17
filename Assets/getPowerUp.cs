@@ -1,10 +1,10 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.Tilemaps;
 
 public class getPowerUp : MonoBehaviour
 {
     public CompositeCollider2D regularBoxCollider;
+    public BoxCollider2D regularHalfBoxCollider;
+    public PolygonCollider2D regularDiagBoxCollider;
 
     void OnCollisionEnter2D(Collision2D collision)
     {
@@ -20,7 +20,15 @@ public class getPowerUp : MonoBehaviour
                 Collider2D playerCollider = collision.collider;
                 player.hasPowerUp = true;
                 player.powerUpImage.enabled = true;
+                // Disable collisions with regular boxes
                 Physics2D.IgnoreCollision(playerCollider, regularBoxCollider, true);
+                GameObject[] boxObjects = GameObject.FindGameObjectsWithTag("PhaseForPowerUp");
+                for (int counter = 0;  counter < boxObjects.Length; ++counter)
+                {
+                    GameObject boxObject = boxObjects[counter];
+                    Collider2D boxCollider = boxObject.GetComponent<Collider2D>();
+                    Physics2D.IgnoreCollision(playerCollider, boxCollider, true);
+                }
                 // Destroy power up
                 Destroy(gameObject);
             }

@@ -9,6 +9,7 @@ TagManager:
   - ThrowBoxButton
   - BaseTextClone
   - Key
+  - PhaseForPowerUp
   layers:
   - Default
   - TransparentFX

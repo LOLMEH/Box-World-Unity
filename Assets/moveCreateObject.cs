@@ -60,6 +60,18 @@ public class moveCreateObject : MonoBehaviour
     public Sprite throwBoxTileImage;
     public GameObject unknownGroup;
     public GameObject unknownObject;
+    public GameObject diagonalBoxBLGroup;
+    public GameObject diagonalBoxBRGroup;
+    public GameObject diagonalBoxTRGroup;
+    public GameObject diagonalBoxTLGroup;
+    public GameObject diagonalBoxObject;
+    public Sprite diagonalBoxImage;
+    public GameObject halfBoxBGroup;
+    public GameObject halfBoxRGroup;
+    public GameObject halfBoxTGroup;
+    public GameObject halfBoxLGroup;
+    public GameObject halfBoxObject;
+    public Sprite halfBoxImage;
     private string objectName;
     private SpriteRenderer createSprite;
 
@@ -70,7 +82,7 @@ public class moveCreateObject : MonoBehaviour
     /// <param name="mousePosY">The Y of the mouse pointer</param>
     /// <param name="useObjectScale">If the object being placed uses the object scale</param>
     /// <param name="objectNameOverride">The name of the object to override the chosen object</param>
-    public void PlaceObject(int mousePosX, int mousePosY, bool useObjectScale, string objectNameOverride = "")
+    public void PlaceObject(int mousePosX, int mousePosY, bool useObjectScale, string objectNameOverride = "", int variantID = 0)
     {
         // Get the box position on the tilemap grid
         Vector3Int objectPositon = new Vector3Int(
@@ -90,6 +102,73 @@ public class moveCreateObject : MonoBehaviour
         {
             // Override the object name if it is not blank
             placeObjectName = objectNameOverride;
+
+            // If the object has a variant, set the name to the corresponding variant
+            switch (placeObjectName)
+            {
+                case "keyDoor":
+                    switch (variantID)
+                    {
+                        case 1:
+                            placeObjectName = "greenKeyDoor";
+                            break;
+                        case 2:
+                            placeObjectName = "redKeyDoor";
+                            break;
+                        case 3:
+                            placeObjectName = "blueKeyDoor";
+                            break;
+                    }
+                    break;
+                case "key":
+                    switch (variantID)
+                    {
+                        case 1:
+                            placeObjectName = "greenKey";
+                            break;
+                        case 2:
+                            placeObjectName = "redKey";
+                            break;
+                        case 3:
+                            placeObjectName = "blueKey";
+                            break;
+                    }
+                    break;
+                case "diagBox":
+                    switch (variantID)
+                    {
+                        case 1:
+                            placeObjectName = "diagBoxBL";
+                            break;
+                        case 2:
+                            placeObjectName = "diagBoxBR";
+                            break;
+                        case 3:
+                            placeObjectName = "diagBoxTR";
+                            break;
+                        case 4:
+                            placeObjectName = "diagBoxTL";
+                            break;
+                    }
+                    break;
+                case "halfBox":
+                    switch (variantID)
+                    {
+                        case 1:
+                            placeObjectName = "halfBoxB";
+                            break;
+                        case 2:
+                            placeObjectName = "halfBoxR";
+                            break;
+                        case 3:
+                            placeObjectName = "halfBoxT";
+                            break;
+                        case 4:
+                            placeObjectName = "halfBoxL";
+                            break;
+                    }
+                    break;
+            }
         }
 
         // Check if the placed object can go though tiles
@@ -235,6 +314,86 @@ public class moveCreateObject : MonoBehaviour
                     Destroy(unknown);
                 }
             }
+            int amountOfDiagTLBoxes = diagonalBoxTLGroup.transform.childCount;
+            for (int counter = 0; counter < amountOfDiagTLBoxes; counter++)
+            {
+                GameObject diagBox = diagonalBoxTLGroup.transform.GetChild(counter).gameObject;
+                Vector2 diagBoxVector = diagBox.transform.position;
+                if (diagBoxVector == newObjectPos)
+                {
+                    Destroy(diagBox);
+                }
+            }
+            int amountOfDiagTRBoxes = diagonalBoxTRGroup.transform.childCount;
+            for (int counter = 0; counter < amountOfDiagTRBoxes; counter++)
+            {
+                GameObject diagBox = diagonalBoxTRGroup.transform.GetChild(counter).gameObject;
+                Vector2 diagBoxVector = diagBox.transform.position;
+                if (diagBoxVector == newObjectPos)
+                {
+                    Destroy(diagBox);
+                }
+            }
+            int amountOfDiagBLBoxes = diagonalBoxBLGroup.transform.childCount;
+            for (int counter = 0; counter < amountOfDiagBLBoxes; counter++)
+            {
+                GameObject diagBox = diagonalBoxBLGroup.transform.GetChild(counter).gameObject;
+                Vector2 diagBoxVector = diagBox.transform.position;
+                if (diagBoxVector == newObjectPos)
+                {
+                    Destroy(diagBox);
+                }
+            }
+            int amountOfDiagBRBoxes = diagonalBoxBRGroup.transform.childCount;
+            for (int counter = 0; counter < amountOfDiagBRBoxes; counter++)
+            {
+                GameObject diagBox = diagonalBoxBRGroup.transform.GetChild(counter).gameObject;
+                Vector2 diagBoxVector = diagBox.transform.position;
+                if (diagBoxVector == newObjectPos)
+                {
+                    Destroy(diagBox);
+                }
+            }
+            int amountOfHalfBBoxes = halfBoxBGroup.transform.childCount;
+            for (int counter = 0; counter < amountOfHalfBBoxes; counter++)
+            {
+                GameObject halfBox = halfBoxBGroup.transform.GetChild(counter).gameObject;
+                Vector2 halfBoxVector = halfBox.transform.position;
+                if (halfBoxVector == newObjectPos)
+                {
+                    Destroy(halfBox);
+                }
+            }
+            int amountOfHalfRBoxes = halfBoxRGroup.transform.childCount;
+            for (int counter = 0; counter < amountOfHalfRBoxes; counter++)
+            {
+                GameObject halfBox = halfBoxRGroup.transform.GetChild(counter).gameObject;
+                Vector2 halfBoxVector = halfBox.transform.position;
+                if (halfBoxVector == newObjectPos)
+                {
+                    Destroy(halfBox);
+                }
+            }
+            int amountOfHalfTBoxes = halfBoxTGroup.transform.childCount;
+            for (int counter = 0; counter < amountOfHalfTBoxes; counter++)
+            {
+                GameObject halfBox = halfBoxTGroup.transform.GetChild(counter).gameObject;
+                Vector2 halfBoxVector = halfBox.transform.position;
+                if (halfBoxVector == newObjectPos)
+                {
+                    Destroy(halfBox);
+                }
+            }
+            int amountOfHalfLBoxes = halfBoxLGroup.transform.childCount;
+            for (int counter = 0; counter < amountOfHalfLBoxes; counter++)
+            {
+                GameObject halfBox = halfBoxLGroup.transform.GetChild(counter).gameObject;
+                Vector2 halfBoxVector = halfBox.transform.position;
+                if (halfBoxVector == newObjectPos)
+                {
+                    Destroy(halfBox);
+                }
+            }
         }
 
         // Create object
@@ -343,6 +502,55 @@ public class moveCreateObject : MonoBehaviour
             case "throwBoxTile":
                 throwBoxTileTilemap.SetTile(objectPositon, throwBoxTileTile);
                 break;
+            case "diagBoxBL":
+                mousePosX *= objectScale;
+                mousePosY *= objectScale;
+                GameObject newDiagBoxBL = Instantiate(diagonalBoxObject, new Vector2(mousePosX, mousePosY), Quaternion.identity);
+                newDiagBoxBL.transform.SetParent(diagonalBoxBLGroup.transform);
+                break;
+            case "diagBoxBR":
+                // Rotate this variants
+                mousePosX *= objectScale;
+                mousePosY *= objectScale;
+                GameObject newDiagBoxBR = Instantiate(diagonalBoxObject, new Vector2(mousePosX, mousePosY), Quaternion.Euler(0, 0, 90));
+                newDiagBoxBR.transform.SetParent(diagonalBoxBRGroup.transform);
+                break;
+            case "diagBoxTR":
+                mousePosX *= objectScale;
+                mousePosY *= objectScale;
+                GameObject newDiagBoxTR = Instantiate(diagonalBoxObject, new Vector2(mousePosX, mousePosY), Quaternion.Euler(0, 0, 180));
+                newDiagBoxTR.transform.SetParent(diagonalBoxTRGroup.transform);
+                break;
+            case "diagBoxTL":
+                mousePosX *= objectScale;
+                mousePosY *= objectScale;
+                GameObject newDiagBoxTL = Instantiate(diagonalBoxObject, new Vector2(mousePosX, mousePosY), Quaternion.Euler(0, 0, 270));
+                newDiagBoxTL.transform.SetParent(diagonalBoxTLGroup.transform);
+                break;
+            case "halfBoxB":
+                mousePosX *= objectScale;
+                mousePosY *= objectScale;
+                GameObject newHalfBoxB = Instantiate(halfBoxObject, new Vector2(mousePosX, mousePosY), Quaternion.identity);
+                newHalfBoxB.transform.SetParent(halfBoxBGroup.transform);
+                break;
+            case "halfBoxR":
+                mousePosX *= objectScale;
+                mousePosY *= objectScale;
+                GameObject newHalfBoxR = Instantiate(halfBoxObject, new Vector2(mousePosX, mousePosY), Quaternion.Euler(0, 0, 90));
+                newHalfBoxR.transform.SetParent(halfBoxRGroup.transform);
+                break;
+            case "halfBoxT":
+                mousePosX *= objectScale;
+                mousePosY *= objectScale;
+                GameObject newHalfBoxT = Instantiate(halfBoxObject, new Vector2(mousePosX, mousePosY), Quaternion.Euler(0, 0, 180));
+                newHalfBoxT.transform.SetParent(halfBoxTGroup.transform);
+                break;
+            case "halfBoxL":
+                mousePosX *= objectScale;
+                mousePosY *= objectScale;
+                GameObject newHalfBoxL = Instantiate(halfBoxObject, new Vector2(mousePosX, mousePosY), Quaternion.Euler(0, 0, 270));
+                newHalfBoxL.transform.SetParent(halfBoxLGroup.transform);
+                break;
             default:
                 // Default object
                 mousePosX *= objectScale;
@@ -393,36 +601,43 @@ public class moveCreateObject : MonoBehaviour
         {
             objectName = "air";
             createSprite.sprite = null;
+            createSprite.transform.rotation = Quaternion.Euler(0, 0, 0);
         }
         else if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             objectName = "regularBox";
             createSprite.sprite = regularBoxImage;
+            createSprite.transform.rotation = Quaternion.Euler(0, 0, 0);
         }
         else if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             objectName = "steelBox";
             createSprite.sprite = steelBoxImage;
+            createSprite.transform.rotation = Quaternion.Euler(0, 0, 0);
         }
         else if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             objectName = "lavaBox";
             createSprite.sprite = lavaBoxImage;
+            createSprite.transform.rotation = Quaternion.Euler(0, 0, 0);
         }
         else if (Input.GetKeyDown(KeyCode.Alpha4))
         {
             objectName = "powerUp";
             createSprite.sprite = powerUpImage;
+            createSprite.transform.rotation = Quaternion.Euler(0, 0, 0);
         }
         else if (Input.GetKeyDown(KeyCode.Alpha5))
         {
             objectName = "player";
             createSprite.sprite = playerImage;
+            createSprite.transform.rotation = Quaternion.Euler(0, 0, 0);
         }
         else if (Input.GetKeyDown(KeyCode.Alpha6))
         {
             objectName = "goal";
             createSprite.sprite = goalImage;
+            createSprite.transform.rotation = Quaternion.Euler(0, 0, 0);
         }
         else if (Input.GetKeyDown(KeyCode.Alpha7))
         {
@@ -442,6 +657,7 @@ public class moveCreateObject : MonoBehaviour
                     createSprite.sprite = greenKeyDoorImage;
                     break;
             }
+            createSprite.transform.rotation = Quaternion.Euler(0, 0, 0);
         }
         else if (Input.GetKeyDown(KeyCode.Alpha8))
         {
@@ -460,41 +676,95 @@ public class moveCreateObject : MonoBehaviour
                     createSprite.sprite = greenKeyImage;
                     break;
             }
+            createSprite.transform.rotation = Quaternion.Euler(0, 0, 0);
         }
         else if (Input.GetKeyDown(KeyCode.Alpha9))
         {
             objectName = "moveBox";
             createSprite.sprite = moveBoxImage;
+            createSprite.transform.rotation = Quaternion.Euler(0, 0, 0);
         }
         else if (Input.GetKeyDown(KeyCode.Q))
         {
             objectName = "player2";
             createSprite.sprite = playerTwoImage;
+            createSprite.transform.rotation = Quaternion.Euler(0, 0, 0);
         }
         else if (Input.GetKeyDown(KeyCode.W))
         {
             objectName = "player3";
             createSprite.sprite = playerThreeImage;
+            createSprite.transform.rotation = Quaternion.Euler(0, 0, 0);
         }
         else if (Input.GetKeyDown(KeyCode.E))
         {
             objectName = "player4";
             createSprite.sprite = playerFourImage;
+            createSprite.transform.rotation = Quaternion.Euler(0, 0, 0);
         }
         else if (Input.GetKeyDown(KeyCode.R))
         {
             objectName = "throwBox";
             createSprite.sprite = throwBoxImage;
+            createSprite.transform.rotation = Quaternion.Euler(0, 0, 0);
         }
         else if (Input.GetKeyDown(KeyCode.T))
         {
             objectName = "throwBoxButton";
             createSprite.sprite = throwBoxButtonImage;
+            createSprite.transform.rotation = Quaternion.Euler(0, 0, 0);
         }
         else if (Input.GetKeyDown(KeyCode.Y))
         {
             objectName = "throwBoxTile";
             createSprite.sprite = throwBoxTileImage;
+            createSprite.transform.rotation = Quaternion.Euler(0, 0, 0);
+        }
+        else if (Input.GetKeyDown(KeyCode.U))
+        {
+            switch (objectName)
+            {
+                case "diagBoxBL":
+                    objectName = "diagBoxBR";
+                    createSprite.transform.rotation = Quaternion.Euler(0, 0, 90);
+                    break;
+                case "diagBoxBR":
+                    objectName = "diagBoxTR";
+                    createSprite.transform.rotation = Quaternion.Euler(0, 0, 180);
+                    break;
+                case "diagBoxTR":
+                    objectName = "diagBoxTL";
+                    createSprite.transform.rotation = Quaternion.Euler(0, 0, 270);
+                    break;
+                default:
+                    objectName = "diagBoxBL";
+                    createSprite.sprite = diagonalBoxImage;
+                    createSprite.transform.rotation = Quaternion.Euler(0, 0, 0);
+                    break;
+            }
+        }
+        else if (Input.GetKeyDown(KeyCode.I))
+        {
+            switch (objectName)
+            {
+                case "halfBoxB":
+                    objectName = "halfBoxR";
+                    createSprite.transform.rotation = Quaternion.Euler(0, 0, 90);
+                    break;
+                case "halfBoxR":
+                    objectName = "halfBoxT";
+                    createSprite.transform.rotation = Quaternion.Euler(0, 0, 180);
+                    break;
+                case "halfBoxT":
+                    objectName = "halfBoxL";
+                    createSprite.transform.rotation = Quaternion.Euler(0, 0, 270);
+                    break;
+                default:
+                    objectName = "halfBoxB";
+                    createSprite.sprite = halfBoxImage;
+                    createSprite.transform.rotation = Quaternion.Euler(0, 0, 0);
+                    break;
+            }
         }
     }
 }
