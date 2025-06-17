@@ -58,6 +58,8 @@ public class moveCreateObject : MonoBehaviour
     public Tilemap throwBoxTileTilemap;
     public TileBase throwBoxTileTile;
     public Sprite throwBoxTileImage;
+    public GameObject unknownGroup;
+    public GameObject unknownObject;
     private string objectName;
     private SpriteRenderer createSprite;
 
@@ -223,11 +225,24 @@ public class moveCreateObject : MonoBehaviour
                     Destroy(throwBoxButton);
                 }
             }
+            int amountOfUnknowns = unknownGroup.transform.childCount;
+            for (int counter = 0; counter < amountOfUnknowns; counter++)
+            {
+                GameObject unknown = unknownGroup.transform.GetChild(counter).gameObject;
+                Vector2 unknownVector = unknown.transform.position;
+                if (unknownVector == newObjectPos)
+                {
+                    Destroy(unknown);
+                }
+            }
         }
 
         // Create object
         switch (placeObjectName)
         {
+            case "air":
+                // Do nothing
+                break;
             case "regularBox":
                 // Create tile object
                 regularBoxTilemap.SetTile(objectPositon, regularBoxTile);
@@ -328,6 +343,13 @@ public class moveCreateObject : MonoBehaviour
             case "throwBoxTile":
                 throwBoxTileTilemap.SetTile(objectPositon, throwBoxTileTile);
                 break;
+            default:
+                // Default object
+                mousePosX *= objectScale;
+                mousePosY *= objectScale;
+                GameObject newUnknown = Instantiate(unknownObject, new Vector2(mousePosX, mousePosY), Quaternion.identity);
+                newUnknown.transform.SetParent(unknownGroup.transform);
+                break;
         }
     }
 
@@ -404,65 +426,72 @@ public class moveCreateObject : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.Alpha7))
         {
-            objectName = "greenKeyDoor";
-            createSprite.sprite = greenKeyDoorImage;
+            // Go into more variants
+            switch (objectName)
+            {
+                case "greenKeyDoor":
+                    objectName = "redKeyDoor";
+                    createSprite.sprite = redKeyDoorImage;
+                    break;
+                case "redKeyDoor":
+                    objectName = "blueKeyDoor";
+                    createSprite.sprite = blueKeyDoorImage;
+                    break;
+                default:
+                    objectName = "greenKeyDoor";
+                    createSprite.sprite = greenKeyDoorImage;
+                    break;
+            }
         }
         else if (Input.GetKeyDown(KeyCode.Alpha8))
         {
-            objectName = "redKeyDoor";
-            createSprite.sprite = redKeyDoorImage;
+            switch (objectName)
+            {
+                case "greenKey":
+                    objectName = "redKey";
+                    createSprite.sprite = redKeyImage;
+                    break;
+                case "redKey":
+                    objectName = "blueKey";
+                    createSprite.sprite = blueKeyImage;
+                    break;
+                default:
+                    objectName = "greenKey";
+                    createSprite.sprite = greenKeyImage;
+                    break;
+            }
         }
         else if (Input.GetKeyDown(KeyCode.Alpha9))
-        {
-            objectName = "blueKeyDoor";
-            createSprite.sprite = blueKeyDoorImage;
-        }
-        else if (Input.GetKeyDown(KeyCode.Q))
-        {
-            objectName = "greenKey";
-            createSprite.sprite = greenKeyImage;
-        }
-        else if (Input.GetKeyDown(KeyCode.W))
-        {
-            objectName = "redKey";
-            createSprite.sprite = redKeyImage;
-        }
-        else if (Input.GetKeyDown(KeyCode.E))
-        {
-            objectName = "blueKey";
-            createSprite.sprite = blueKeyImage;
-        }
-        else if (Input.GetKeyDown(KeyCode.R))
         {
             objectName = "moveBox";
             createSprite.sprite = moveBoxImage;
         }
-        else if (Input.GetKeyDown(KeyCode.T))
+        else if (Input.GetKeyDown(KeyCode.Q))
         {
             objectName = "player2";
             createSprite.sprite = playerTwoImage;
         }
-        else if (Input.GetKeyDown(KeyCode.Y))
+        else if (Input.GetKeyDown(KeyCode.W))
         {
             objectName = "player3";
             createSprite.sprite = playerThreeImage;
         }
-        else if (Input.GetKeyDown(KeyCode.U))
+        else if (Input.GetKeyDown(KeyCode.E))
         {
             objectName = "player4";
             createSprite.sprite = playerFourImage;
         }
-        else if (Input.GetKeyDown(KeyCode.I))
+        else if (Input.GetKeyDown(KeyCode.R))
         {
             objectName = "throwBox";
             createSprite.sprite = throwBoxImage;
         }
-        else if (Input.GetKeyDown(KeyCode.O))
+        else if (Input.GetKeyDown(KeyCode.T))
         {
             objectName = "throwBoxButton";
             createSprite.sprite = throwBoxButtonImage;
         }
-        else if (Input.GetKeyDown(KeyCode.P))
+        else if (Input.GetKeyDown(KeyCode.Y))
         {
             objectName = "throwBoxTile";
             createSprite.sprite = throwBoxTileImage;

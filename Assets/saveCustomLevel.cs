@@ -52,14 +52,14 @@ public class saveCustomLevel : MonoBehaviour
                 if (tile != null)
                 {
                     GridPosition gridPos = new GridPosition(pos.x, pos.y);
-                    levelData[levelDataIndex] = new ObjectInformation(name, gridPos);
+                    levelData[levelDataIndex] = new ObjectInformation(name, gridPos, 0);
                     levelDataIndex += 1;
                 }
             }
         }
 
         // https://discussions.unity.com/t/count-the-amount-Of-a-certain-tile-in-a-tilemap/228363/5
-        void createObjectAtPositionObject(GameObject group, string name)
+        void createObjectAtPositionObject(GameObject group, string name, int variantID = 0)
         {
             int amount = group.transform.childCount;
             for (int counter = 0; counter < amount; counter++)
@@ -69,7 +69,7 @@ public class saveCustomLevel : MonoBehaviour
                 int objectPosX = (int)objectPos.x / 2;
                 int objectPosY = (int)objectPos.y / 2;
                 GridPosition gridPos = new GridPosition(objectPosX, objectPosY);
-                levelData[levelDataIndex] = new ObjectInformation(name, gridPos);
+                levelData[levelDataIndex] = new ObjectInformation(name, gridPos, variantID);
                 levelDataIndex += 1;
             }
         }
@@ -131,7 +131,7 @@ public class saveCustomLevel : MonoBehaviour
         // Create objects in the level data
         levelData = new ObjectInformation[totalObjectCount];
         GridPosition goalGridPos = new GridPosition((int)goalMarker.transform.position.x / 2, (int)goalMarker.transform.position.y / 2);
-        levelData[levelDataIndex] = new ObjectInformation("goal", goalGridPos);
+        levelData[levelDataIndex] = new ObjectInformation("goal", goalGridPos, 0);
         levelDataIndex += 1;
         // Create objects (tilemaps)
         createObjectAtPositionTilemap(regularBoxTilemap, "regularBox");
@@ -141,12 +141,12 @@ public class saveCustomLevel : MonoBehaviour
         // Create objects (non-tilemaps)
         createObjectAtPositionObject(moveBoxGroup, "moveBox");
         createObjectAtPositionObject(powerUpGroup, "powerUp");
-        createObjectAtPositionObject(greenKeyDoorGroup, "greenKeyDoor");
-        createObjectAtPositionObject(redKeyDoorGroup, "redKeyDoor");
-        createObjectAtPositionObject(blueKeyDoorGroup, "blueKeyDoor");
-        createObjectAtPositionObject(greenKeyGroup, "greenKey");
-        createObjectAtPositionObject(redKeyGroup, "redKey");
-        createObjectAtPositionObject(blueKeyGroup, "blueKey");
+        createObjectAtPositionObject(greenKeyDoorGroup, "keyDoor", 1);
+        createObjectAtPositionObject(redKeyDoorGroup, "keyDoor", 2);
+        createObjectAtPositionObject(blueKeyDoorGroup, "keyDoor", 3);
+        createObjectAtPositionObject(greenKeyGroup, "key", 1);
+        createObjectAtPositionObject(redKeyGroup, "key", 2);
+        createObjectAtPositionObject(blueKeyGroup, "key", 3);
         createObjectAtPositionObject(throwBoxGroup, "throwBox");
         createObjectAtPositionObject(throwBoxButtonGroup, "throwBoxButton");
 

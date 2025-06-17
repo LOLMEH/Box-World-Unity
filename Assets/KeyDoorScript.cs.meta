@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: f4c8f7065bb265c4482b9c8f96a4102e
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - greenKeyDoorSprite: {fileID: 21300000, guid: 3a0ea4c3117899443affd6fe8efc997b, type: 3}
+  - redKeyDoorSprite: {fileID: 21300000, guid: ea70acec0cae36642ba867e79b46c644, type: 3}
+  - blueKeyDoorSprite: {fileID: 21300000, guid: ccf27fdbe7e4af64384684332afe2dc6, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

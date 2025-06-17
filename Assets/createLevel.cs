@@ -21,16 +21,13 @@ public class createLevel : MonoBehaviour
     public Tilemap throwBoxTileTilemap;
     public TileBase throwBoxTileTile;
     public GameObject moveBox;
-    public GameObject greenKeyDoor;
-    public GameObject redKeyDoor;
-    public GameObject blueKeyDoor;
-    public GameObject greenKey;
-    public GameObject redKey;
-    public GameObject blueKey;
+    public GameObject keyDoor;
+    public GameObject key;
     public GameObject powerUp;
     public GameObject goal;
     public GameObject throwBox;
     public GameObject throwBoxButton;
+    public GameObject unknownObject;
     public int playerCount;
 
     [System.Serializable]
@@ -49,23 +46,25 @@ public class createLevel : MonoBehaviour
     [System.Serializable]
     public class ObjectInformation
     {
-        public String type;
+        public string type;
         public GridPosition position;
+        public int variantID;
 
-        public ObjectInformation(string type, GridPosition position)
+        public ObjectInformation(string type, GridPosition position, int variantID = 0)
         {
             this.type = type;
             this.position = position;
+            this.variantID = variantID;
         }
     }
 
     [System.Serializable]
     public class Level
     {
-        public String levelName;
-        public String bounds;
+        public string levelName;
+        public string bounds;
         public GridPosition[] playerStartPositions;
-        public String versionCreated;
+        public string versionCreated;
         public ObjectInformation[] levelData;
 
         public Level(string levelName, string bounds, GridPosition[] playerStartPositions, string versionCreated, ObjectInformation[] levelData)
@@ -267,9 +266,11 @@ public class createLevel : MonoBehaviour
         // Generate level objects
         for (int counter = 0; counter < levelBoxes.Length; counter++)
         {
-            String objectName = levelBoxes[counter].type;
-            GridPosition objectPosition = levelBoxes[counter].position;
-            Vector3Int objectPositonVector = new Vector3Int(objectPosition.x, objectPosition.y);
+            ObjectInformation objectInformation = levelBoxes[counter];
+            String objectName = objectInformation.type;
+            GridPosition objectPosition = objectInformation.position;
+            int objectVariantID = objectInformation.variantID;
+            Vector3Int objectPositonVector = new(objectPosition.x, objectPosition.y);
 
             if (objectName == "regularBox")
             {
@@ -306,47 +307,22 @@ public class createLevel : MonoBehaviour
                 );
                 Instantiate(goal, goalPositonVector, Quaternion.identity);
             }
-            else if (objectName == "greenKeyDoor")
+            else if (objectName == "keyDoor")
             {
-                Vector3Int greenKeyDoorPositonVector = new Vector3Int(
-                    objectPosition.x * 2, objectPosition.y * 2, (int)greenKeyDoor.transform.position.z
+                Vector3Int keyDoorPositonVector = new Vector3Int(
+                    objectPosition.x * 2, objectPosition.y * 2, (int)keyDoor.transform.position.z
                 );
-                Instantiate(greenKeyDoor, greenKeyDoorPositonVector, Quaternion.identity);
+                // Give regular objects with a variant option their variant ID
+                GameObject keyDoorClone = Instantiate(keyDoor, keyDoorPositonVector, Quaternion.identity);
+                keyDoorClone.GetComponent<KeyDoorScript>().variantID = objectVariantID;
             }
-            else if (objectName == "greenKey")
+            else if (objectName == "key")
             {
-                Vector3Int greenKeyPositonVector = new Vector3Int(
-                    objectPosition.x * 2, objectPosition.y * 2, (int)greenKey.transform.position.z
+                Vector3Int keyPositonVector = new Vector3Int(
+                    objectPosition.x * 2, objectPosition.y * 2, (int)key.transform.position.z
                 );
-                Instantiate(greenKey, greenKeyPositonVector, Quaternion.identity);
-            }
-            else if (objectName == "redKeyDoor")
-            {
-                Vector3Int redKeyDoorPositonVector = new Vector3Int(
-                    objectPosition.x * 2, objectPosition.y * 2, (int)redKeyDoor.transform.position.z
-                );
-                Instantiate(redKeyDoor, redKeyDoorPositonVector, Quaternion.identity);
-            }
-            else if (objectName == "redKey")
-            {
-                Vector3Int redKeyPositonVector = new Vector3Int(
-                    objectPosition.x * 2, objectPosition.y * 2, (int)redKey.transform.position.z
-                );
-                Instantiate(redKey, redKeyPositonVector, Quaternion.identity);
-            }
-            else if (objectName == "blueKeyDoor")
-            {
-                Vector3Int blueKeyDoorPositonVector = new Vector3Int(
-                    objectPosition.x * 2, objectPosition.y * 2, (int)blueKeyDoor.transform.position.z
-                );
-                Instantiate(blueKeyDoor, blueKeyDoorPositonVector, Quaternion.identity);
-            }
-            else if (objectName == "blueKey")
-            {
-                Vector3Int blueKeyPositonVector = new Vector3Int(
-                    objectPosition.x * 2, objectPosition.y * 2, (int)blueKey.transform.position.z
-                );
-                Instantiate(blueKey, blueKeyPositonVector, Quaternion.identity);
+                GameObject keyClone = Instantiate(key, keyPositonVector, Quaternion.identity);
+                keyClone.GetComponent<KeyScript>().variantID = objectVariantID;
             }
             else if (objectName == "throwBox")
             {
@@ -368,7 +344,10 @@ public class createLevel : MonoBehaviour
             }
             else
             {
-                print("Error: object " + objectName + " not found");
+                Vector3Int unknownVector = new Vector3Int(
+                    objectPosition.x * 2, objectPosition.y * 2, (int)throwBoxButton.transform.position.z
+                );
+                Instantiate(unknownObject, unknownVector, Quaternion.identity);
             }
         }
     }

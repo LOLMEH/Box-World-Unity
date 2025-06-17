@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class movementScript : MonoBehaviour
@@ -7,9 +8,7 @@ public class movementScript : MonoBehaviour
     public float maxSpeed;
     public Vector2 respawnPoint;
     public bool hasPowerUp;
-    public int greenKeys;
-    public int redKeys;
-    public int blueKeys;
+    public Dictionary<int, int> keysHeld = new();
     private KeyCode upKey;
     private KeyCode downKey;
     private KeyCode leftKey;
