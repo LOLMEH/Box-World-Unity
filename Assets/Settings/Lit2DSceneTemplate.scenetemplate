@@ -64,6 +64,8 @@ MonoBehaviour:
     the 2D Renderer in Universal RP.
   preview: {fileID: -3604256930052969394}
   dependencies:
+  - dependency: {fileID: 2800000, guid: 6bba7b15983658541b07519dc6aa29cd, type: 3}
+    instantiationMode: 0
   - dependency: {fileID: 2800000, guid: 5697f237217deda4389ce2b6c2b1361c, type: 3}
     instantiationMode: 0
   - dependency: {fileID: 11400000, guid: bb37e5917fce05a42a6759565266a1d1, type: 2}
@@ -73,6 +75,8 @@ MonoBehaviour:
   - dependency: {fileID: 2800000, guid: 3028dc075ba8c584d9bc7d1e0255e038, type: 3}
     instantiationMode: 1
   - dependency: {fileID: 2800000, guid: 65d93c316457f624a96e0dfe11c4da4d, type: 3}
+    instantiationMode: 0
+  - dependency: {fileID: 2800000, guid: 35c5e04560dab6d47aa429c962714ef1, type: 3}
     instantiationMode: 0
   - dependency: {fileID: 2800000, guid: 3a0ea4c3117899443affd6fe8efc997b, type: 3}
     instantiationMode: 0
@@ -90,10 +94,14 @@ MonoBehaviour:
     instantiationMode: 1
   - dependency: {fileID: 2800000, guid: cd309a165ffb319458185057d1f136be, type: 3}
     instantiationMode: 0
+  - dependency: {fileID: 2800000, guid: 6c07a89627cd21645b85160044a8c1ad, type: 3}
+    instantiationMode: 0
   - dependency: {fileID: 11400000, guid: 2e498d1c8094910479dc3e1b768306a4, type: 2}
     instantiationMode: 1
   - dependency: {fileID: 11400000, guid: 61b66fedb71cd074789c9876cf8b759d, type: 2}
     instantiationMode: 1
+  - dependency: {fileID: 2800000, guid: 774945f839d007447af16187a7db69f2, type: 3}
+    instantiationMode: 0
   - dependency: {fileID: 2800000, guid: 67a08fddd7e5e3d4487ab957ba2eeec2, type: 3}
     instantiationMode: 0
   - dependency: {fileID: 4900000, guid: 467bc568deb34624ea9e036faeb511ca, type: 3}
@@ -108,23 +116,25 @@ MonoBehaviour:
     instantiationMode: 1
   - dependency: {fileID: 2800000, guid: 05985793caed8254fad32be6c577abd2, type: 3}
     instantiationMode: 0
+  - dependency: {fileID: 2800000, guid: d0ba386ba8e61ef48a5678c069c59d5e, type: 3}
+    instantiationMode: 0
   - dependency: {fileID: 2800000, guid: b566acc9880438548a58170c25bab0c5, type: 3}
     instantiationMode: 0
   - dependency: {fileID: 2800000, guid: ccf27fdbe7e4af64384684332afe2dc6, type: 3}
     instantiationMode: 0
-  - dependency: {fileID: 2800000, guid: c082e4ff2b48e724eb85f0c07937b1a0, type: 3}
-    instantiationMode: 0
-  - dependency: {fileID: 4900000, guid: 862aeabf52d0af246a6a1b9ee09c9f8d, type: 3}
-    instantiationMode: 1
   - dependency: {fileID: 2800000, guid: ee148e281f3c41c5b4ff5f8a5afe5a6c, type: 3}
     instantiationMode: 1
+  - dependency: {fileID: 4900000, guid: 862aeabf52d0af246a6a1b9ee09c9f8d, type: 3}
+    instantiationMode: 1
+  - dependency: {fileID: 2800000, guid: c082e4ff2b48e724eb85f0c07937b1a0, type: 3}
+    instantiationMode: 0
   - dependency: {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
     instantiationMode: 0
   - dependency: {fileID: 2800000, guid: 00cb24f948290954684820e37c873d23, type: 3}
     instantiationMode: 0
   - dependency: {fileID: 2800000, guid: 58f2eee725488c2419597cef51dc27fa, type: 3}
     instantiationMode: 0
-  - dependency: {fileID: 2800000, guid: a01d8f74c7507c64aae2d4f9827ea78f, type: 3}
+  - dependency: {fileID: 2800000, guid: 73e3939d31f47d243b97bb181fbe3497, type: 3}
     instantiationMode: 0
   - dependency: {fileID: -944628639613478452, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
     instantiationMode: 1
@@ -134,6 +144,12 @@ MonoBehaviour:
     instantiationMode: 0
   - dependency: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
     instantiationMode: 1
+  - dependency: {fileID: 2800000, guid: a01d8f74c7507c64aae2d4f9827ea78f, type: 3}
+    instantiationMode: 0
+  - dependency: {fileID: 2800000, guid: 84c9fbb8d2449bb44b1ab1df39da8930, type: 3}
+    instantiationMode: 0
+  - dependency: {fileID: 2800000, guid: 4f734cc845ba5c84392928d819b2ea11, type: 3}
+    instantiationMode: 0
   - dependency: {fileID: 11400000, guid: 51b76cd5643f88f43b0a856c28ea0023, type: 2}
     instantiationMode: 1
   - dependency: {fileID: 12800000, guid: e3265ab4bf004d28a9537516768c1c75, type: 3}

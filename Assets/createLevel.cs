@@ -30,6 +30,7 @@ public class createLevel : MonoBehaviour
     public GameObject unknownObject;
     public GameObject diagonalBox;
     public GameObject halfBox;
+    public GameObject playerWall;
     public int playerCount;
 
     [System.Serializable]
@@ -101,7 +102,7 @@ public class createLevel : MonoBehaviour
         GridPosition playerTwoPosition = playerStartPositions[1];
         GridPosition playerThreePosition = playerStartPositions[2];
         GridPosition playerFourPosition = playerStartPositions[3];
-        GridPosition invalidPlayerPosition = new GridPosition(-99, -99);
+        GridPosition invalidPlayerPosition = new(-99, -99);
 
         // A level is a multiplayer level if the player position is valid (not equal to -99, -99)
         int foundPlayerCount = 1;
@@ -175,19 +176,16 @@ public class createLevel : MonoBehaviour
         GridPosition playerTwoPosition = playerStartPositions[1];
         GridPosition playerThreePosition = playerStartPositions[2];
         GridPosition playerFourPosition = playerStartPositions[3];
-        GridPosition invalidPlayerPosition = new GridPosition(-99, -99);
 
         // Move player one to positions
-        GridPosition playerStartPosition = playerPosition;
-        Vector2 playerStartPositionVector = new Vector2(playerPosition.x * 2, playerPosition.y * 2);
+        Vector2 playerStartPositionVector = new(playerPosition.x * 2, playerPosition.y * 2);
         player.transform.position = playerStartPositionVector;
 
         // Move player two to position
         void movePlayerTwo(GridPosition position)
         {
             playerTwo.SetActive(true);
-            GridPosition playerTwoStartPosition = position;
-            Vector2 playerTwoStartPositionVector = new Vector2(playerTwoPosition.x * 2, playerTwoPosition.y * 2);
+            Vector2 playerTwoStartPositionVector = new(playerTwoPosition.x * 2, playerTwoPosition.y * 2);
             playerTwo.transform.position = playerTwoStartPositionVector;
         }
 
@@ -195,8 +193,7 @@ public class createLevel : MonoBehaviour
         void movePlayerThree(GridPosition position)
         {
             playerThree.SetActive(true);
-            GridPosition playerThreeStartPosition = position;
-            Vector2 playerThreeStartPositionVector = new Vector2(playerThreePosition.x * 2, playerThreePosition.y * 2);
+            Vector2 playerThreeStartPositionVector = new(playerThreePosition.x * 2, playerThreePosition.y * 2);
             playerThree.transform.position = playerThreeStartPositionVector;
         }
 
@@ -204,8 +201,7 @@ public class createLevel : MonoBehaviour
         void movePlayerFour(GridPosition position)
         {
             playerFour.SetActive(true);
-            GridPosition playerFourStartPosition = position;
-            Vector2 playerFourStartPositionVector = new Vector2(playerFourPosition.x * 2, playerFourPosition.y * 2);
+            Vector2 playerFourStartPositionVector = new(playerFourPosition.x * 2, playerFourPosition.y * 2);
             playerFour.transform.position = playerFourStartPositionVector;
         }
 
@@ -236,7 +232,7 @@ public class createLevel : MonoBehaviour
             for (int counter = 0; counter < levelBoundData.Length; counter++)
             {
                 GridPosition boundPositon = levelBoundData[counter];
-                Vector3Int boundPositonVector = new Vector3Int(boundPositon.x, boundPositon.y);
+                Vector3Int boundPositonVector = new(boundPositon.x, boundPositon.y);
                 steelBoxTilemap.SetTile(boundPositonVector, steelBoxTile);
             }
         }
@@ -290,28 +286,28 @@ public class createLevel : MonoBehaviour
             {
                 // Makes sure the object keeps its z value
                 // Objects that are not tilemaps need to have their position multiplied by 2
-                Vector3Int moveBoxPositonVector = new Vector3Int(
+                Vector3Int moveBoxPositonVector = new(
                     objectPosition.x * 2, objectPosition.y * 2, (int)moveBox.transform.position.z
                 );
                 Instantiate(moveBox, moveBoxPositonVector, Quaternion.identity);
             }
             else if (objectName == "powerUp")
             {
-                Vector3Int powerUpPositonVector = new Vector3Int(
+                Vector3Int powerUpPositonVector = new(
                     objectPosition.x * 2, objectPosition.y * 2, (int)powerUp.transform.position.z
                 );
                 Instantiate(powerUp, powerUpPositonVector, Quaternion.identity);
             }
             else if (objectName == "goal")
             {
-                Vector3Int goalPositonVector = new Vector3Int(
+                Vector3Int goalPositonVector = new(
                     objectPosition.x * 2, objectPosition.y * 2, (int)goal.transform.position.z
                 );
                 Instantiate(goal, goalPositonVector, Quaternion.identity);
             }
             else if (objectName == "keyDoor")
             {
-                Vector3Int keyDoorPositonVector = new Vector3Int(
+                Vector3Int keyDoorPositonVector = new(
                     objectPosition.x * 2, objectPosition.y * 2, (int)keyDoor.transform.position.z
                 );
                 // Give regular objects with a variant option their variant ID
@@ -320,7 +316,7 @@ public class createLevel : MonoBehaviour
             }
             else if (objectName == "key")
             {
-                Vector3Int keyPositonVector = new Vector3Int(
+                Vector3Int keyPositonVector = new(
                     objectPosition.x * 2, objectPosition.y * 2, (int)key.transform.position.z
                 );
                 GameObject keyClone = Instantiate(key, keyPositonVector, Quaternion.identity);
@@ -328,14 +324,14 @@ public class createLevel : MonoBehaviour
             }
             else if (objectName == "throwBox")
             {
-                Vector3Int throwBoxPositonVector = new Vector3Int(
+                Vector3Int throwBoxPositonVector = new(
                     objectPosition.x * 2, objectPosition.y * 2, (int)throwBox.transform.position.z
                 );
                 Instantiate(throwBox, throwBoxPositonVector, Quaternion.identity);
             }
             else if (objectName == "throwBoxButton")
             {
-                Vector3Int throwBoxButtonPositonVector = new Vector3Int(
+                Vector3Int throwBoxButtonPositonVector = new(
                     objectPosition.x * 2, objectPosition.y * 2, (int)throwBoxButton.transform.position.z
                 );
                 Instantiate(throwBoxButton, throwBoxButtonPositonVector, Quaternion.identity);
@@ -346,7 +342,7 @@ public class createLevel : MonoBehaviour
             }
             else if (objectName == "diagBox")
             {
-                Vector3Int diagBoxPositonVector = new Vector3Int(
+                Vector3Int diagBoxPositonVector = new(
                     objectPosition.x * 2, objectPosition.y * 2, (int)diagonalBox.transform.position.z
                 );
                 Quaternion quaternion = Quaternion.identity;
@@ -367,7 +363,7 @@ public class createLevel : MonoBehaviour
             }
             else if (objectName == "halfBox")
             {
-                Vector3Int halfBoxPositonVector = new Vector3Int(
+                Vector3Int halfBoxPositonVector = new(
                     objectPosition.x * 2, objectPosition.y * 2, (int)halfBox.transform.position.z
                 );
                 Quaternion quaternion = Quaternion.identity;
@@ -386,9 +382,25 @@ public class createLevel : MonoBehaviour
                 }
                 Instantiate(halfBox, halfBoxPositonVector, quaternion);
             }
+            else if (objectName == "playerWallHorizontal")
+            {
+                Vector3Int playerWallPositonVector = new(
+                    objectPosition.x * 2, objectPosition.y * 2, (int)key.transform.position.z
+                );
+                GameObject playerWallClone = Instantiate(playerWall, playerWallPositonVector, Quaternion.identity);
+                playerWallClone.GetComponent<PlayerWallScript>().variantID = objectVariantID;
+            }
+            else if (objectName == "playerWallVertical")
+            {
+                Vector3Int playerWallVerticalPositonVector = new(
+                    objectPosition.x * 2, objectPosition.y * 2, (int)key.transform.position.z
+                );
+                GameObject playerWallVerticalClone = Instantiate(playerWall, playerWallVerticalPositonVector, Quaternion.Euler(new(0, 0, 90)));
+                playerWallVerticalClone.GetComponent<PlayerWallScript>().variantID = objectVariantID;
+            }
             else
             {
-                Vector3Int unknownVector = new Vector3Int(
+                Vector3Int unknownVector = new(
                     objectPosition.x * 2, objectPosition.y * 2, (int)throwBoxButton.transform.position.z
                 );
                 Instantiate(unknownObject, unknownVector, Quaternion.identity);

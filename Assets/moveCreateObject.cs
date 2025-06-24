@@ -1,21 +1,15 @@
-using NUnit.Framework.Internal;
 using UnityEngine;
-using UnityEngine.Rendering;
 using UnityEngine.Tilemaps;
 
 public class moveCreateObject : MonoBehaviour
 {
     public int gridScale;
     public GameObject playerMarker;
-    public Sprite playerImage;
     public GameObject playerTwoMarker;
-    public Sprite playerTwoImage;
     public GameObject playerThreeMarker;
-    public Sprite playerThreeImage;
     public GameObject playerFourMarker;
-    public Sprite playerFourImage;
     public GameObject goalMarker;
-    public Sprite goalImage;
+    public GameObject[] groupList;
     public Tilemap regularBoxTilemap;
     public TileBase regularBoxTile;
     public Sprite regularBoxImage;
@@ -27,34 +21,24 @@ public class moveCreateObject : MonoBehaviour
     public Sprite lavaBoxImage;
     public GameObject moveBoxGroup;
     public GameObject moveBoxObject;
-    public Sprite moveBoxImage;
     public GameObject powerUpGroup;
     public GameObject powerUpObject;
-    public Sprite powerUpImage;
     public GameObject greenKeyDoorGroup;
     public GameObject greenKeyDoorObject;
-    public Sprite greenKeyDoorImage;
     public GameObject blueKeyDoorGroup;
     public GameObject blueKeyDoorObject;
-    public Sprite blueKeyDoorImage;
     public GameObject redKeyDoorGroup;
     public GameObject redKeyDoorObject;
-    public Sprite redKeyDoorImage;
     public GameObject greenKeyGroup;
     public GameObject greenKeyObject;
-    public Sprite greenKeyImage;
     public GameObject blueKeyGroup;
     public GameObject blueKeyObject;
-    public Sprite blueKeyImage;
     public GameObject redKeyGroup;
     public GameObject redKeyObject;
-    public Sprite redKeyImage;
     public GameObject throwBoxGroup;
     public GameObject throwBoxObject;
-    public Sprite throwBoxImage;
     public GameObject throwBoxButtonGroup;
     public GameObject throwBoxButtonObject;
-    public Sprite throwBoxButtonImage;
     public Tilemap throwBoxTileTilemap;
     public TileBase throwBoxTileTile;
     public Sprite throwBoxTileImage;
@@ -65,13 +49,23 @@ public class moveCreateObject : MonoBehaviour
     public GameObject diagonalBoxTRGroup;
     public GameObject diagonalBoxTLGroup;
     public GameObject diagonalBoxObject;
-    public Sprite diagonalBoxImage;
     public GameObject halfBoxBGroup;
     public GameObject halfBoxRGroup;
     public GameObject halfBoxTGroup;
     public GameObject halfBoxLGroup;
     public GameObject halfBoxObject;
-    public Sprite halfBoxImage;
+    public GameObject playerOneWallGroup;
+    public GameObject playerOneWallObject;
+    public GameObject playerTwoWallGroup;
+    public GameObject playerTwoWallObject;
+    public GameObject playerThreeWallGroup;
+    public GameObject playerThreeWallObject;
+    public GameObject playerFourWallGroup;
+    public GameObject playerFourWallObject;
+    public GameObject playerOneWallVerticalGroup;
+    public GameObject playerTwoWallVerticalGroup;
+    public GameObject playerThreeWallVerticalGroup;
+    public GameObject playerFourWallVerticalGroup;
     private string objectName;
     private SpriteRenderer createSprite;
 
@@ -85,14 +79,14 @@ public class moveCreateObject : MonoBehaviour
     public void PlaceObject(int mousePosX, int mousePosY, bool useObjectScale, string objectNameOverride = "", int variantID = 0)
     {
         // Get the box position on the tilemap grid
-        Vector3Int objectPositon = new Vector3Int(
+        Vector3Int objectPositon = new(
             mousePosX / gridScale,
             mousePosY / gridScale
         );
         int objectScale = 1;
         if (useObjectScale == true)
         {
-            objectPositon = new Vector3Int(mousePosX, mousePosY);
+            objectPositon = new(mousePosX, mousePosY);
             objectScale = 2;
         }
 
@@ -168,11 +162,49 @@ public class moveCreateObject : MonoBehaviour
                             break;
                     }
                     break;
+                case "playerWallHorizontal":
+                    switch (variantID)
+                    {
+                        case 1:
+                            placeObjectName = "playerOneWall";
+                            break;
+                        case 2:
+                            placeObjectName = "playerTwoWall";
+                            break;
+                        case 3:
+                            placeObjectName = "playerThreeWall";
+                            break;
+                        case 4:
+                            placeObjectName = "playerFourWall";
+                            break;
+                    }
+                    break;
+                case "playerWallVertical":
+                    switch (variantID)
+                    {
+                        case 1:
+                            placeObjectName = "playerOneWallVertical";
+                            break;
+                        case 2:
+                            placeObjectName = "playerTwoWallVertical";
+                            break;
+                        case 3:
+                            placeObjectName = "playerThreeWallVertical";
+                            break;
+                        case 4:
+                            placeObjectName = "playerFourWallVertical";
+                            break;
+                    }
+                    break;
             }
         }
 
         // Check if the placed object can go though tiles
-        string[] objectThatCanGoInTiles = { "powerUp", "greenKey", "redKey", "blueKey" };
+        string[] objectThatCanGoInTiles = { 
+            "powerUp", "greenKey", "redKey", "blueKey",
+            "playerOneWall", "playerTwoWall", "playerThreeWall", "playerFourWall",
+            "playerOneWallVertical", "playerTwoWallVertical", "playerThreeWallVertical", "playerFourWallVertical"
+        };
         bool canPlacedObjectGoInTiles = false;
         for (int counter = 0; counter < objectThatCanGoInTiles.Length; counter++)
         {
@@ -183,7 +215,7 @@ public class moveCreateObject : MonoBehaviour
             }
         }
 
-        // Delete object if space is occupied
+        // Delete object if space is occupied (tilemaps)
         if (regularBoxTilemap.GetTile(objectPositon) && !canPlacedObjectGoInTiles)
         {
             regularBoxTilemap.SetTile(objectPositon, null);
@@ -202,203 +234,33 @@ public class moveCreateObject : MonoBehaviour
         }
         else
         {
-            // Special check case for non-tile objects
-            Vector2 newObjectPos = new Vector2(mousePosX, mousePosY);
-            int amountOfMoveBoxes = moveBoxGroup.transform.childCount;
-            for (int counter = 0; counter < amountOfMoveBoxes; counter++)
+            // Checks if the current space is occupied by a placed object in a group
+            static void checkForOccupiedSpace(GameObject objectGroup, Vector2 placedObjectPos)
             {
-                GameObject moveBox = moveBoxGroup.transform.GetChild(counter).gameObject;
-                Vector2 moveBoxVector = moveBox.transform.position;
-                if (moveBoxVector == newObjectPos)
+                int amountOfObjects = objectGroup.transform.childCount;
+                for (int counter = 0; counter < amountOfObjects; counter++)
                 {
-                    Destroy(moveBox);
+                    GameObject gameObject = objectGroup.transform.GetChild(counter).gameObject;
+                    Vector2 gameObjectVector = gameObject.transform.position;
+                    if (gameObjectVector == placedObjectPos)
+                    {
+                        Destroy(gameObject);
+                    }
                 }
             }
-            int amountOfPowerUps = powerUpGroup.transform.childCount;
-            for (int counter = 0; counter < amountOfPowerUps; counter++)
+            
+            // Delete object if space is occupied (other objects)
+            Vector2 newObjectPos = new(mousePosX, mousePosY);
+            for (int counter = 0; groupList.Length > counter; counter++)
             {
-                GameObject powerUp = powerUpGroup.transform.GetChild(counter).gameObject;
-                Vector2 powerUpVector = powerUp.transform.position;
-                if (powerUpVector == newObjectPos)
-                {
-                    Destroy(powerUp);
-                }
-            }
-            int amountOfGreenKeyDoors = greenKeyDoorGroup.transform.childCount;
-            for (int counter = 0; counter < amountOfGreenKeyDoors; counter++)
-            {
-                GameObject greenKeyDoor = greenKeyDoorGroup.transform.GetChild(counter).gameObject;
-                Vector2 greenKeyDoorVector = greenKeyDoor.transform.position;
-                if (greenKeyDoorVector == newObjectPos)
-                {
-                    Destroy(greenKeyDoor);
-                }
-            }
-            int amountOfRedKeyDoors = redKeyDoorGroup.transform.childCount;
-            for (int counter = 0; counter < amountOfRedKeyDoors; counter++)
-            {
-                GameObject redKeyDoor = redKeyDoorGroup.transform.GetChild(counter).gameObject;
-                Vector2 redKeyDoorVector = redKeyDoor.transform.position;
-                if (redKeyDoorVector == newObjectPos)
-                {
-                    Destroy(redKeyDoor);
-                }
-            }
-            int amountOfBlueKeyDoors = blueKeyDoorGroup.transform.childCount;
-            for (int counter = 0; counter < amountOfBlueKeyDoors; counter++)
-            {
-                GameObject blueKeyDoor = blueKeyDoorGroup.transform.GetChild(counter).gameObject;
-                Vector2 blueKeyDoorVector = blueKeyDoor.transform.position;
-                if (blueKeyDoorVector == newObjectPos)
-                {
-                    Destroy(blueKeyDoor);
-                }
-            }
-            int amountOfGreenKeys = greenKeyGroup.transform.childCount;
-            for (int counter = 0; counter < amountOfGreenKeys; counter++)
-            {
-                GameObject greenKey = greenKeyGroup.transform.GetChild(counter).gameObject;
-                Vector2 greenKeyVector = greenKey.transform.position;
-                if (greenKeyVector == newObjectPos)
-                {
-                    Destroy(greenKey);
-                }
-            }
-            int amountOfRedKeys = redKeyGroup.transform.childCount;
-            for (int counter = 0; counter < amountOfRedKeys; counter++)
-            {
-                GameObject redKey = redKeyGroup.transform.GetChild(counter).gameObject;
-                Vector2 redKeyVector = redKey.transform.position;
-                if (redKeyVector == newObjectPos)
-                {
-                    Destroy(redKey);
-                }
-            }
-            int amountOfBlueKeys = blueKeyGroup.transform.childCount;
-            for (int counter = 0; counter < amountOfBlueKeys; counter++)
-            {
-                GameObject blueKey = blueKeyGroup.transform.GetChild(counter).gameObject;
-                Vector2 blueKeyVector = blueKey.transform.position;
-                if (blueKeyVector == newObjectPos)
-                {
-                    Destroy(blueKey);
-                }
-            }
-            int amountOfThrowBoxes = throwBoxGroup.transform.childCount;
-            for (int counter = 0; counter < amountOfThrowBoxes; counter++)
-            {
-                GameObject throwBox = throwBoxGroup.transform.GetChild(counter).gameObject;
-                Vector2 throwBoxVector = throwBox.transform.position;
-                if (throwBoxVector == newObjectPos)
-                {
-                    Destroy(throwBox);
-                }
-            }
-            int amountOfThrowBoxButtons = throwBoxButtonGroup.transform.childCount;
-            for (int counter = 0; counter < amountOfThrowBoxButtons; counter++)
-            {
-                GameObject throwBoxButton = throwBoxButtonGroup.transform.GetChild(counter).gameObject;
-                Vector2 throwBoxButtonVector = throwBoxButton.transform.position;
-                if (throwBoxButtonVector == newObjectPos)
-                {
-                    Destroy(throwBoxButton);
-                }
-            }
-            int amountOfUnknowns = unknownGroup.transform.childCount;
-            for (int counter = 0; counter < amountOfUnknowns; counter++)
-            {
-                GameObject unknown = unknownGroup.transform.GetChild(counter).gameObject;
-                Vector2 unknownVector = unknown.transform.position;
-                if (unknownVector == newObjectPos)
-                {
-                    Destroy(unknown);
-                }
-            }
-            int amountOfDiagTLBoxes = diagonalBoxTLGroup.transform.childCount;
-            for (int counter = 0; counter < amountOfDiagTLBoxes; counter++)
-            {
-                GameObject diagBox = diagonalBoxTLGroup.transform.GetChild(counter).gameObject;
-                Vector2 diagBoxVector = diagBox.transform.position;
-                if (diagBoxVector == newObjectPos)
-                {
-                    Destroy(diagBox);
-                }
-            }
-            int amountOfDiagTRBoxes = diagonalBoxTRGroup.transform.childCount;
-            for (int counter = 0; counter < amountOfDiagTRBoxes; counter++)
-            {
-                GameObject diagBox = diagonalBoxTRGroup.transform.GetChild(counter).gameObject;
-                Vector2 diagBoxVector = diagBox.transform.position;
-                if (diagBoxVector == newObjectPos)
-                {
-                    Destroy(diagBox);
-                }
-            }
-            int amountOfDiagBLBoxes = diagonalBoxBLGroup.transform.childCount;
-            for (int counter = 0; counter < amountOfDiagBLBoxes; counter++)
-            {
-                GameObject diagBox = diagonalBoxBLGroup.transform.GetChild(counter).gameObject;
-                Vector2 diagBoxVector = diagBox.transform.position;
-                if (diagBoxVector == newObjectPos)
-                {
-                    Destroy(diagBox);
-                }
-            }
-            int amountOfDiagBRBoxes = diagonalBoxBRGroup.transform.childCount;
-            for (int counter = 0; counter < amountOfDiagBRBoxes; counter++)
-            {
-                GameObject diagBox = diagonalBoxBRGroup.transform.GetChild(counter).gameObject;
-                Vector2 diagBoxVector = diagBox.transform.position;
-                if (diagBoxVector == newObjectPos)
-                {
-                    Destroy(diagBox);
-                }
-            }
-            int amountOfHalfBBoxes = halfBoxBGroup.transform.childCount;
-            for (int counter = 0; counter < amountOfHalfBBoxes; counter++)
-            {
-                GameObject halfBox = halfBoxBGroup.transform.GetChild(counter).gameObject;
-                Vector2 halfBoxVector = halfBox.transform.position;
-                if (halfBoxVector == newObjectPos)
-                {
-                    Destroy(halfBox);
-                }
-            }
-            int amountOfHalfRBoxes = halfBoxRGroup.transform.childCount;
-            for (int counter = 0; counter < amountOfHalfRBoxes; counter++)
-            {
-                GameObject halfBox = halfBoxRGroup.transform.GetChild(counter).gameObject;
-                Vector2 halfBoxVector = halfBox.transform.position;
-                if (halfBoxVector == newObjectPos)
-                {
-                    Destroy(halfBox);
-                }
-            }
-            int amountOfHalfTBoxes = halfBoxTGroup.transform.childCount;
-            for (int counter = 0; counter < amountOfHalfTBoxes; counter++)
-            {
-                GameObject halfBox = halfBoxTGroup.transform.GetChild(counter).gameObject;
-                Vector2 halfBoxVector = halfBox.transform.position;
-                if (halfBoxVector == newObjectPos)
-                {
-                    Destroy(halfBox);
-                }
-            }
-            int amountOfHalfLBoxes = halfBoxLGroup.transform.childCount;
-            for (int counter = 0; counter < amountOfHalfLBoxes; counter++)
-            {
-                GameObject halfBox = halfBoxLGroup.transform.GetChild(counter).gameObject;
-                Vector2 halfBoxVector = halfBox.transform.position;
-                if (halfBoxVector == newObjectPos)
-                {
-                    Destroy(halfBox);
-                }
+                // Loop through each object group and check if a object from that group is occupying the new object's space 
+                checkForOccupiedSpace(groupList[counter], newObjectPos);
             }
         }
 
-        // Create object
         switch (placeObjectName)
         {
+            // Check which object to place
             case "air":
                 // Do nothing
                 break;
@@ -551,6 +413,54 @@ public class moveCreateObject : MonoBehaviour
                 GameObject newHalfBoxL = Instantiate(halfBoxObject, new Vector2(mousePosX, mousePosY), Quaternion.Euler(0, 0, 270));
                 newHalfBoxL.transform.SetParent(halfBoxLGroup.transform);
                 break;
+            case "playerOneWall":
+                mousePosX *= objectScale;
+                mousePosY *= objectScale;
+                GameObject newPlayerOneWall = Instantiate(playerOneWallObject, new Vector2(mousePosX, mousePosY), Quaternion.identity);
+                newPlayerOneWall.transform.SetParent(playerOneWallGroup.transform);
+                break;
+            case "playerTwoWall":
+                mousePosX *= objectScale;
+                mousePosY *= objectScale;
+                GameObject newPlayerTwoWall = Instantiate(playerTwoWallObject, new Vector2(mousePosX, mousePosY), Quaternion.identity);
+                newPlayerTwoWall.transform.SetParent(playerTwoWallGroup.transform);
+                break;
+            case "playerThreeWall":
+                mousePosX *= objectScale;
+                mousePosY *= objectScale;
+                GameObject newPlayerThreeWall = Instantiate(playerThreeWallObject, new Vector2(mousePosX, mousePosY), Quaternion.identity);
+                newPlayerThreeWall.transform.SetParent(playerThreeWallGroup.transform);
+                break;
+            case "playerFourWall":
+                mousePosX *= objectScale;
+                mousePosY *= objectScale;
+                GameObject newPlayerFourWall = Instantiate(playerFourWallObject, new Vector2(mousePosX, mousePosY), Quaternion.identity);
+                newPlayerFourWall.transform.SetParent(playerFourWallGroup.transform);
+                break;
+            case "playerOneWallVertical":
+                mousePosX *= objectScale;
+                mousePosY *= objectScale;
+                GameObject newPlayerOneWallVertical = Instantiate(playerOneWallObject, new Vector2(mousePosX, mousePosY), Quaternion.Euler(0, 0, 90));
+                newPlayerOneWallVertical.transform.SetParent(playerOneWallVerticalGroup.transform);
+                break;
+            case "playerTwoWallVertical":
+                mousePosX *= objectScale;
+                mousePosY *= objectScale;
+                GameObject newPlayerTwoWallVertical = Instantiate(playerTwoWallObject, new Vector2(mousePosX, mousePosY), Quaternion.Euler(0, 0, 90));
+                newPlayerTwoWallVertical.transform.SetParent(playerTwoWallVerticalGroup.transform);
+                break;
+            case "playerThreeWallVertical":
+                mousePosX *= objectScale;
+                mousePosY *= objectScale;
+                GameObject newPlayerThreeWallVertical = Instantiate(playerThreeWallObject, new Vector2(mousePosX, mousePosY), Quaternion.Euler(0, 0, 90));
+                newPlayerThreeWallVertical.transform.SetParent(playerThreeWallVerticalGroup.transform);
+                break;
+            case "playerFourWallVertical":
+                mousePosX *= objectScale;
+                mousePosY *= objectScale;
+                GameObject newPlayerFourWallVertical = Instantiate(playerFourWallObject, new Vector2(mousePosX, mousePosY), Quaternion.Euler(0, 0, 90));
+                newPlayerFourWallVertical.transform.SetParent(playerFourWallVerticalGroup.transform);
+                break;
             default:
                 // Default object
                 mousePosX *= objectScale;
@@ -565,8 +475,21 @@ public class moveCreateObject : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        // Default configurations
         objectName = "regularBox";
         createSprite = GetComponent<SpriteRenderer>();
+
+        // Get the group list
+        GameObject[] allGroupList =
+        {
+            moveBoxGroup, powerUpGroup, greenKeyDoorGroup, redKeyDoorGroup,
+            blueKeyDoorGroup, greenKeyGroup, redKeyGroup, blueKeyGroup, throwBoxGroup, throwBoxButtonGroup,
+            unknownGroup, diagonalBoxTLGroup, diagonalBoxTRGroup, diagonalBoxBLGroup, diagonalBoxBRGroup,
+            halfBoxBGroup, halfBoxTGroup, halfBoxRGroup, halfBoxLGroup, playerOneWallGroup, playerTwoWallGroup,
+            playerThreeWallGroup, playerFourWallGroup, playerOneWallVerticalGroup, playerTwoWallVerticalGroup,
+            playerThreeWallVerticalGroup, playerFourWallVerticalGroup
+        };
+        groupList = allGroupList;
     }
 
     // Update is called once per frame
@@ -588,7 +511,7 @@ public class moveCreateObject : MonoBehaviour
         }
 
         // Go to mouse position
-        GetComponent<Transform>().position = new Vector2(mousePos.x, mousePos.y);
+        GetComponent<Transform>().position = (Vector2)mousePos;
 
         // Place sprite when the player clicks
         if (Input.GetMouseButton(0))
@@ -596,48 +519,53 @@ public class moveCreateObject : MonoBehaviour
             PlaceObject((int)mousePos.x, (int)mousePos.y, false);
         }
 
+        // Reset the create object image's rotation
+        static void resetCreateObjectRotation(SpriteRenderer createSprite)
+        {
+            createSprite.transform.rotation = Quaternion.Euler(0, 0, 0);
+        }
         // Change object being placed
         if (Input.GetKeyDown(KeyCode.Alpha0))
         {
             objectName = "air";
             createSprite.sprite = null;
-            createSprite.transform.rotation = Quaternion.Euler(0, 0, 0);
+            resetCreateObjectRotation(createSprite);
         }
         else if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             objectName = "regularBox";
             createSprite.sprite = regularBoxImage;
-            createSprite.transform.rotation = Quaternion.Euler(0, 0, 0);
+            resetCreateObjectRotation(createSprite);
         }
         else if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             objectName = "steelBox";
             createSprite.sprite = steelBoxImage;
-            createSprite.transform.rotation = Quaternion.Euler(0, 0, 0);
+            resetCreateObjectRotation(createSprite);
         }
         else if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             objectName = "lavaBox";
             createSprite.sprite = lavaBoxImage;
-            createSprite.transform.rotation = Quaternion.Euler(0, 0, 0);
+            resetCreateObjectRotation(createSprite);
         }
         else if (Input.GetKeyDown(KeyCode.Alpha4))
         {
             objectName = "powerUp";
-            createSprite.sprite = powerUpImage;
-            createSprite.transform.rotation = Quaternion.Euler(0, 0, 0);
+            createSprite.sprite = powerUpObject.GetComponent<SpriteRenderer>().sprite;
+            resetCreateObjectRotation(createSprite);
         }
         else if (Input.GetKeyDown(KeyCode.Alpha5))
         {
             objectName = "player";
-            createSprite.sprite = playerImage;
-            createSprite.transform.rotation = Quaternion.Euler(0, 0, 0);
+            createSprite.sprite = playerMarker.GetComponent<SpriteRenderer>().sprite;
+            resetCreateObjectRotation(createSprite);
         }
         else if (Input.GetKeyDown(KeyCode.Alpha6))
         {
             objectName = "goal";
-            createSprite.sprite = goalImage;
-            createSprite.transform.rotation = Quaternion.Euler(0, 0, 0);
+            createSprite.sprite = goalMarker.GetComponent<SpriteRenderer>().sprite;
+            resetCreateObjectRotation(createSprite);
         }
         else if (Input.GetKeyDown(KeyCode.Alpha7))
         {
@@ -646,18 +574,18 @@ public class moveCreateObject : MonoBehaviour
             {
                 case "greenKeyDoor":
                     objectName = "redKeyDoor";
-                    createSprite.sprite = redKeyDoorImage;
+                    createSprite.sprite = redKeyDoorObject.GetComponent<SpriteRenderer>().sprite;
                     break;
                 case "redKeyDoor":
                     objectName = "blueKeyDoor";
-                    createSprite.sprite = blueKeyDoorImage;
+                    createSprite.sprite = blueKeyDoorObject.GetComponent<SpriteRenderer>().sprite;
                     break;
                 default:
                     objectName = "greenKeyDoor";
-                    createSprite.sprite = greenKeyDoorImage;
+                    createSprite.sprite = greenKeyDoorObject.GetComponent<SpriteRenderer>().sprite;
                     break;
             }
-            createSprite.transform.rotation = Quaternion.Euler(0, 0, 0);
+            resetCreateObjectRotation(createSprite);
         }
         else if (Input.GetKeyDown(KeyCode.Alpha8))
         {
@@ -665,60 +593,60 @@ public class moveCreateObject : MonoBehaviour
             {
                 case "greenKey":
                     objectName = "redKey";
-                    createSprite.sprite = redKeyImage;
+                    createSprite.sprite = redKeyObject.GetComponent<SpriteRenderer>().sprite;
                     break;
                 case "redKey":
                     objectName = "blueKey";
-                    createSprite.sprite = blueKeyImage;
+                    createSprite.sprite = blueKeyObject.GetComponent<SpriteRenderer>().sprite;
                     break;
                 default:
                     objectName = "greenKey";
-                    createSprite.sprite = greenKeyImage;
+                    createSprite.sprite = greenKeyObject.GetComponent<SpriteRenderer>().sprite;
                     break;
             }
-            createSprite.transform.rotation = Quaternion.Euler(0, 0, 0);
+            resetCreateObjectRotation(createSprite);
         }
         else if (Input.GetKeyDown(KeyCode.Alpha9))
         {
             objectName = "moveBox";
-            createSprite.sprite = moveBoxImage;
-            createSprite.transform.rotation = Quaternion.Euler(0, 0, 0);
+            createSprite.sprite = moveBoxObject.GetComponent<SpriteRenderer>().sprite;
+            resetCreateObjectRotation(createSprite);
         }
         else if (Input.GetKeyDown(KeyCode.Q))
         {
             objectName = "player2";
-            createSprite.sprite = playerTwoImage;
-            createSprite.transform.rotation = Quaternion.Euler(0, 0, 0);
+            createSprite.sprite = playerTwoMarker.GetComponent<SpriteRenderer>().sprite;
+            resetCreateObjectRotation(createSprite);
         }
         else if (Input.GetKeyDown(KeyCode.W))
         {
             objectName = "player3";
-            createSprite.sprite = playerThreeImage;
-            createSprite.transform.rotation = Quaternion.Euler(0, 0, 0);
+            createSprite.sprite = playerThreeMarker.GetComponent<SpriteRenderer>().sprite;
+            resetCreateObjectRotation(createSprite);
         }
         else if (Input.GetKeyDown(KeyCode.E))
         {
             objectName = "player4";
-            createSprite.sprite = playerFourImage;
-            createSprite.transform.rotation = Quaternion.Euler(0, 0, 0);
+            createSprite.sprite = playerFourMarker.GetComponent<SpriteRenderer>().sprite;
+            resetCreateObjectRotation(createSprite);
         }
         else if (Input.GetKeyDown(KeyCode.R))
         {
             objectName = "throwBox";
-            createSprite.sprite = throwBoxImage;
-            createSprite.transform.rotation = Quaternion.Euler(0, 0, 0);
+            createSprite.sprite = throwBoxObject.GetComponent<SpriteRenderer>().sprite;
+            resetCreateObjectRotation(createSprite);
         }
         else if (Input.GetKeyDown(KeyCode.T))
         {
             objectName = "throwBoxButton";
-            createSprite.sprite = throwBoxButtonImage;
-            createSprite.transform.rotation = Quaternion.Euler(0, 0, 0);
+            createSprite.sprite = throwBoxButtonObject.GetComponent<SpriteRenderer>().sprite;
+            resetCreateObjectRotation(createSprite);
         }
         else if (Input.GetKeyDown(KeyCode.Y))
         {
             objectName = "throwBoxTile";
             createSprite.sprite = throwBoxTileImage;
-            createSprite.transform.rotation = Quaternion.Euler(0, 0, 0);
+            resetCreateObjectRotation(createSprite);
         }
         else if (Input.GetKeyDown(KeyCode.U))
         {
@@ -738,8 +666,8 @@ public class moveCreateObject : MonoBehaviour
                     break;
                 default:
                     objectName = "diagBoxBL";
-                    createSprite.sprite = diagonalBoxImage;
-                    createSprite.transform.rotation = Quaternion.Euler(0, 0, 0);
+                    createSprite.sprite = diagonalBoxObject.GetComponent<SpriteRenderer>().sprite;
+                    resetCreateObjectRotation(createSprite);
                     break;
             }
         }
@@ -761,10 +689,56 @@ public class moveCreateObject : MonoBehaviour
                     break;
                 default:
                     objectName = "halfBoxB";
-                    createSprite.sprite = halfBoxImage;
-                    createSprite.transform.rotation = Quaternion.Euler(0, 0, 0);
+                    createSprite.sprite = halfBoxObject.GetComponent<SpriteRenderer>().sprite;
+                    resetCreateObjectRotation(createSprite);
                     break;
             }
+        }
+        else if (Input.GetKeyDown(KeyCode.O))
+        {
+            switch (objectName)
+            {
+                case "playerOneWall":
+                    objectName = "playerTwoWall";
+                    createSprite.sprite = playerTwoWallObject.GetComponent<SpriteRenderer>().sprite;
+                    break;
+                case "playerTwoWall":
+                    objectName = "playerThreeWall";
+                    createSprite.sprite = playerThreeWallObject.GetComponent<SpriteRenderer>().sprite;
+                    break;
+                case "playerThreeWall":
+                    objectName = "playerFourWall";
+                    createSprite.sprite = playerFourWallObject.GetComponent<SpriteRenderer>().sprite;
+                    break;
+                default:
+                    objectName = "playerOneWall";
+                    createSprite.sprite = playerOneWallObject.GetComponent<SpriteRenderer>().sprite;
+                    break;
+            }
+            resetCreateObjectRotation(createSprite);
+        }
+        else if (Input.GetKeyDown(KeyCode.P))
+        {
+            switch (objectName)
+            {
+                case "playerOneWallVertical":
+                    objectName = "playerTwoWallVertical";
+                    createSprite.sprite = playerTwoWallObject.GetComponent<SpriteRenderer>().sprite;
+                    break;
+                case "playerTwoWallVertical":
+                    objectName = "playerThreeWallVertical";
+                    createSprite.sprite = playerThreeWallObject.GetComponent<SpriteRenderer>().sprite;
+                    break;
+                case "playerThreeWallVertical":
+                    objectName = "playerFourWallVertical";
+                    createSprite.sprite = playerFourWallObject.GetComponent<SpriteRenderer>().sprite;
+                    break;
+                default:
+                    objectName = "playerOneWallVertical";
+                    createSprite.sprite = playerOneWallObject.GetComponent<SpriteRenderer>().sprite;
+                    break;
+            }
+            createSprite.transform.rotation = Quaternion.Euler(0, 0, 90);
         }
     }
 }

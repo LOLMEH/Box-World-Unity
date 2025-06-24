@@ -51,8 +51,8 @@ public class saveCustomLevel : MonoBehaviour
                 Tile tile = tilemap.GetTile<Tile>(pos);
                 if (tile != null)
                 {
-                    GridPosition gridPos = new GridPosition(pos.x, pos.y);
-                    levelData[levelDataIndex] = new ObjectInformation(name, gridPos, 0);
+                    GridPosition gridPos = new(pos.x, pos.y);
+                    levelData[levelDataIndex] = new(name, gridPos, 0);
                     levelDataIndex += 1;
                 }
             }
@@ -68,8 +68,8 @@ public class saveCustomLevel : MonoBehaviour
                 Vector2 objectPos = group.transform.GetChild(counter).position;
                 int objectPosX = (int)objectPos.x / 2;
                 int objectPosY = (int)objectPos.y / 2;
-                GridPosition gridPos = new GridPosition(objectPosX, objectPosY);
-                levelData[levelDataIndex] = new ObjectInformation(name, gridPos, variantID);
+                GridPosition gridPos = new(objectPosX, objectPosY);
+                levelData[levelDataIndex] = new(name, gridPos, variantID);
                 levelDataIndex += 1;
             }
         }
@@ -84,9 +84,10 @@ public class saveCustomLevel : MonoBehaviour
         string levelBounds = levelSettings.boundString;
         int playerCount = levelSettings.playerCount;
 
-        print("Attempting to save " + playerCount + " player level " + levelName + " with " + levelBounds + " bounds...");
+        print("Attempting to save " + playerCount + " player level '" + levelName + "' with " + levelBounds + " bounds...");
 
         // Get markers for the objects
+        GameObject[] groupList = createObject.groupList;
         GameObject playerMarker = createObject.playerMarker;
         GameObject goalMarker = createObject.goalMarker;
         Tilemap regularBoxTilemap = createObject.regularBoxTilemap;
@@ -114,6 +115,14 @@ public class saveCustomLevel : MonoBehaviour
         GameObject halfBoxRGroup = createObject.halfBoxRGroup;
         GameObject halfBoxTGroup = createObject.halfBoxTGroup;
         GameObject halfBoxLGroup = createObject.halfBoxLGroup;
+        GameObject playerOneWallGroup = createObject.playerOneWallGroup;
+        GameObject playerTwoWallGroup = createObject.playerTwoWallGroup;
+        GameObject playerThreeWallGroup = createObject.playerThreeWallGroup;
+        GameObject playerFourWallGroup = createObject.playerFourWallGroup;
+        GameObject playerOneWallVerticalGroup = createObject.playerOneWallVerticalGroup;
+        GameObject playerTwoWallVerticalGroup = createObject.playerTwoWallVerticalGroup;
+        GameObject playerThreeWallVerticalGroup = createObject.playerThreeWallVerticalGroup;
+        GameObject playerFourWallVerticalGroup = createObject.playerFourWallVerticalGroup;
 
         // Count amount Of objects placed (tilemaps)
         int amountOfRegularBoxes = getAmountOfTiles(regularBoxTilemap);
@@ -121,30 +130,17 @@ public class saveCustomLevel : MonoBehaviour
         int amountOfLavaBoxes = getAmountOfTiles(lavaBoxTilemap);
         int amountOfThrowBoxTiles = getAmountOfTiles(throwBoxTileTilemap);
         // Count amount Of objects placed (regular objects)
-        int amountOfMoveBoxes = moveBoxGroup.transform.childCount;
-        int amountOfPowerUps = powerUpGroup.transform.childCount;
-        int amountOfGreenKeyDoors = greenKeyDoorGroup.transform.childCount;
-        int amountOfRedKeyDoors = redKeyDoorGroup.transform.childCount;
-        int amountOfBlueKeyDoors = blueKeyDoorGroup.transform.childCount;
-        int amountOfGreenKeys = greenKeyGroup.transform.childCount;
-        int amountOfRedKeys = redKeyGroup.transform.childCount;
-        int amountOfBlueKeys = blueKeyGroup.transform.childCount;
-        int amountOfThrowBoxes = throwBoxGroup.transform.childCount;
-        int amountOfThrowBoxButtons = throwBoxButtonGroup.transform.childCount;
-        int amountOfDiagBoxes = diagBoxBLGroup.transform.childCount + diagBoxBRGroup.transform.childCount
-            + diagBoxTLGroup.transform.childCount + diagBoxTRGroup.transform.childCount;
-        int amountOfHalfBoxes = halfBoxBGroup.transform.childCount + halfBoxLGroup.transform.childCount
-            + halfBoxRGroup.transform.childCount + halfBoxTGroup.transform.childCount;
         // Add an extra 1 due since the goal is an object
-        int totalObjectCount = 1 + amountOfRegularBoxes + amountOfSteelBoxes
-            + amountOfLavaBoxes + amountOfPowerUps + amountOfGreenKeyDoors + amountOfRedKeyDoors
-            + amountOfBlueKeyDoors + amountOfGreenKeys + amountOfRedKeys + amountOfBlueKeys
-            + amountOfMoveBoxes + amountOfThrowBoxes + amountOfThrowBoxButtons + amountOfThrowBoxTiles
-            + amountOfDiagBoxes + amountOfHalfBoxes;
+        int totalObjectCount = 1 + amountOfRegularBoxes + amountOfSteelBoxes + amountOfLavaBoxes + amountOfThrowBoxTiles; 
+        for (int counter = 0; groupList.Length > counter; counter++)
+        {
+            GameObject group = groupList[counter];
+            totalObjectCount += group.transform.childCount;
+        }
 
         // Create objects in the level data
         levelData = new ObjectInformation[totalObjectCount];
-        GridPosition goalGridPos = new GridPosition((int)goalMarker.transform.position.x / 2, (int)goalMarker.transform.position.y / 2);
+        GridPosition goalGridPos = new((int)goalMarker.transform.position.x / 2, (int)goalMarker.transform.position.y / 2);
         levelData[levelDataIndex] = new ObjectInformation("goal", goalGridPos, 0);
         levelDataIndex += 1;
         // Create objects (tilemaps)
@@ -171,19 +167,27 @@ public class saveCustomLevel : MonoBehaviour
         createObjectAtPositionObject(halfBoxRGroup, "halfBox", 2);
         createObjectAtPositionObject(halfBoxTGroup, "halfBox", 3);
         createObjectAtPositionObject(halfBoxLGroup, "halfBox", 4);
+        createObjectAtPositionObject(playerOneWallGroup, "playerWallHorizontal", 1);
+        createObjectAtPositionObject(playerTwoWallGroup, "playerWallHorizontal", 2);
+        createObjectAtPositionObject(playerThreeWallGroup, "playerWallHorizontal", 3);
+        createObjectAtPositionObject(playerFourWallGroup, "playerWallHorizontal", 4);
+        createObjectAtPositionObject(playerOneWallVerticalGroup, "playerWallVertical", 1);
+        createObjectAtPositionObject(playerTwoWallVerticalGroup, "playerWallVertical", 2);
+        createObjectAtPositionObject(playerThreeWallVerticalGroup, "playerWallVertical", 3);
+        createObjectAtPositionObject(playerFourWallVerticalGroup, "playerWallVertical", 4);
 
         // Get all of the player positions
-        GridPosition playerPosition = new GridPosition((int)playerMarker.transform.position.x / 2, (int)playerMarker.transform.position.y / 2);
-        GridPosition playerTwoPosition = new GridPosition((int)playerTwoMarker.transform.position.x / 2, (int)playerTwoMarker.transform.position.y / 2);
-        GridPosition playerThreePosition = new GridPosition((int)playerThreeMarker.transform.position.x / 2, (int)playerThreeMarker.transform.position.y / 2);
-        GridPosition playerFourPosition = new GridPosition((int)playerFourMarker.transform.position.x / 2, (int)playerFourMarker.transform.position.y / 2);
+        GridPosition playerPosition = new((int)playerMarker.transform.position.x / 2, (int)playerMarker.transform.position.y / 2);
+        GridPosition playerTwoPosition = new((int)playerTwoMarker.transform.position.x / 2, (int)playerTwoMarker.transform.position.y / 2);
+        GridPosition playerThreePosition = new((int)playerThreeMarker.transform.position.x / 2, (int)playerThreeMarker.transform.position.y / 2);
+        GridPosition playerFourPosition = new((int)playerFourMarker.transform.position.x / 2, (int)playerFourMarker.transform.position.y / 2);
 
         // Save player positions depending on how many players there are
         GridPosition[] playerStartPositions = {
-            new GridPosition(-99, -99), // Invalid player position
-            new GridPosition(-99, -99),
-            new GridPosition(-99, -99),
-            new GridPosition(-99, -99)
+            new(-99, -99), // Invalid player position
+            new(-99, -99),
+            new(-99, -99),
+            new(-99, -99)
         };
 
         // Save player 1 position
@@ -251,7 +255,7 @@ public class saveCustomLevel : MonoBehaviour
 
         // Save level to a new json file
         File.WriteAllText(filePath, levelJson);
-        print("File saved to " + filePath);
+        print("Successfully saved level to " + filePath);
 
         // Reset level values
         levelData = new ObjectInformation[0];
