@@ -9,7 +9,7 @@ public class moveCreateObject : MonoBehaviour
     public GameObject playerThreeMarker;
     public GameObject playerFourMarker;
     public GameObject goalMarker;
-    public GameObject[] groupList;
+    public GameObject objectGroup;
     public Tilemap regularBoxTilemap;
     public TileBase regularBoxTile;
     public Sprite regularBoxImage;
@@ -19,53 +19,36 @@ public class moveCreateObject : MonoBehaviour
     public Tilemap lavaBoxTilemap;
     public TileBase lavaBoxTile;
     public Sprite lavaBoxImage;
-    public GameObject moveBoxGroup;
     public GameObject moveBoxObject;
-    public GameObject powerUpGroup;
     public GameObject powerUpObject;
-    public GameObject greenKeyDoorGroup;
     public GameObject greenKeyDoorObject;
-    public GameObject blueKeyDoorGroup;
     public GameObject blueKeyDoorObject;
-    public GameObject redKeyDoorGroup;
     public GameObject redKeyDoorObject;
-    public GameObject greenKeyGroup;
     public GameObject greenKeyObject;
-    public GameObject blueKeyGroup;
     public GameObject blueKeyObject;
-    public GameObject redKeyGroup;
     public GameObject redKeyObject;
-    public GameObject throwBoxGroup;
     public GameObject throwBoxObject;
-    public GameObject throwBoxButtonGroup;
     public GameObject throwBoxButtonObject;
     public Tilemap throwBoxTileTilemap;
     public TileBase throwBoxTileTile;
     public Sprite throwBoxTileImage;
-    public GameObject unknownGroup;
     public GameObject unknownObject;
-    public GameObject diagonalBoxBLGroup;
-    public GameObject diagonalBoxBRGroup;
-    public GameObject diagonalBoxTRGroup;
-    public GameObject diagonalBoxTLGroup;
-    public GameObject diagonalBoxObject;
-    public GameObject halfBoxBGroup;
-    public GameObject halfBoxRGroup;
-    public GameObject halfBoxTGroup;
-    public GameObject halfBoxLGroup;
-    public GameObject halfBoxObject;
-    public GameObject playerOneWallGroup;
+    public GameObject diagonalBoxTRObject;
+    public GameObject diagonalBoxTLObject;
+    public GameObject diagonalBoxBRObject;
+    public GameObject diagonalBoxBLObject;
+    public GameObject halfBoxBottomObject;
+    public GameObject halfBoxRightObject;
+    public GameObject halfBoxTopObject;
+    public GameObject halfBoxLeftObject;
     public GameObject playerOneWallObject;
-    public GameObject playerTwoWallGroup;
     public GameObject playerTwoWallObject;
-    public GameObject playerThreeWallGroup;
     public GameObject playerThreeWallObject;
-    public GameObject playerFourWallGroup;
     public GameObject playerFourWallObject;
-    public GameObject playerOneWallVerticalGroup;
-    public GameObject playerTwoWallVerticalGroup;
-    public GameObject playerThreeWallVerticalGroup;
-    public GameObject playerFourWallVerticalGroup;
+    public GameObject playerOneVertWallObject;
+    public GameObject playerTwoVertWallObject;
+    public GameObject playerThreeVertWallObject;
+    public GameObject playerFourVertWallObject;
     private string objectName;
     private SpriteRenderer createSprite;
 
@@ -234,27 +217,17 @@ public class moveCreateObject : MonoBehaviour
         }
         else
         {
-            // Checks if the current space is occupied by a placed object in a group
-            static void checkForOccupiedSpace(GameObject objectGroup, Vector2 placedObjectPos)
-            {
-                int amountOfObjects = objectGroup.transform.childCount;
-                for (int counter = 0; counter < amountOfObjects; counter++)
-                {
-                    GameObject gameObject = objectGroup.transform.GetChild(counter).gameObject;
-                    Vector2 gameObjectVector = gameObject.transform.position;
-                    if (gameObjectVector == placedObjectPos)
-                    {
-                        Destroy(gameObject);
-                    }
-                }
-            }
-            
             // Delete object if space is occupied (other objects)
             Vector2 newObjectPos = new(mousePosX, mousePosY);
-            for (int counter = 0; groupList.Length > counter; counter++)
+            int amountOfObjects = objectGroup.transform.childCount;
+            for (int counter = 0; counter < amountOfObjects; counter++)
             {
-                // Loop through each object group and check if a object from that group is occupying the new object's space 
-                checkForOccupiedSpace(groupList[counter], newObjectPos);
+                GameObject gameObject = objectGroup.transform.GetChild(counter).gameObject;
+                Vector2 gameObjectVector = gameObject.transform.position;
+                if (gameObjectVector == newObjectPos)
+                {
+                    Destroy(gameObject);
+                }
             }
         }
 
@@ -279,13 +252,13 @@ public class moveCreateObject : MonoBehaviour
                 mousePosX *= objectScale;
                 mousePosY *= objectScale;
                 GameObject newCloneMoveBox = Instantiate(moveBoxObject, new Vector2(mousePosX, mousePosY), Quaternion.identity);
-                newCloneMoveBox.transform.SetParent(moveBoxGroup.transform);
+                newCloneMoveBox.transform.SetParent(objectGroup.transform);
                 break;
             case "powerUp":
                 mousePosX *= objectScale;
                 mousePosY *= objectScale;
                 GameObject newClonePowerUp = Instantiate(powerUpObject, new Vector2(mousePosX, mousePosY), Quaternion.identity);
-                newClonePowerUp.transform.SetParent(powerUpGroup.transform);
+                newClonePowerUp.transform.SetParent(objectGroup.transform);
                 break;
             case "player":
                 // Move the only critical object
@@ -301,38 +274,38 @@ public class moveCreateObject : MonoBehaviour
             case "greenKeyDoor":
                 mousePosX *= objectScale;
                 mousePosY *= objectScale;
-                GameObject newCloneGreenKeyDoor = Instantiate(greenKeyDoorObject, new Vector2(mousePosX, mousePosY), Quaternion.identity);
-                newCloneGreenKeyDoor.transform.SetParent(greenKeyDoorGroup.transform);
+                GameObject newCloneGreenKeyDoor = Instantiate(greenKeyDoorObject, new Vector2(mousePosX, mousePosY), greenKeyDoorObject.transform.rotation);
+                newCloneGreenKeyDoor.transform.SetParent(objectGroup.transform);
                 break;
             case "redKeyDoor":
                 mousePosX *= objectScale;
                 mousePosY *= objectScale;
-                GameObject newCloneRedKeyDoor = Instantiate(redKeyDoorObject, new Vector2(mousePosX, mousePosY), Quaternion.identity);
-                newCloneRedKeyDoor.transform.SetParent(redKeyDoorGroup.transform);
+                GameObject newCloneRedKeyDoor = Instantiate(redKeyDoorObject, new Vector2(mousePosX, mousePosY), redKeyDoorObject.transform.rotation);
+                newCloneRedKeyDoor.transform.SetParent(objectGroup.transform);
                 break;
             case "blueKeyDoor":
                 mousePosX *= objectScale;
                 mousePosY *= objectScale;
-                GameObject newCloneBlueKeyDoor = Instantiate(blueKeyDoorObject, new Vector2(mousePosX, mousePosY), Quaternion.identity);
-                newCloneBlueKeyDoor.transform.SetParent(blueKeyDoorGroup.transform);
+                GameObject newCloneBlueKeyDoor = Instantiate(blueKeyDoorObject, new Vector2(mousePosX, mousePosY), blueKeyDoorObject.transform.rotation);
+                newCloneBlueKeyDoor.transform.SetParent(objectGroup.transform);
                 break;
             case "greenKey":
                 mousePosX *= objectScale;
                 mousePosY *= objectScale;
-                GameObject newCloneGreenKey = Instantiate(greenKeyObject, new Vector2(mousePosX, mousePosY), Quaternion.identity);
-                newCloneGreenKey.transform.SetParent(greenKeyGroup.transform);
+                GameObject newCloneGreenKey = Instantiate(greenKeyObject, new Vector2(mousePosX, mousePosY), greenKeyObject.transform.rotation);
+                newCloneGreenKey.transform.SetParent(objectGroup.transform);
                 break;
             case "redKey":
                 mousePosX *= objectScale;
                 mousePosY *= objectScale;
-                GameObject newCloneRedKey = Instantiate(redKeyObject, new Vector2(mousePosX, mousePosY), Quaternion.identity);
-                newCloneRedKey.transform.SetParent(redKeyGroup.transform);
+                GameObject newCloneRedKey = Instantiate(redKeyObject, new Vector2(mousePosX, mousePosY), redKeyObject.transform.rotation);
+                newCloneRedKey.transform.SetParent(objectGroup.transform);
                 break;
             case "blueKey":
                 mousePosX *= objectScale;
                 mousePosY *= objectScale;
-                GameObject newCloneBlueKey = Instantiate(blueKeyObject, new Vector2(mousePosX, mousePosY), Quaternion.identity);
-                newCloneBlueKey.transform.SetParent(blueKeyGroup.transform);
+                GameObject newCloneBlueKey = Instantiate(blueKeyObject, new Vector2(mousePosX, mousePosY), blueKeyObject.transform.rotation);
+                newCloneBlueKey.transform.SetParent(objectGroup.transform);
                 break;
             case "player2":
                 mousePosX *= objectScale;
@@ -352,14 +325,14 @@ public class moveCreateObject : MonoBehaviour
             case "throwBox":
                 mousePosX *= objectScale;
                 mousePosY *= objectScale;
-                GameObject newCloneThrowBox = Instantiate(throwBoxObject, new Vector2(mousePosX, mousePosY), Quaternion.identity);
-                newCloneThrowBox.transform.SetParent(throwBoxGroup.transform);
+                GameObject newCloneThrowBox = Instantiate(throwBoxObject, new Vector2(mousePosX, mousePosY), throwBoxObject.transform.rotation);
+                newCloneThrowBox.transform.SetParent(objectGroup.transform);
                 break;
             case "throwBoxButton":
                 mousePosX *= objectScale;
                 mousePosY *= objectScale;
-                GameObject newCloneThrowBoxButton = Instantiate(throwBoxButtonObject, new Vector2(mousePosX, mousePosY), Quaternion.identity);
-                newCloneThrowBoxButton.transform.SetParent(throwBoxButtonGroup.transform);
+                GameObject newCloneThrowBoxButton = Instantiate(throwBoxButtonObject, new Vector2(mousePosX, mousePosY), throwBoxButtonObject.transform.rotation);
+                newCloneThrowBoxButton.transform.SetParent(objectGroup.transform);
                 break;
             case "throwBoxTile":
                 throwBoxTileTilemap.SetTile(objectPositon, throwBoxTileTile);
@@ -367,106 +340,106 @@ public class moveCreateObject : MonoBehaviour
             case "diagBoxBL":
                 mousePosX *= objectScale;
                 mousePosY *= objectScale;
-                GameObject newDiagBoxBL = Instantiate(diagonalBoxObject, new Vector2(mousePosX, mousePosY), Quaternion.identity);
-                newDiagBoxBL.transform.SetParent(diagonalBoxBLGroup.transform);
+                GameObject newDiagBoxBL = Instantiate(diagonalBoxBLObject, new Vector2(mousePosX, mousePosY), diagonalBoxBLObject.transform.rotation);
+                newDiagBoxBL.transform.SetParent(objectGroup.transform);
                 break;
             case "diagBoxBR":
                 // Rotate this variants
                 mousePosX *= objectScale;
                 mousePosY *= objectScale;
-                GameObject newDiagBoxBR = Instantiate(diagonalBoxObject, new Vector2(mousePosX, mousePosY), Quaternion.Euler(0, 0, 90));
-                newDiagBoxBR.transform.SetParent(diagonalBoxBRGroup.transform);
+                GameObject newDiagBoxBR = Instantiate(diagonalBoxBRObject, new Vector2(mousePosX, mousePosY), diagonalBoxBRObject.transform.rotation);
+                newDiagBoxBR.transform.SetParent(objectGroup.transform);
                 break;
             case "diagBoxTR":
                 mousePosX *= objectScale;
                 mousePosY *= objectScale;
-                GameObject newDiagBoxTR = Instantiate(diagonalBoxObject, new Vector2(mousePosX, mousePosY), Quaternion.Euler(0, 0, 180));
-                newDiagBoxTR.transform.SetParent(diagonalBoxTRGroup.transform);
+                GameObject newDiagBoxTR = Instantiate(diagonalBoxTRObject, new Vector2(mousePosX, mousePosY), diagonalBoxTRObject.transform.rotation);
+                newDiagBoxTR.transform.SetParent(objectGroup.transform);
                 break;
             case "diagBoxTL":
                 mousePosX *= objectScale;
                 mousePosY *= objectScale;
-                GameObject newDiagBoxTL = Instantiate(diagonalBoxObject, new Vector2(mousePosX, mousePosY), Quaternion.Euler(0, 0, 270));
-                newDiagBoxTL.transform.SetParent(diagonalBoxTLGroup.transform);
+                GameObject newDiagBoxTL = Instantiate(diagonalBoxTLObject, new Vector2(mousePosX, mousePosY), diagonalBoxTLObject.transform.rotation);
+                newDiagBoxTL.transform.SetParent(objectGroup.transform);
                 break;
             case "halfBoxB":
                 mousePosX *= objectScale;
                 mousePosY *= objectScale;
-                GameObject newHalfBoxB = Instantiate(halfBoxObject, new Vector2(mousePosX, mousePosY), Quaternion.identity);
-                newHalfBoxB.transform.SetParent(halfBoxBGroup.transform);
+                GameObject newHalfBoxB = Instantiate(halfBoxBottomObject, new Vector2(mousePosX, mousePosY), halfBoxBottomObject.transform.rotation);
+                newHalfBoxB.transform.SetParent(objectGroup.transform);
                 break;
             case "halfBoxR":
                 mousePosX *= objectScale;
                 mousePosY *= objectScale;
-                GameObject newHalfBoxR = Instantiate(halfBoxObject, new Vector2(mousePosX, mousePosY), Quaternion.Euler(0, 0, 90));
-                newHalfBoxR.transform.SetParent(halfBoxRGroup.transform);
+                GameObject newHalfBoxR = Instantiate(halfBoxRightObject, new Vector2(mousePosX, mousePosY), halfBoxRightObject.transform.rotation);
+                newHalfBoxR.transform.SetParent(objectGroup.transform);
                 break;
             case "halfBoxT":
                 mousePosX *= objectScale;
                 mousePosY *= objectScale;
-                GameObject newHalfBoxT = Instantiate(halfBoxObject, new Vector2(mousePosX, mousePosY), Quaternion.Euler(0, 0, 180));
-                newHalfBoxT.transform.SetParent(halfBoxTGroup.transform);
+                GameObject newHalfBoxT = Instantiate(halfBoxTopObject, new Vector2(mousePosX, mousePosY), halfBoxTopObject.transform.rotation);
+                newHalfBoxT.transform.SetParent(objectGroup.transform);
                 break;
             case "halfBoxL":
                 mousePosX *= objectScale;
                 mousePosY *= objectScale;
-                GameObject newHalfBoxL = Instantiate(halfBoxObject, new Vector2(mousePosX, mousePosY), Quaternion.Euler(0, 0, 270));
-                newHalfBoxL.transform.SetParent(halfBoxLGroup.transform);
+                GameObject newHalfBoxL = Instantiate(halfBoxLeftObject, new Vector2(mousePosX, mousePosY), halfBoxLeftObject.transform.rotation);
+                newHalfBoxL.transform.SetParent(objectGroup.transform);
                 break;
             case "playerOneWall":
                 mousePosX *= objectScale;
                 mousePosY *= objectScale;
-                GameObject newPlayerOneWall = Instantiate(playerOneWallObject, new Vector2(mousePosX, mousePosY), Quaternion.identity);
-                newPlayerOneWall.transform.SetParent(playerOneWallGroup.transform);
+                GameObject newPlayerOneWall = Instantiate(playerOneWallObject, new Vector2(mousePosX, mousePosY), playerOneWallObject.transform.rotation);
+                newPlayerOneWall.transform.SetParent(objectGroup.transform);
                 break;
             case "playerTwoWall":
                 mousePosX *= objectScale;
                 mousePosY *= objectScale;
-                GameObject newPlayerTwoWall = Instantiate(playerTwoWallObject, new Vector2(mousePosX, mousePosY), Quaternion.identity);
-                newPlayerTwoWall.transform.SetParent(playerTwoWallGroup.transform);
+                GameObject newPlayerTwoWall = Instantiate(playerTwoWallObject, new Vector2(mousePosX, mousePosY), playerTwoWallObject.transform.rotation);
+                newPlayerTwoWall.transform.SetParent(objectGroup.transform);
                 break;
             case "playerThreeWall":
                 mousePosX *= objectScale;
                 mousePosY *= objectScale;
-                GameObject newPlayerThreeWall = Instantiate(playerThreeWallObject, new Vector2(mousePosX, mousePosY), Quaternion.identity);
-                newPlayerThreeWall.transform.SetParent(playerThreeWallGroup.transform);
+                GameObject newPlayerThreeWall = Instantiate(playerThreeWallObject, new Vector2(mousePosX, mousePosY), playerThreeWallObject.transform.rotation);
+                newPlayerThreeWall.transform.SetParent(objectGroup.transform);
                 break;
             case "playerFourWall":
                 mousePosX *= objectScale;
                 mousePosY *= objectScale;
-                GameObject newPlayerFourWall = Instantiate(playerFourWallObject, new Vector2(mousePosX, mousePosY), Quaternion.identity);
-                newPlayerFourWall.transform.SetParent(playerFourWallGroup.transform);
+                GameObject newPlayerFourWall = Instantiate(playerFourWallObject, new Vector2(mousePosX, mousePosY), playerFourWallObject.transform.rotation);
+                newPlayerFourWall.transform.SetParent(objectGroup.transform);
                 break;
             case "playerOneWallVertical":
                 mousePosX *= objectScale;
                 mousePosY *= objectScale;
-                GameObject newPlayerOneWallVertical = Instantiate(playerOneWallObject, new Vector2(mousePosX, mousePosY), Quaternion.Euler(0, 0, 90));
-                newPlayerOneWallVertical.transform.SetParent(playerOneWallVerticalGroup.transform);
+                GameObject newPlayerOneWallVertical = Instantiate(playerOneVertWallObject, new Vector2(mousePosX, mousePosY), playerOneVertWallObject.transform.rotation);
+                newPlayerOneWallVertical.transform.SetParent(objectGroup.transform);
                 break;
             case "playerTwoWallVertical":
                 mousePosX *= objectScale;
                 mousePosY *= objectScale;
-                GameObject newPlayerTwoWallVertical = Instantiate(playerTwoWallObject, new Vector2(mousePosX, mousePosY), Quaternion.Euler(0, 0, 90));
-                newPlayerTwoWallVertical.transform.SetParent(playerTwoWallVerticalGroup.transform);
+                GameObject newPlayerTwoWallVertical = Instantiate(playerTwoVertWallObject, new Vector2(mousePosX, mousePosY), playerTwoVertWallObject.transform.rotation);
+                newPlayerTwoWallVertical.transform.SetParent(objectGroup.transform);
                 break;
             case "playerThreeWallVertical":
                 mousePosX *= objectScale;
                 mousePosY *= objectScale;
-                GameObject newPlayerThreeWallVertical = Instantiate(playerThreeWallObject, new Vector2(mousePosX, mousePosY), Quaternion.Euler(0, 0, 90));
-                newPlayerThreeWallVertical.transform.SetParent(playerThreeWallVerticalGroup.transform);
+                GameObject newPlayerThreeWallVertical = Instantiate(playerThreeVertWallObject, new Vector2(mousePosX, mousePosY), playerThreeVertWallObject.transform.rotation);
+                newPlayerThreeWallVertical.transform.SetParent(objectGroup.transform);
                 break;
             case "playerFourWallVertical":
                 mousePosX *= objectScale;
                 mousePosY *= objectScale;
-                GameObject newPlayerFourWallVertical = Instantiate(playerFourWallObject, new Vector2(mousePosX, mousePosY), Quaternion.Euler(0, 0, 90));
-                newPlayerFourWallVertical.transform.SetParent(playerFourWallVerticalGroup.transform);
+                GameObject newPlayerFourWallVertical = Instantiate(playerFourVertWallObject, new Vector2(mousePosX, mousePosY), playerFourVertWallObject.transform.rotation);
+                newPlayerFourWallVertical.transform.SetParent(objectGroup.transform);
                 break;
             default:
                 // Default object
                 mousePosX *= objectScale;
                 mousePosY *= objectScale;
-                GameObject newUnknown = Instantiate(unknownObject, new Vector2(mousePosX, mousePosY), Quaternion.identity);
-                newUnknown.transform.SetParent(unknownGroup.transform);
+                GameObject newUnknown = Instantiate(unknownObject, new Vector2(mousePosX, mousePosY), unknownObject.transform.rotation);
+                newUnknown.transform.SetParent(objectGroup.transform);
                 break;
         }
     }
@@ -478,18 +451,6 @@ public class moveCreateObject : MonoBehaviour
         // Default configurations
         objectName = "regularBox";
         createSprite = GetComponent<SpriteRenderer>();
-
-        // Get the group list
-        GameObject[] allGroupList =
-        {
-            moveBoxGroup, powerUpGroup, greenKeyDoorGroup, redKeyDoorGroup,
-            blueKeyDoorGroup, greenKeyGroup, redKeyGroup, blueKeyGroup, throwBoxGroup, throwBoxButtonGroup,
-            unknownGroup, diagonalBoxTLGroup, diagonalBoxTRGroup, diagonalBoxBLGroup, diagonalBoxBRGroup,
-            halfBoxBGroup, halfBoxTGroup, halfBoxRGroup, halfBoxLGroup, playerOneWallGroup, playerTwoWallGroup,
-            playerThreeWallGroup, playerFourWallGroup, playerOneWallVerticalGroup, playerTwoWallVerticalGroup,
-            playerThreeWallVerticalGroup, playerFourWallVerticalGroup
-        };
-        groupList = allGroupList;
     }
 
     // Update is called once per frame
@@ -666,7 +627,7 @@ public class moveCreateObject : MonoBehaviour
                     break;
                 default:
                     objectName = "diagBoxBL";
-                    createSprite.sprite = diagonalBoxObject.GetComponent<SpriteRenderer>().sprite;
+                    createSprite.sprite = diagonalBoxBLObject.GetComponent<SpriteRenderer>().sprite;
                     resetCreateObjectRotation(createSprite);
                     break;
             }
@@ -689,7 +650,7 @@ public class moveCreateObject : MonoBehaviour
                     break;
                 default:
                     objectName = "halfBoxB";
-                    createSprite.sprite = halfBoxObject.GetComponent<SpriteRenderer>().sprite;
+                    createSprite.sprite = halfBoxBottomObject.GetComponent<SpriteRenderer>().sprite;
                     resetCreateObjectRotation(createSprite);
                     break;
             }

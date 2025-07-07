@@ -6,6 +6,7 @@ public class PlayerWallScript : MonoBehaviour
     public Sprite playerOneWallSprite;
     public Sprite playerTwoWallSprite;
     public Sprite playerThreeWallSprite;
+    public Sprite playerThreeWallVerticalSprite;
     public Sprite playerFourWallSprite;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -21,7 +22,15 @@ public class PlayerWallScript : MonoBehaviour
                 GetComponent<SpriteRenderer>().sprite = playerTwoWallSprite;
                 break;
             case 3:
-                GetComponent<SpriteRenderer>().sprite = playerThreeWallSprite;
+                if (transform.eulerAngles.z == 90)
+                {
+                    // Special sprite for the player three wall if it is vertical
+                    GetComponent<SpriteRenderer>().sprite = playerThreeWallVerticalSprite;
+                }
+                else
+                {
+                    GetComponent<SpriteRenderer>().sprite = playerThreeWallSprite;
+                }
                 break;
             case 4:
                 GetComponent<SpriteRenderer>().sprite = playerFourWallSprite;

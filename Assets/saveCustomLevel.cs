@@ -59,17 +59,19 @@ public class saveCustomLevel : MonoBehaviour
         }
 
         // https://discussions.unity.com/t/count-the-amount-Of-a-certain-tile-in-a-tilemap/228363/5
-        void createObjectAtPositionObject(GameObject group, string name, int variantID = 0)
+        void createObjectAtPositionObject(GameObject group)
         {
             int amount = group.transform.childCount;
             for (int counter = 0; counter < amount; counter++)
             {
                 // Since object positions are double what they should be, convert them to the tile position
-                Vector2 objectPos = group.transform.GetChild(counter).position;
+                Transform newObjectTransform = group.transform.GetChild(counter);
+                CreateObjectData newObject = newObjectTransform.gameObject.GetComponent<CreateObjectData>();
+                Vector2 objectPos = newObjectTransform.position;
                 int objectPosX = (int)objectPos.x / 2;
                 int objectPosY = (int)objectPos.y / 2;
                 GridPosition gridPos = new(objectPosX, objectPosY);
-                levelData[levelDataIndex] = new(name, gridPos, variantID);
+                levelData[levelDataIndex] = new(newObject.objectString, gridPos, newObject.variantId);
                 levelDataIndex += 1;
             }
         }
@@ -87,56 +89,27 @@ public class saveCustomLevel : MonoBehaviour
         print("Attempting to save " + playerCount + " player level '" + levelName + "' with " + levelBounds + " bounds...");
 
         // Get markers for the objects
-        GameObject[] groupList = createObject.groupList;
         GameObject playerMarker = createObject.playerMarker;
         GameObject goalMarker = createObject.goalMarker;
-        Tilemap regularBoxTilemap = createObject.regularBoxTilemap;
-        Tilemap steelBoxTilemap = createObject.steelBoxTilemap;
-        Tilemap lavaBoxTilemap = createObject.lavaBoxTilemap;
-        GameObject moveBoxGroup = createObject.moveBoxGroup;
-        GameObject powerUpGroup = createObject.powerUpGroup;
-        GameObject greenKeyDoorGroup = createObject.greenKeyDoorGroup;
-        GameObject blueKeyDoorGroup = createObject.blueKeyDoorGroup;
-        GameObject redKeyDoorGroup = createObject.redKeyDoorGroup;
-        GameObject greenKeyGroup = createObject.greenKeyGroup;
-        GameObject blueKeyGroup = createObject.blueKeyGroup;
-        GameObject redKeyGroup = createObject.redKeyGroup;
         GameObject playerTwoMarker = createObject.playerTwoMarker;
         GameObject playerThreeMarker = createObject.playerThreeMarker;
         GameObject playerFourMarker = createObject.playerFourMarker;
-        GameObject throwBoxGroup = createObject.throwBoxGroup;
-        GameObject throwBoxButtonGroup = createObject.throwBoxButtonGroup;
+        Tilemap regularBoxTilemap = createObject.regularBoxTilemap;
+        Tilemap steelBoxTilemap = createObject.steelBoxTilemap;
+        Tilemap lavaBoxTilemap = createObject.lavaBoxTilemap;
         Tilemap throwBoxTileTilemap = createObject.throwBoxTileTilemap;
-        GameObject diagBoxBLGroup = createObject.diagonalBoxBLGroup;
-        GameObject diagBoxBRGroup = createObject.diagonalBoxBRGroup;
-        GameObject diagBoxTRGroup = createObject.diagonalBoxTRGroup;
-        GameObject diagBoxTLGroup = createObject.diagonalBoxTLGroup;
-        GameObject halfBoxBGroup = createObject.halfBoxBGroup;
-        GameObject halfBoxRGroup = createObject.halfBoxRGroup;
-        GameObject halfBoxTGroup = createObject.halfBoxTGroup;
-        GameObject halfBoxLGroup = createObject.halfBoxLGroup;
-        GameObject playerOneWallGroup = createObject.playerOneWallGroup;
-        GameObject playerTwoWallGroup = createObject.playerTwoWallGroup;
-        GameObject playerThreeWallGroup = createObject.playerThreeWallGroup;
-        GameObject playerFourWallGroup = createObject.playerFourWallGroup;
-        GameObject playerOneWallVerticalGroup = createObject.playerOneWallVerticalGroup;
-        GameObject playerTwoWallVerticalGroup = createObject.playerTwoWallVerticalGroup;
-        GameObject playerThreeWallVerticalGroup = createObject.playerThreeWallVerticalGroup;
-        GameObject playerFourWallVerticalGroup = createObject.playerFourWallVerticalGroup;
+        GameObject objectGroup = createObject.objectGroup;
 
         // Count amount Of objects placed (tilemaps)
         int amountOfRegularBoxes = getAmountOfTiles(regularBoxTilemap);
         int amountOfSteelBoxes = getAmountOfTiles(steelBoxTilemap);
         int amountOfLavaBoxes = getAmountOfTiles(lavaBoxTilemap);
         int amountOfThrowBoxTiles = getAmountOfTiles(throwBoxTileTilemap);
+        int amountOfObjects = objectGroup.transform.childCount;
         // Count amount Of objects placed (regular objects)
         // Add an extra 1 due since the goal is an object
-        int totalObjectCount = 1 + amountOfRegularBoxes + amountOfSteelBoxes + amountOfLavaBoxes + amountOfThrowBoxTiles; 
-        for (int counter = 0; groupList.Length > counter; counter++)
-        {
-            GameObject group = groupList[counter];
-            totalObjectCount += group.transform.childCount;
-        }
+        int totalObjectCount = 1 + amountOfRegularBoxes + amountOfSteelBoxes + amountOfLavaBoxes
+            + amountOfThrowBoxTiles + amountOfObjects;
 
         // Create objects in the level data
         levelData = new ObjectInformation[totalObjectCount];
@@ -149,32 +122,7 @@ public class saveCustomLevel : MonoBehaviour
         createObjectAtPositionTilemap(lavaBoxTilemap, "lavaBox");
         createObjectAtPositionTilemap(throwBoxTileTilemap, "throwBoxTile");
         // Create objects (non-tilemaps)
-        createObjectAtPositionObject(moveBoxGroup, "moveBox");
-        createObjectAtPositionObject(powerUpGroup, "powerUp");
-        createObjectAtPositionObject(greenKeyDoorGroup, "keyDoor", 1);
-        createObjectAtPositionObject(redKeyDoorGroup, "keyDoor", 2);
-        createObjectAtPositionObject(blueKeyDoorGroup, "keyDoor", 3);
-        createObjectAtPositionObject(greenKeyGroup, "key", 1);
-        createObjectAtPositionObject(redKeyGroup, "key", 2);
-        createObjectAtPositionObject(blueKeyGroup, "key", 3);
-        createObjectAtPositionObject(throwBoxGroup, "throwBox");
-        createObjectAtPositionObject(throwBoxButtonGroup, "throwBoxButton");
-        createObjectAtPositionObject(diagBoxBLGroup, "diagBox", 1);
-        createObjectAtPositionObject(diagBoxBRGroup, "diagBox", 2);
-        createObjectAtPositionObject(diagBoxTRGroup, "diagBox", 3);
-        createObjectAtPositionObject(diagBoxTLGroup, "diagBox", 4);
-        createObjectAtPositionObject(halfBoxBGroup, "halfBox", 1);
-        createObjectAtPositionObject(halfBoxRGroup, "halfBox", 2);
-        createObjectAtPositionObject(halfBoxTGroup, "halfBox", 3);
-        createObjectAtPositionObject(halfBoxLGroup, "halfBox", 4);
-        createObjectAtPositionObject(playerOneWallGroup, "playerWallHorizontal", 1);
-        createObjectAtPositionObject(playerTwoWallGroup, "playerWallHorizontal", 2);
-        createObjectAtPositionObject(playerThreeWallGroup, "playerWallHorizontal", 3);
-        createObjectAtPositionObject(playerFourWallGroup, "playerWallHorizontal", 4);
-        createObjectAtPositionObject(playerOneWallVerticalGroup, "playerWallVertical", 1);
-        createObjectAtPositionObject(playerTwoWallVerticalGroup, "playerWallVertical", 2);
-        createObjectAtPositionObject(playerThreeWallVerticalGroup, "playerWallVertical", 3);
-        createObjectAtPositionObject(playerFourWallVerticalGroup, "playerWallVertical", 4);
+        createObjectAtPositionObject(objectGroup);
 
         // Get all of the player positions
         GridPosition playerPosition = new((int)playerMarker.transform.position.x / 2, (int)playerMarker.transform.position.y / 2);

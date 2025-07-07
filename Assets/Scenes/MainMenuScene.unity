@@ -2653,7 +2653,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levelID: 1
   gamemode: singleplayer
-  gameVersion: Alpha v1.3.1
+  gameVersion: Alpha v1.3.2
 --- !u!4 &839536502
 Transform:
   m_ObjectHideFlags: 0

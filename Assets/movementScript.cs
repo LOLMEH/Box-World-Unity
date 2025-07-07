@@ -5,20 +5,26 @@ public class movementScript : MonoBehaviour
 {
     public int playerNumber;
     public SpriteRenderer powerUpImage;
-    public float maxSpeed;
+    public float movementSpeed;
+    private float speedMultiplier = 1;
     public Vector2 respawnPoint;
     public bool hasPowerUp;
     public Dictionary<int, int> keysHeld = new();
+    private Rigidbody2D rigidBody2D;
     private KeyCode upKey;
     private KeyCode downKey;
     private KeyCode leftKey;
     private KeyCode rightKey;
+    private KeyCode slowWalkKey;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         // Hide power up image on start
         powerUpImage.enabled = false;
+
+        // Get the rigid body
+        rigidBody2D = GetComponent<Rigidbody2D>();
 
         // Disable collision with all other players
         GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
@@ -36,24 +42,28 @@ public class movementScript : MonoBehaviour
                 leftKey = KeyCode.A;
                 downKey = KeyCode.S;
                 rightKey = KeyCode.D;
+                slowWalkKey = KeyCode.LeftShift;
                 break;
             case 2:
                 upKey = KeyCode.UpArrow;
                 leftKey = KeyCode.LeftArrow;
                 downKey = KeyCode.DownArrow;
                 rightKey = KeyCode.RightArrow;
+                slowWalkKey = KeyCode.LeftShift;
                 break;
             case 3:
                 upKey = KeyCode.T;
                 leftKey = KeyCode.F;
                 downKey = KeyCode.G;
                 rightKey = KeyCode.H;
+                slowWalkKey = KeyCode.LeftShift;
                 break;
             case 4:
                 upKey = KeyCode.I;
                 leftKey = KeyCode.J;
                 downKey = KeyCode.K;
                 rightKey = KeyCode.L;
+                slowWalkKey = KeyCode.LeftShift;
                 break;
         }
     }
@@ -68,28 +78,30 @@ public class movementScript : MonoBehaviour
     void Update()
     {
         // Moves the player depending on the x and y values
-        void movePlayer(Rigidbody2D rigidBody2D, float x, float y)
+        void movePlayer(float x, float y)
         {
             rigidBody2D.linearVelocity = new Vector2(x, y);
         }
         
-        Rigidbody2D rigidBody2D = GetComponent<Rigidbody2D>();
 
         // Press button variables
         bool isUpButtonDown = Input.GetKey(upKey);
         bool isLeftButtonDown = Input.GetKey(leftKey);
         bool isDownButtonDown = Input.GetKey(downKey);
         bool isRightButtonDown = Input.GetKey(rightKey);
+        bool isSlowWalkButtonDown = Input.GetKey(slowWalkKey);
         bool isUpButtonUp = Input.GetKeyUp(upKey);
         bool isLeftButtonUp = Input.GetKeyUp(leftKey);
         bool isDownButtonUp = Input.GetKeyUp(downKey);
         bool isRightButtonUp = Input.GetKeyUp(rightKey);
+        bool isSlowWalkButtonUp = Input.GetKeyUp(slowWalkKey);
 
         // Hold button variables
         bool upButtonHold = isUpButtonDown && !isUpButtonUp;
         bool downButtonHold = isDownButtonDown && !isDownButtonUp;
         bool leftButtonHold = isLeftButtonDown && !isLeftButtonUp;
         bool rightButtonHold = isRightButtonDown && !isRightButtonUp;
+        bool slowWalkButtonHold = isSlowWalkButtonDown && !isSlowWalkButtonUp;
 
         // Exclusive hold button variables
         bool upButtonHoldOnly = upButtonHold && !downButtonHold && !leftButtonHold && !rightButtonHold;
@@ -101,74 +113,87 @@ public class movementScript : MonoBehaviour
         bool upRightButtonHoldOnly = upButtonHold && !downButtonHold && !leftButtonHold && rightButtonHold;
         bool downRightButtonHoldOnly = !upButtonHold && downButtonHold && !leftButtonHold && rightButtonHold;
 
+        // Movement controls
+        float speed = movementSpeed * speedMultiplier;
+
+        if (slowWalkButtonHold)
+        {
+            // Slow the player down
+            speedMultiplier = 0.5f;
+        }
+        else
+        {
+            speedMultiplier = 1;
+        }
+
         if (upLeftButtonHoldOnly)
         {
             // Move up left
-            movePlayer(rigidBody2D, -maxSpeed, maxSpeed);
+            movePlayer(-speed, speed);
         }
         else if (downLeftButtonHoldOnly)
         {
             // Move down left
-            movePlayer(rigidBody2D, -maxSpeed, -maxSpeed);
+            movePlayer(-speed, -speed);
         }
         else if (upRightButtonHoldOnly)
         {
             // Move up right
-            movePlayer(rigidBody2D, maxSpeed, maxSpeed);
+            movePlayer(speed, speed);
         }
         else if (downRightButtonHoldOnly)
         {
             // Move down right
-            movePlayer(rigidBody2D, maxSpeed, -maxSpeed);
+            movePlayer(speed, -speed);
         }
         else if (upButtonHoldOnly)
         {
             // Move up
-            movePlayer(rigidBody2D, 0, maxSpeed);
+            movePlayer(0, speed);
         }
         else if (leftButtonHoldOnly)
         {
             // Move left
-            movePlayer(rigidBody2D, -maxSpeed, 0);
+            movePlayer(-speed, 0);
         }
         else if (downButtonHoldOnly)
         {
             // Move down
-            movePlayer(rigidBody2D, 0, -maxSpeed);
+            movePlayer(0, -speed);
         }
         else if (rightButtonHoldOnly)
         {
             // Move right
-            movePlayer(rigidBody2D, maxSpeed, 0);
+            movePlayer(speed, 0);
         }
         else
         {
             // Stop movement if no buttons are down (or if no valid movements are made)
-            movePlayer(rigidBody2D, 0, 0);
+            movePlayer(0, 0);
         }
 
         // Cap at max speed (+X)
-        if (rigidBody2D.linearVelocityX > maxSpeed)
+        if (rigidBody2D.linearVelocityX > speed)
         {
-            rigidBody2D.linearVelocityX = maxSpeed;
+            rigidBody2D.linearVelocityX = speed;
         }
 
         // Cap at max speed (-X)
-        if (rigidBody2D.linearVelocityX < -maxSpeed)
+        if (rigidBody2D.linearVelocityX < -speed)
         {
-            rigidBody2D.linearVelocityX = -maxSpeed;
+            rigidBody2D.linearVelocityX = -speed;
         }
 
         // Cap at max speed (+Y)
-        if (rigidBody2D.linearVelocityY > maxSpeed)
+        if (rigidBody2D.linearVelocityY > speed)
         {
-            rigidBody2D.linearVelocityY = maxSpeed;
+            rigidBody2D.linearVelocityY = speed;
         }
 
         // Cap at max speed (-Y)
-        if (rigidBody2D.linearVelocityY < -maxSpeed)
+        if (rigidBody2D.linearVelocityY < -speed)
         {
-            rigidBody2D.linearVelocityY = -maxSpeed;
+            rigidBody2D.linearVelocityY = -speed;
         }
     }
 }

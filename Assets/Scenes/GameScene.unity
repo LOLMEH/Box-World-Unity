@@ -1234,7 +1234,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerNumber: 3
   powerUpImage: {fileID: 841652757}
-  maxSpeed: 10
+  movementSpeed: 10
   respawnPoint: {x: -8, y: 4}
   hasPowerUp: 0
 --- !u!50 &549479064
@@ -1374,7 +1374,7 @@ Transform:
   m_GameObject: {fileID: 549479062}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 33, y: -12, z: 4}
+  m_LocalPosition: {x: 60, y: -4, z: 4}
   m_LocalScale: {x: 1.25, y: 1.25, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1517,7 +1517,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerNumber: 4
   powerUpImage: {fileID: 1431224936}
-  maxSpeed: 10
+  movementSpeed: 10
   respawnPoint: {x: -8, y: 4}
   hasPowerUp: 0
 --- !u!50 &587108304
@@ -1657,7 +1657,7 @@ Transform:
   m_GameObject: {fileID: 587108302}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 35, y: -12, z: 6}
+  m_LocalPosition: {x: 62, y: -4, z: 6}
   m_LocalScale: {x: 1.25, y: 1.25, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2811,7 +2811,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerNumber: 2
   powerUpImage: {fileID: 931872051}
-  maxSpeed: 10
+  movementSpeed: 10
   respawnPoint: {x: -8, y: 4}
   hasPowerUp: 0
 --- !u!50 &794283711
@@ -2951,7 +2951,7 @@ Transform:
   m_GameObject: {fileID: 794283709}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 31, y: -12, z: 2}
+  m_LocalPosition: {x: 58, y: -4, z: 2}
   m_LocalScale: {x: 1.25, y: 1.25, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3286,7 +3286,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerNumber: 1
   powerUpImage: {fileID: 1654728737}
-  maxSpeed: 10
+  movementSpeed: 10
   respawnPoint: {x: -8, y: 4}
   hasPowerUp: 0
 --- !u!50 &896422087
@@ -3586,6 +3586,7 @@ MonoBehaviour:
   playerOneWallSprite: {fileID: 21300000, guid: 35c5e04560dab6d47aa429c962714ef1, type: 3}
   playerTwoWallSprite: {fileID: 21300000, guid: 84c9fbb8d2449bb44b1ab1df39da8930, type: 3}
   playerThreeWallSprite: {fileID: 21300000, guid: 4f734cc845ba5c84392928d819b2ea11, type: 3}
+  playerThreeWallVerticalSprite: {fileID: 21300000, guid: 7c33ad226ae246a43a4398f7e603bd0d, type: 3}
   playerFourWallSprite: {fileID: 21300000, guid: 73e3939d31f47d243b97bb181fbe3497, type: 3}
 --- !u!61 &1017836199
 BoxCollider2D:
