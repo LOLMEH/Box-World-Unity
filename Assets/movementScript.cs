@@ -17,6 +17,49 @@ public class movementScript : MonoBehaviour
     private KeyCode rightKey;
     private KeyCode slowWalkKey;
 
+    /// <summary>
+    /// Resets the player's keybinds
+    /// </summary>
+    public void ResetKeyBinds()
+    {
+        // Get the keybinds
+        loadingLevelData loadingLevelData = GameObject.FindGameObjectWithTag("LoadLevelInfo").GetComponent<loadingLevelData>();
+        Dictionary<string, KeyCode> keybinds = loadingLevelData.keybinds;
+
+        // Get the player's controls depending on their player number
+        switch (playerNumber)
+        {
+            case 1:
+                upKey = keybinds["PlayerOne.MoveUp"];
+                leftKey = keybinds["PlayerOne.MoveLeft"];
+                downKey = keybinds["PlayerOne.MoveDown"];
+                rightKey = keybinds["PlayerOne.MoveRight"];
+                slowWalkKey = keybinds["PlayerOne.SlowWalk"];
+                break;
+            case 2:
+                upKey = keybinds["PlayerTwo.MoveUp"];
+                leftKey = keybinds["PlayerTwo.MoveLeft"];
+                downKey = keybinds["PlayerTwo.MoveDown"];
+                rightKey = keybinds["PlayerTwo.MoveRight"];
+                slowWalkKey = keybinds["PlayerTwo.SlowWalk"];
+                break;
+            case 3:
+                upKey = keybinds["PlayerThree.MoveUp"];
+                leftKey = keybinds["PlayerThree.MoveLeft"];
+                downKey = keybinds["PlayerThree.MoveDown"];
+                rightKey = keybinds["PlayerThree.MoveRight"];
+                slowWalkKey = keybinds["PlayerThree.SlowWalk"];
+                break;
+            case 4:
+                upKey = keybinds["PlayerFour.MoveUp"];
+                leftKey = keybinds["PlayerFour.MoveLeft"];
+                downKey = keybinds["PlayerFour.MoveDown"];
+                rightKey = keybinds["PlayerFour.MoveRight"];
+                slowWalkKey = keybinds["PlayerFour.SlowWalk"];
+                break;
+        }
+    }
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -34,39 +77,10 @@ public class movementScript : MonoBehaviour
             Physics2D.IgnoreCollision(player.GetComponent<Collider2D>(), GetComponent<Collider2D>());
         }
 
-        // Get the player's controls depending on their player number
-        switch (playerNumber)
-        {
-            case 1:
-                upKey = KeyCode.W;
-                leftKey = KeyCode.A;
-                downKey = KeyCode.S;
-                rightKey = KeyCode.D;
-                slowWalkKey = KeyCode.LeftShift;
-                break;
-            case 2:
-                upKey = KeyCode.UpArrow;
-                leftKey = KeyCode.LeftArrow;
-                downKey = KeyCode.DownArrow;
-                rightKey = KeyCode.RightArrow;
-                slowWalkKey = KeyCode.LeftShift;
-                break;
-            case 3:
-                upKey = KeyCode.T;
-                leftKey = KeyCode.F;
-                downKey = KeyCode.G;
-                rightKey = KeyCode.H;
-                slowWalkKey = KeyCode.LeftShift;
-                break;
-            case 4:
-                upKey = KeyCode.I;
-                leftKey = KeyCode.J;
-                downKey = KeyCode.K;
-                rightKey = KeyCode.L;
-                slowWalkKey = KeyCode.LeftShift;
-                break;
-        }
+        // Get the player's controls
+        ResetKeyBinds();
     }
+
     void OnCollisionExit2D(Collision2D collision)
     {
         // Stop moving the player when a collision stops

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -11,8 +12,11 @@ public class OtherKeybindMethods : MonoBehaviour
     void Start()
     {
         // Set up pause menu keybinds
-        resetKey = KeyCode.R;
-        pauseKey = KeyCode.Escape;
+        loadingLevelData loadingLevelData = GameObject.FindGameObjectWithTag("LoadLevelInfo").GetComponent<loadingLevelData>();
+        Dictionary<string, KeyCode> keybinds = loadingLevelData.keybinds;
+
+        resetKey = keybinds["General.Reset"];
+        pauseKey = keybinds["General.Pause"];
     }
 
     // Update is called once per frame

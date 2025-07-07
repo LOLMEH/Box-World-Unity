@@ -7,6 +7,7 @@ public class mainMenuButtonMethods : MonoBehaviour
     public GameObject chooseGameScreen;
     public GameObject levelSelectScreen;
     public GameObject levelInfoScreen;
+    public GameObject settingsScreen;
     private loadingLevelData loadingLevelData;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -56,6 +57,7 @@ public class mainMenuButtonMethods : MonoBehaviour
         // Return to the main menu from any submenu
         chooseGameScreen.SetActive(false);
         levelSelectScreen.SetActive(false);
+        settingsScreen.SetActive(false);
         mainMenuScreen.SetActive(true);
     }
 
@@ -64,5 +66,12 @@ public class mainMenuButtonMethods : MonoBehaviour
         // Start game scene (two player)
         loadingLevelData.gamemode = "twoplayer";
         SceneManager.LoadScene("GameScene");
+    }
+
+    public void GoToSettingsMenu()
+    {
+        // Go to the settings menu from the main menu
+        mainMenuScreen.SetActive(false);
+        settingsScreen.SetActive(true);
     }
 }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class togglePauseGUI : MonoBehaviour
@@ -6,6 +7,7 @@ public class togglePauseGUI : MonoBehaviour
     public GameObject copyLevelGui;
     public GameObject saveLevelGui;
     public GameObject createCursor;
+    private KeyCode pauseKey;
 
     /// <summary>
     /// Moves the player to the copy level screen from the level save screen
@@ -47,11 +49,21 @@ public class togglePauseGUI : MonoBehaviour
         }
     }
 
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
+    {
+        // Get the pause keybind
+        loadingLevelData loadingLevelData = GameObject.FindGameObjectWithTag("LoadLevelInfo").GetComponent<loadingLevelData>();
+        Dictionary<string, KeyCode> keybinds = loadingLevelData.keybinds;
+
+        pauseKey = keybinds["General.Pause"];
+    }
+
     // Update is called once per frame
     void Update()
     {
         // Hide GUI and disable editing
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(pauseKey))
         {
             TogglePauseGUI();
         }
