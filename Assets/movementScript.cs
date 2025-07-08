@@ -9,6 +9,8 @@ public class movementScript : MonoBehaviour
     private float speedMultiplier = 1;
     public Vector2 respawnPoint;
     public bool hasPowerUp;
+    public bool isOnIce = false;
+    public bool isStuckOnIce = false;
     public Dictionary<int, int> keysHeld = new();
     private Rigidbody2D rigidBody2D;
     private KeyCode upKey;
@@ -81,6 +83,20 @@ public class movementScript : MonoBehaviour
         ResetKeyBinds();
     }
 
+    void OnCollisionStay2D(Collision2D collision)
+    {
+        // Allow movement if the player is pressed against a wall due to sliding on ice
+        GameObject collidingObject = collision.gameObject;
+        if (
+                (collidingObject.CompareTag("StopWall") || collidingObject.CompareTag("ThrowBoxButton")
+                || collidingObject.CompareTag("PhaseForPowerUp"))
+                && isOnIce == true
+            )
+        {
+            isStuckOnIce = true;
+        }
+    }
+
     void OnCollisionExit2D(Collision2D collision)
     {
         // Stop moving the player when a collision stops
@@ -94,7 +110,14 @@ public class movementScript : MonoBehaviour
         // Moves the player depending on the x and y values
         void movePlayer(float x, float y)
         {
+            // Move the player
             rigidBody2D.linearVelocity = new Vector2(x, y);
+
+            // Make the player not stuck anymore
+            if (isStuckOnIce)
+            {
+                isStuckOnIce = false;
+            }
         }
         
 
@@ -130,60 +153,64 @@ public class movementScript : MonoBehaviour
         // Movement controls
         float speed = movementSpeed * speedMultiplier;
 
-        if (slowWalkButtonHold)
+        // Only allow movement if the player is not on ice or if the player is stuck on a wall due to ice
+        if (isOnIce == false || isStuckOnIce == true)
         {
-            // Slow the player down
-            speedMultiplier = 0.5f;
-        }
-        else
-        {
-            speedMultiplier = 1;
-        }
+            if (slowWalkButtonHold)
+            {
+                // Slow the player down
+                speedMultiplier = 0.5f;
+            }
+            else
+            {
+                speedMultiplier = 1;
+            }
 
-        if (upLeftButtonHoldOnly)
-        {
-            // Move up left
-            movePlayer(-speed, speed);
-        }
-        else if (downLeftButtonHoldOnly)
-        {
-            // Move down left
-            movePlayer(-speed, -speed);
-        }
-        else if (upRightButtonHoldOnly)
-        {
-            // Move up right
-            movePlayer(speed, speed);
-        }
-        else if (downRightButtonHoldOnly)
-        {
-            // Move down right
-            movePlayer(speed, -speed);
-        }
-        else if (upButtonHoldOnly)
-        {
-            // Move up
-            movePlayer(0, speed);
-        }
-        else if (leftButtonHoldOnly)
-        {
-            // Move left
-            movePlayer(-speed, 0);
-        }
-        else if (downButtonHoldOnly)
-        {
-            // Move down
-            movePlayer(0, -speed);
-        }
-        else if (rightButtonHoldOnly)
-        {
-            // Move right
-            movePlayer(speed, 0);
-        }
-        else
-        {
-            // Stop movement if no buttons are down (or if no valid movements are made)
-            movePlayer(0, 0);
+            if (upLeftButtonHoldOnly)
+            {
+                // Move up left
+                movePlayer(-speed, speed);
+            }
+            else if (downLeftButtonHoldOnly)
+            {
+                // Move down left
+                movePlayer(-speed, -speed);
+            }
+            else if (upRightButtonHoldOnly)
+            {
+                // Move up right
+                movePlayer(speed, speed);
+            }
+            else if (downRightButtonHoldOnly)
+            {
+                // Move down right
+                movePlayer(speed, -speed);
+            }
+            else if (upButtonHoldOnly)
+            {
+                // Move up
+                movePlayer(0, speed);
+            }
+            else if (leftButtonHoldOnly)
+            {
+                // Move left
+                movePlayer(-speed, 0);
+            }
+            else if (downButtonHoldOnly)
+            {
+                // Move down
+                movePlayer(0, -speed);
+            }
+            else if (rightButtonHoldOnly)
+            {
+                // Move right
+                movePlayer(speed, 0);
+            }
+            else
+            {
+                // Stop movement if no buttons are down and the player is not on ice (or if no valid movements are made)
+                rigidBody2D.linearVelocity = new Vector2(0, 0);
+            }
         }
 
         // Cap at max speed (+X)

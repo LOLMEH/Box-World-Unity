@@ -5,7 +5,7 @@ It's (probably) not free.
 qwertyuiopasdfghjklzxcvbnm
 Click the logo!
 These messages are random.
-Press escape to pause!
+Press the pause button to pause!
 Made in Unity 6!
 Not made in Phaser 3!
 I do not know if this piece of text will appear on screen correctly but I hope it does so that my programming skills are proven to be good. It took a while to figure out how to make the scrolling text actually work, but I've just proven that it works with even incredibly long pieces of text! Hahahaha! I'm actually the best at making text scroll across the screen without it being cut off randomly!
@@ -29,13 +29,13 @@ Check out Box World Plus on GitHub!
 This is every epic
 Wow!
 This text is not on line 33.
-This text may actually not be on line 33.
-This text is really on line 33.
+This text is also not on line 33.
+This text is actually on line 33.
 Do not ingest!
 I'm writing this at 8:33 pm on May 5th 2025
 ?
 Am I useful to you?
-I hope you live a good life!
+Live a good life!
 A classic!
 Does not (hopefully) explode on you!
 Was that the box of '25?
@@ -86,7 +86,7 @@ Un monde de boîtes.
 Puis-je parler français?                             Je ne sais pas.
 Achoo!
 Hello, World!
-Do not run "sudo rm -rf /*"!
+Do not run "sudo rm -rf /*".                             It will destroy your device.
 Keep yourself safe online!
 Nice.
 Amazing!
@@ -121,3 +121,7 @@ Nice computer you got here. Can I have it?
 Drive safely!
 How many types of boxes are there in the game again?
 Try not to laugh!
+Do not get stuck on ice. Thank you.
+Send a review if you hated (or loved) this game!
+Send a review if you loved (or hated) this game!
+The next update will include a new splash text.                             Maybe.

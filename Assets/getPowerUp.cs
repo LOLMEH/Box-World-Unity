@@ -22,6 +22,7 @@ public class getPowerUp : MonoBehaviour
                 player.powerUpImage.enabled = true;
                 // Disable collisions with regular boxes
                 Physics2D.IgnoreCollision(playerCollider, regularBoxCollider, true);
+                // Disable collisions with box objects that are phasable with power ups
                 GameObject[] boxObjects = GameObject.FindGameObjectsWithTag("PhaseForPowerUp");
                 for (int counter = 0;  counter < boxObjects.Length; ++counter)
                 {

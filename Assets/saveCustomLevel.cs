@@ -98,6 +98,7 @@ public class saveCustomLevel : MonoBehaviour
         Tilemap steelBoxTilemap = createObject.steelBoxTilemap;
         Tilemap lavaBoxTilemap = createObject.lavaBoxTilemap;
         Tilemap throwBoxTileTilemap = createObject.throwBoxTileTilemap;
+        Tilemap iceTilemap = createObject.iceTilemap;
         GameObject objectGroup = createObject.objectGroup;
 
         // Count amount Of objects placed (tilemaps)
@@ -105,11 +106,12 @@ public class saveCustomLevel : MonoBehaviour
         int amountOfSteelBoxes = getAmountOfTiles(steelBoxTilemap);
         int amountOfLavaBoxes = getAmountOfTiles(lavaBoxTilemap);
         int amountOfThrowBoxTiles = getAmountOfTiles(throwBoxTileTilemap);
+        int amountOfIceTiles = getAmountOfTiles(iceTilemap);
         int amountOfObjects = objectGroup.transform.childCount;
         // Count amount Of objects placed (regular objects)
         // Add an extra 1 due since the goal is an object
         int totalObjectCount = 1 + amountOfRegularBoxes + amountOfSteelBoxes + amountOfLavaBoxes
-            + amountOfThrowBoxTiles + amountOfObjects;
+            + amountOfThrowBoxTiles + amountOfIceTiles + amountOfObjects;
 
         // Create objects in the level data
         levelData = new ObjectInformation[totalObjectCount];
@@ -121,6 +123,7 @@ public class saveCustomLevel : MonoBehaviour
         createObjectAtPositionTilemap(steelBoxTilemap, "steelBox");
         createObjectAtPositionTilemap(lavaBoxTilemap, "lavaBox");
         createObjectAtPositionTilemap(throwBoxTileTilemap, "throwBoxTile");
+        createObjectAtPositionTilemap(iceTilemap, "ice");
         // Create objects (non-tilemaps)
         createObjectAtPositionObject(objectGroup);
 

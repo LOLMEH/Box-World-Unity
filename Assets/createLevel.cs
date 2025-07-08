@@ -31,6 +31,8 @@ public class createLevel : MonoBehaviour
     public GameObject diagonalBox;
     public GameObject halfBox;
     public GameObject playerWall;
+    public Tilemap iceTilemap;
+    public TileBase iceTile;
     public int playerCount;
 
     [System.Serializable]
@@ -397,6 +399,10 @@ public class createLevel : MonoBehaviour
                 );
                 GameObject playerWallVerticalClone = Instantiate(playerWall, playerWallVerticalPositonVector, Quaternion.Euler(new(0, 0, 90)));
                 playerWallVerticalClone.GetComponent<PlayerWallScript>().variantID = objectVariantID;
+            }
+            else if (objectName == "ice")
+            {
+                iceTilemap.SetTile(objectPositonVector, iceTile);
             }
             else
             {

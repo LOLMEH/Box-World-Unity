@@ -49,6 +49,9 @@ public class moveCreateObject : MonoBehaviour
     public GameObject playerTwoVertWallObject;
     public GameObject playerThreeVertWallObject;
     public GameObject playerFourVertWallObject;
+    public Tilemap iceTilemap;
+    public TileBase iceTile;
+    public Sprite iceImage;
     private string objectName;
     private SpriteRenderer createSprite;
 
@@ -214,6 +217,10 @@ public class moveCreateObject : MonoBehaviour
         else if (throwBoxTileTilemap.GetTile(objectPositon) && !canPlacedObjectGoInTiles)
         {
             throwBoxTileTilemap.SetTile(objectPositon, null);
+        }
+        else if (iceTilemap.GetTile(objectPositon) && !canPlacedObjectGoInTiles)
+        {
+            iceTilemap.SetTile(objectPositon, null);
         }
         else
         {
@@ -433,6 +440,9 @@ public class moveCreateObject : MonoBehaviour
                 mousePosY *= objectScale;
                 GameObject newPlayerFourWallVertical = Instantiate(playerFourVertWallObject, new Vector2(mousePosX, mousePosY), playerFourVertWallObject.transform.rotation);
                 newPlayerFourWallVertical.transform.SetParent(objectGroup.transform);
+                break;
+            case "ice":
+                iceTilemap.SetTile(objectPositon, iceTile);
                 break;
             default:
                 // Default object
@@ -700,6 +710,12 @@ public class moveCreateObject : MonoBehaviour
                     break;
             }
             createSprite.transform.rotation = Quaternion.Euler(0, 0, 90);
+        }
+        else if (Input.GetKeyDown(KeyCode.A))
+        {
+            objectName = "ice";
+            createSprite.sprite = iceImage;
+            resetCreateObjectRotation(createSprite);
         }
     }
 }
