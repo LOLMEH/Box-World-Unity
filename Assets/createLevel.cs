@@ -8,6 +8,7 @@ public class createLevel : MonoBehaviour
     public Camera gameCamera;
     public TextAsset oldBoundsFile;
     public TextAsset x2BoundsFile;
+    public GameObject levelBanner;
     public GameObject player;
     public GameObject playerTwo;
     public GameObject playerThree;
@@ -34,6 +35,7 @@ public class createLevel : MonoBehaviour
     public Tilemap iceTilemap;
     public TileBase iceTile;
     public int playerCount;
+    public string levelName;
 
     [System.Serializable]
     public class GridPosition
@@ -168,6 +170,10 @@ public class createLevel : MonoBehaviour
         // Convert to a level from json
         Level levelInfo;
         levelInfo = JsonUtility.FromJson<Level>(levelFile);
+
+        // Set the level's name
+        levelName = levelInfo.levelName;
+        levelBanner.SetActive(true);
 
         // Get the level's object information
         ObjectInformation[] levelBoxes = levelInfo.levelData;

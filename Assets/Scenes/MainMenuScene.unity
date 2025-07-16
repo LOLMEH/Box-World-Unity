@@ -6587,7 +6587,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levelID: 1
   gamemode: singleplayer
-  gameVersion: Alpha v1.3.4
+  gameVersion: Alpha v1.3.5
   defaultKeybindFile: {fileID: 4900000, guid: 5e93d2c788820a6458583cf927bdfc71, type: 3}
 --- !u!4 &839536502
 Transform:
